@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 export default function HowToOrderPage() {
     return (
-        <section className="max-w-4xl mx-auto px-4 py-8">
+        <section className="max-w-4xl mx-auto md:px-4 md:py-8">
             <div className="bg-white rounded-lg shadow-sm overflow-hidden">
                 <div className="relative w-full">
                     <Image

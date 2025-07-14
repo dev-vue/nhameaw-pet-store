@@ -41,7 +41,7 @@ const Header = ({ onMenuClick }: { onMenuClick: () => void; }) => {
             {showSearch && (
                 <div className="fixed inset-0 z-[1000] bg-black/60 flex flex-col" style={{ backdropFilter: 'blur(2px)' }}>
                     <div className="bg-white w-full py-6 px-3 shadow-lg relative">
-                        <div className="container mx-auto px-4">
+                        <div className="container mx-auto px-3">
                             <div className="flex items-center justify-between mb-4">
                                 <span className="font-semibold text-lg">ค้นหาสินค้า</span>
                                 <button onClick={() => setShowSearch(false)} className="text-gray-500 text-sm flex items-center gap-1"><span className="text-xl">×</span> ปิด</button>
@@ -78,7 +78,7 @@ const Header = ({ onMenuClick }: { onMenuClick: () => void; }) => {
                 </div>
             )}
             <header className="bg-white sticky top-0 z-30">
-                <div className="container mx-auto px-4">
+                <div className="container mx-auto">
                     {/* Desktop Header */}
                     <div className="hidden lg:flex justify-between items-center py-3 px-4">
                         <div className="flex items-center gap-x-4">
@@ -141,7 +141,7 @@ const Header = ({ onMenuClick }: { onMenuClick: () => void; }) => {
                                 <p className="text-[10px] text-subdube text-center">สินค้าสัตว์เลี้ยงโดยทีมสัตวแพทย์</p>
                             </div>
                         </div>
-                        <Button size="sm" className="w-fit justify-self-end" leftIcon={<ShoppingCart className="h-5 w-5" />}>
+                        <Button size="sm" className="w-fit justify-self-end" leftIcon={<ShoppingCart className="h-5 w-5" />} onClick={() => push('/my-cart')}>
                             ตะกร้า
                         </Button>
                     </div>
@@ -165,7 +165,7 @@ const Header = ({ onMenuClick }: { onMenuClick: () => void; }) => {
                 {
                     pathname !== "/" &&
                     <div className="flex bg-secondary items-center">
-                        <div className="container mx-auto space-y-8 py-3 px-4">
+                        <div className="container mx-auto space-y-8 py-3">
                             <div className="px-4">
                                 <button type="button" className="cursor-pointer flex items-center gap-x-2 text-white hover:text-primary-hover" onClick={() => back()}>
                                     <ChevronLeft className="w-4 h-4" />

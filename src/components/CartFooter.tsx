@@ -18,7 +18,7 @@ const CartFooter: React.FC<CartFooterProps> = ({
     return (
         <div className="fixed bottom-0 left-0 right-0 z-40 ">
             <div className='bg-primary text-white '>
-                <div className="container mx-auto px-4 py-2">
+                <div className="container mx-auto py-2">
                     <div className="flex items-center justify-center">
                         {/* Left side - Savings info */}
                         <div className="flex items-center gap-2">
@@ -31,7 +31,7 @@ const CartFooter: React.FC<CartFooterProps> = ({
                 </div>
             </div>
             <div className='bg-white'>
-                <div className="container mx-auto px-4 py-3">
+                <div className="container mx-auto px-4 ">
                     <div className="flex items-center justify-end gap-x-3">
                         <div className='flex flex-col items-end gap-x-2'>
                             <div className='flex items-center gap-x-2'>

@@ -78,7 +78,7 @@ export default function ProductDetailPage() {
     return (
         <div className="min-h-screen pb-20">
             {/* Unified Responsive Layout */}
-            <div className="container mx-auto px-4">
+            <div className="container mx-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
                     {/* Product Images Section */}
                     <div className="relative order-1 lg:order-1">
