@@ -40,7 +40,7 @@ const Header = ({ onMenuClick }: { onMenuClick: () => void; }) => {
             {/* Search Overlay Modal */}
             {showSearch && (
                 <div className="fixed inset-0 z-[1000] bg-black/60 flex flex-col" style={{ backdropFilter: 'blur(2px)' }}>
-                    <div className="bg-white w-full p-6 shadow-lg relative">
+                    <div className="bg-white w-full py-6 px-3 shadow-lg relative">
                         <div className="container mx-auto px-4">
                             <div className="flex items-center justify-between mb-4">
                                 <span className="font-semibold text-lg">ค้นหาสินค้า</span>
@@ -60,7 +60,7 @@ const Header = ({ onMenuClick }: { onMenuClick: () => void; }) => {
                                             placeholder="ค้นหาสินค้า"
                                             value={searchText}
                                             onChange={(e) => setSearchText(e.target.value)}
-                                            className="w-full placeholder:text-subdube text-subdube pl-10 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm"
+                                            className="w-full placeholder:text-subdube text-subdube pl-10 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-base"
                                             autoFocus
                                         />
                                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -80,7 +80,7 @@ const Header = ({ onMenuClick }: { onMenuClick: () => void; }) => {
             <header className="bg-white sticky top-0 z-30">
                 <div className="container mx-auto px-4">
                     {/* Desktop Header */}
-                    <div className="hidden lg:flex justify-between items-center py-3">
+                    <div className="hidden lg:flex justify-between items-center py-3 px-4">
                         <div className="flex items-center gap-x-4">
                             <Image
                                 src={'/images/nhamaew-icon.png'}
@@ -123,8 +123,8 @@ const Header = ({ onMenuClick }: { onMenuClick: () => void; }) => {
                     </div>
 
                     {/* Mobile & Tablet Header */}
-                    <div className="lg:hidden flex justify-between items-center py-4">
-                        <button onClick={onMenuClick} className="cursor-pointer flex items-center space-x-2 text-primary px-3 py-2 text-sm">
+                    <div className="lg:hidden grid grid-cols-3 items-center py-4 px-4">
+                        <button onClick={onMenuClick} className="cursor-pointer flex items-center space-x-2 text-primary pr-3 py-2 text-sm">
                             <Menu className="h-5 w-5" />
                             <span>เมนู</span>
                         </button>
@@ -141,7 +141,7 @@ const Header = ({ onMenuClick }: { onMenuClick: () => void; }) => {
                                 <p className="text-[10px] text-subdube text-center">สินค้าสัตว์เลี้ยงโดยทีมสัตวแพทย์</p>
                             </div>
                         </div>
-                        <Button size="md" leftIcon={<ShoppingCart className="h-5 w-5" />}>
+                        <Button size="sm" className="w-fit justify-self-end" leftIcon={<ShoppingCart className="h-5 w-5" />}>
                             ตะกร้า
                         </Button>
                     </div>
@@ -166,10 +166,12 @@ const Header = ({ onMenuClick }: { onMenuClick: () => void; }) => {
                     pathname !== "/" &&
                     <div className="flex bg-secondary items-center">
                         <div className="container mx-auto space-y-8 py-3 px-4">
-                            <button type="button" className="cursor-pointer flex items-center gap-x-2 text-white hover:text-primary-hover" onClick={() => back()}>
-                                <ChevronLeft className="w-4 h-4" />
-                                <span>ย้อนกลับ</span>
-                            </button>
+                            <div className="px-4">
+                                <button type="button" className="cursor-pointer flex items-center gap-x-2 text-white hover:text-primary-hover" onClick={() => back()}>
+                                    <ChevronLeft className="w-4 h-4" />
+                                    <span>ย้อนกลับ</span>
+                                </button>
+                            </div>
                         </div>
                     </div>
                 }

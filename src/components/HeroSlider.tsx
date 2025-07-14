@@ -37,7 +37,7 @@ const HeroSlider = () => {
                     clickable: true,
                 }}
                 modules={[Autoplay, Pagination, Navigation]}
-                className="mySwiper h-full md:h-auto"
+                className="hero-swiper h-full md:h-auto"
             >
                 {slides.map((slide, index) => (
                     <SwiperSlide key={index}>

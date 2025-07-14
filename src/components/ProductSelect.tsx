@@ -55,13 +55,13 @@ const ProductSelect = ({ id, onClose, onAddToCart }: { id: number, onClose: () =
                         alt="O3vit สำหรับแมว"
                         width={60}
                         height={150}
-                        className="h-[150px] w-auto object-contain"
+                        className="md:h-[150px] h-[100px] w-auto object-contain"
                     />
 
                     {/* Price */}
-                    <span className="text-primary text-xl font-bold">฿{product.price}-{product.price + 950}</span>
+                    <span className="text-primary md:text-xl text-sm font-bold">฿{product.price}-{product.price + 950}</span>
                     {product.originalPrice && (
-                        <span className="ml-2 text-gray-500 line-through">฿{product.originalPrice}</span>
+                        <span className="stext-gray-500 line-through md:text-xl text-sm">฿{product.originalPrice}</span>
                     )}
                 </div>
 

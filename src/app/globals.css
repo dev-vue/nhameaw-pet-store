@@ -41,6 +41,21 @@ body {
   font-family: var(--font-dm-sans), var(--font-noto-sans-thai), Arial, Helvetica, sans-serif;
 }
 
+/* Hero Swiper Custom Styles */
+.hero-swiper .swiper-pagination-bullet {
+  background: var(--color-primary-light) !important;
+  opacity: 1 !important;
+  width: 10px !important;
+  height: 10px !important;
+  margin: 0 4px !important;
+  transition: all 0.3s ease !important;
+}
+
+.hero-swiper .swiper-pagination-bullet-active {
+  background: var(--color-primary) !important;
+  transform: scale(1.1) !important;
+}
+
 /* Categories Swiper Custom Styles */
 .categories-swiper {
   padding-bottom: 40px;
