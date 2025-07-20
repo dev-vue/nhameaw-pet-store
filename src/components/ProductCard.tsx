@@ -1,7 +1,7 @@
 'use client';
 
 import { Product } from "@/types/product";
-import { Cat, Dog, Star } from "lucide-react";
+import { Star } from "lucide-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
