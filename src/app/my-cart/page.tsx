@@ -1,12 +1,16 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Minus, Plus, X } from 'lucide-react';
+import { Check, CheckCircle, Minus, Plus, X } from 'lucide-react';
 import Image from 'next/image';
 import { AddressModal, AddressFormData } from '@/components/form/modal-address';
 import CartFooter from '@/components/CartFooter';
 import { swal } from '@/components/common/SweetAlert';
 import { useRouter } from 'next/navigation';
+import { useMyCart } from '@/lib/react-query/cart';
+import { useShippingAddress } from '@/lib/react-query/address';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface CartItemProps {
     id: string;
@@ -22,6 +26,11 @@ interface CartItemProps {
 export default function MyCartPage() {
 
     const { push } = useRouter();
+
+
+    const { data: myCartData } = useMyCart({ lineUserId: "U3a1e3dc0b443f061ad62aafc12c16633" });
+    const { data: shippingAddressData } = useShippingAddress({ lineUserId: "U3a1e3dc0b443f061ad62aafc12c16633" });
+
     // Demo cart data
     const [cartItems, setCartItems] = useState<CartItemProps[]>([
         {
@@ -61,20 +70,20 @@ export default function MyCartPage() {
     const total = subtotal;
 
     // Handlers
-    const increaseQuantity = (id: string) => {
+    const increaseQuantity = (id: number) => {
         setCartItems(cartItems.map(item =>
-            item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+            item.id === id.toString() ? { ...item, quantity: item.quantity + 1 } : item
         ));
     };
 
-    const decreaseQuantity = (id: string) => {
+    const decreaseQuantity = (id: number) => {
         setCartItems(cartItems.map(item =>
-            item.id === id && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
+            item.id === id.toString() && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
         ));
     };
 
-    const removeItem = (id: string) => {
-        setCartItems(cartItems.filter(item => item.id !== id));
+    const removeItem = (id: number) => {
+        setCartItems(cartItems.filter(item => item.id !== id.toString()));
     };
 
     const handleEditAddress = () => {
@@ -82,8 +91,18 @@ export default function MyCartPage() {
     };
 
     const handleSaveAddress = (data: AddressFormData) => {
+
         setAddressData(data);
-        console.log('Address saved:', data);
+        toast.success('บันทึกสำเร็จ', {
+            icon: <CheckCircle className='w-5 h-5 text-success' />, // or use a custom icon component
+            style: {
+                background: "#F1F9EA",
+                borderRadius: "14px",
+                fontWeight: 600,
+                color: 'black',
+                fontFamily: "notoSansThai"
+            }
+        });
     };
 
     const handleSendToAdmin = () => {
@@ -119,39 +138,48 @@ export default function MyCartPage() {
                 <div className="grid grid-cols-2 gap-4">
                     <div className="sm:col-span-1 col-span-2">
                         <div className="bg-white mb-4 p-4 rounded-lg">
-                            <div className="flex items-start">
-                                <img src="/icons/pin-map.png" alt="Shield" className="w-5 h-5 lg:w-6 lg:h-6" />
-                                <div className="flex-grow">
-                                    <h3 className="font-bold text-base mb-2">ที่อยู่จัดส่ง</h3>
-                                    <p className="text-gray-600 text-sm">
-                                        {addressData.phoneNumber}<br />
-                                        {addressData.address}
-                                        {addressData.additionalInfo && (
-                                            <>
-                                                <br />
-                                                {addressData.additionalInfo}
-                                            </>
-                                        )}
-                                    </p>
-                                </div>
-                                <button
-                                    className="text-primary text-sm font-medium"
-                                    onClick={handleEditAddress}
-                                >
-                                    แก้ไข
-                                </button>
-                            </div>
+                            {
+                                shippingAddressData && (
+                                    <div className="flex items-start">
+                                        <img src="/icons/cart-pin.svg" alt="pin" className="w-5 h-5 lg:w-7 lg:h-7" />
+                                        <div className="flex-grow">
+                                            <h3 className="font-bold text-base mb-2">ที่อยู่จัดส่ง</h3>
+                                            <p className="text-black text-baese font-semibold">{shippingAddressData.recipientFullName}</p>
+                                            <p className="text-subdube text-sm">{shippingAddressData.recipientPhoneNumber}</p>
+                                            <p className="text-black text-sm">
+                                                {shippingAddressData.shippingAddress}
+                                                {shippingAddressData.additionalAddress && (
+                                                    <>
+                                                        <br />
+                                                        {shippingAddressData.additionalAddress}
+                                                    </>
+                                                )}
+                                            </p>
+                                            <p>
+
+                                            </p>
+                                        </div>
+                                        <button
+                                            className="text-primary text-sm font-medium"
+                                            onClick={handleEditAddress}
+                                        >
+                                            แก้ไข
+                                        </button>
+                                    </div>
+                                )
+                            }
+
                         </div>
 
                         {/* Cart Items */}
-                        {cartItems.map((item) => (
+                        {myCartData?.map((item) => (
                             <div key={item.id} className="bg-white mb-4 rounded-lg">
                                 <div className="p-4">
                                     <div className="flex items-center mb-2">
                                         <div className="mr-3 w-20 h-20 flex-shrink-0">
                                             <Image
-                                                src={item.image}
-                                                alt={item.name}
+                                                src={item.imageUrl}
+                                                alt={item.productName}
                                                 width={80}
                                                 height={80}
                                                 className="object-contain w-full h-full"
@@ -159,18 +187,21 @@ export default function MyCartPage() {
                                         </div>
                                         <div className="flex-grow">
                                             <div className="flex justify-between">
-                                                <h3 className="font-medium text-sm line-clamp-2 pr-4">{item.name}</h3>
-                                                <button onClick={() => removeItem(item.id)} aria-label="Remove item">
+                                                <h3 className="font-medium text-sm line-clamp-2 pr-4">{item.productName}</h3>
+                                                <button
+                                                    onClick={() => removeItem(item.id)}
+                                                    aria-label="Remove item"
+                                                >
                                                     <X size={18} className="text-gray-400" />
                                                 </button>
                                             </div>
-                                            {item.color && <p className="text-sm text-gray-500">{item.color} 1 กล่อง(บรรจุภัณฑ์)</p>}
+                                            {item.productItemName && <p className="text-sm text-gray-500">{item.productItemName} {item.productItemQuantityName}</p>}
                                             <div className="flex justify-between items-center mt-2">
                                                 <div className="text-primary font-bold text-base">฿{item.price.toLocaleString()}</div>
                                                 <div className="flex items-center justify-end gap-x-2">
                                                     <button
                                                         onClick={() => decreaseQuantity(item.id)}
-                                                        className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200"
+                                                        className="w-10 h-10 text-white bg-secondary rounded-full flex items-center justify-center hover:bg-gray-800"
                                                     >
                                                         <Minus className="w-4 h-4" />
                                                     </button>
@@ -181,8 +212,8 @@ export default function MyCartPage() {
                                                         onChange={(e) => {
                                                             const value = parseInt(e.target.value) || 1;
                                                             if (value > 0) {
-                                                                setCartItems(cartItems.map(item =>
-                                                                    item.id === item.id ? { ...item, quantity: value } : item
+                                                                setCartItems(cartItems.map(cartItem =>
+                                                                    cartItem.id === item.id.toString() ? { ...cartItem, quantity: value } : cartItem
                                                                 ));
                                                             }
                                                         }}
@@ -190,7 +221,7 @@ export default function MyCartPage() {
                                                     />
                                                     <button
                                                         onClick={() => increaseQuantity(item.id)}
-                                                        className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200"
+                                                        className="w-10 h-10 text-white bg-secondary rounded-full flex items-center justify-center hover:bg-gray-800"
                                                     >
                                                         <Plus className="w-4 h-4" />
                                                     </button>
@@ -239,6 +270,7 @@ export default function MyCartPage() {
                 totalItems={totalItems}
                 totalAmount={total}
             />
+            <ToastContainer position="top-center" />
         </div>
     );
 }

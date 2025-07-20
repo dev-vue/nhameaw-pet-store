@@ -33,7 +33,7 @@ const Loading = (props: LoadingProps) => {
                     className={cn(
                         `h-14 w-14`,
                         "inline animate-spin fill-primary text-white",
-                        props.className
+                        // props.className
                     )}
                     viewBox="0 0 100 101"
                     fill="none"
@@ -55,7 +55,7 @@ const Loading = (props: LoadingProps) => {
     return (
         <>
             {!props.fullscreen ? (
-                <div className="py-4">
+                <div className={cn("py-4", props.className)}>
                     <div className="flex h-full items-center justify-center">
                         <LoadingComponent />
                     </div>

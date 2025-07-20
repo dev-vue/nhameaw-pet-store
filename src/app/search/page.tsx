@@ -1,50 +1,147 @@
 'use client'
 
 import ProductCard from '@/components/ProductCard';
-import { filters, MOCK_PRODUCTS } from '@/constants';
-import React, { useState, useEffect } from 'react'
+import { filters } from '@/constants';
+import React, { useState, useEffect, useRef } from 'react'
 import { useSearchParams } from 'next/navigation';
+import { useInfiniteProducts } from '@/lib/react-query/product';
+import { Product } from '@/types/product';
+import Loading from '@/components/common/Loading';
 
 export default function SearchPage() {
     const searchParams = useSearchParams();
-    const [activeFilter, setActiveFilter] = useState(0);
+    const [activeFilter, setActiveFilter] = useState("BSP");
+    const [searchKeyword, setSearchKeyword] = useState("");
+
+    const {
+        data: productList,
+        isLoading: productsLoading,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+        refetch
+    } = useInfiniteProducts({
+        keyword: searchKeyword,
+        size: 8,
+        sortDirection: activeFilter
+    });
+
+    // Get all products from infinite query pages
+    const allProducts: Product[] = productList?.pages.flatMap(page => page.content ?? []) ?? [];
+
+    // Intersection Observer for infinite loading
+    const loadMoreRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
-        // Console log all query params
+        if (!loadMoreRef.current) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const [entry] = entries;
+                if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+                    fetchNextPage();
+                }
+            },
+            { threshold: 0.1 }
+        );
+
+        observer.observe(loadMoreRef.current);
+
+        return () => observer.disconnect();
+    }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+    useEffect(() => {
+        // Get search parameters and update search keyword
         const category = searchParams.get('category');
-        const searchText = searchParams.get('searchText');
+        const searchtext = searchParams.get('searchtext');
 
         console.log('Query Params:', {
             category,
-            searchText,
+            searchtext,
             allParams: Object.fromEntries(searchParams.entries())
         });
+
+        // Set search keyword from URL params
+        const keyword = searchtext || category || "";
+        setSearchKeyword(keyword);
     }, [searchParams]);
+
+    // Refetch when search keyword or filter changes
+    useEffect(() => {
+        if (searchKeyword !== undefined) {
+            refetch();
+        }
+    }, [searchKeyword, activeFilter, refetch]);
+
+    const getSearchTitle = () => {
+        const searchtext = searchParams.get('searchtext');
+        const category = searchParams.get('category');
+
+        if (searchtext) {
+            return `ผลการค้นหา "${searchtext}"`;
+        } else if (category) {
+            return `หมวดหมู่ "${category}"`;
+        }
+        return "รายการสินค้า";
+    };
 
     return (
         <section>
+            {/* Search Results Title */}
+            {/* <h3 className="text-2xl font-semibold mb-4">{getSearchTitle()}</h3> */}
+
+            {/* Filter Buttons */}
             <div className="flex space-x-2 mb-6 overflow-x-auto pb-2">
                 {filters.map((filter, index) => (
                     <button
                         key={index}
                         className={
                             "cursor-pointer px-4 py-2 rounded-full whitespace-nowrap border " +
-                            (activeFilter === index
+                            (activeFilter === filter.value
                                 ? "bg-primary-light text-primary border-primary"
                                 : "bg-white border-gray-300 hover:bg-gray-200")
                         }
-                        onClick={() => setActiveFilter(index)}
+                        onClick={() => setActiveFilter(filter.value)}
                         type="button"
                     >
-                        {filter}
+                        {filter.label}
                     </button>
                 ))}
             </div>
-            <div className="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
-                {MOCK_PRODUCTS.map((product) => (
-                    <ProductCard key={product.id} product={product} />
-                ))}
+
+            {/* Product Search Results */}
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {
+                    productsLoading ? <Loading className='w-full col-span-4' /> :
+                        allProducts.length > 0 ? (
+                            allProducts.map((product) => (
+                                <ProductCard key={product.id} product={product} />
+                            ))
+                        ) : (
+                            <div className="col-span-full text-center py-8">
+                                <p className="text-gray-500 text-lg">ไม่พบสินค้าที่ค้นหา</p>
+                                <p className="text-gray-400 text-sm mt-2">ลองเปลี่ยนคำค้นหาหรือตัวกรองดู</p>
+                            </div>
+                        )
+                }
             </div>
+
+            {/* Intersection Observer Target */}
+            <div ref={loadMoreRef} className="h-10 w-full" />
+
+            {/* Load More Indicator */}
+            {isFetchingNextPage && (
+                <div className="flex justify-center mt-6 w-full">
+                    <Loading className='w-full' />
+                </div>
+            )}
+
+            {/* Results Count */}
+            {!productsLoading && allProducts.length > 0 && (
+                <div className="text-center mt-6 text-gray-500">
+                    <p>แสดง {allProducts.length} รายการ {hasNextPage && "ของสินค้าทั้งหมด"}</p>
+                </div>
+            )}
         </section>
     )
 }

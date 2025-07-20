@@ -28,7 +28,7 @@ const ReviewSection = ({
     return (
         <div className={`bg-white ${className}`}>
             {/* Review Header */}
-            <div className="flex items-center justify-between p-4 border-b border-gray-light">
+            <div className="flex items-center justify-between p-4 border-b border-gray-light cursor-pointer" onClick={onViewAllReviews}>
                 <div className="flex items-center gap-x-2 text-lg lg:text-xl font-semibold">
                     <Star className="w-4 h-4 lg:w-5 lg:h-5 fill-warning text-warning" />
                     <span>{productRating.toFixed(1)}</span>
@@ -36,7 +36,6 @@ const ReviewSection = ({
                 </div>
                 <button
                     type="button"
-                    onClick={onViewAllReviews}
                     className="flex items-center hover:text-primary transition-colors"
                 >
                     <ChevronRight className="w-4 h-4" />

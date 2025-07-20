@@ -1,6 +1,6 @@
 import React from 'react';
-import { Heart } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import Image from 'next/image';
 
 interface CartFooterProps {
     totalSavings: number;
@@ -22,7 +22,7 @@ const CartFooter: React.FC<CartFooterProps> = ({
                     <div className="flex items-center justify-center">
                         {/* Left side - Savings info */}
                         <div className="flex items-center gap-2">
-                            <Heart className="w-4 h-4 fill-white" />
+                            <Image src="/icons/cart-heart.svg" alt="heart" className="w-4 h-4" width={18} height={18} />
                             <span className="text-base font-semibold">
                                 ประหยัดไป ฿{totalSavings.toLocaleString()} น้องได้สินค้าดี คุณได้ราคาดี
                             </span>
@@ -32,7 +32,7 @@ const CartFooter: React.FC<CartFooterProps> = ({
             </div>
             <div className='bg-white'>
                 <div className="container mx-auto px-4 ">
-                    <div className="flex items-center justify-end gap-x-3">
+                    <div className="flex items-center justify-end gap-x-3 py-4">
                         <div className='flex flex-col items-end gap-x-2'>
                             <div className='flex items-center gap-x-2'>
                                 <span className="text-xs opacity-90">

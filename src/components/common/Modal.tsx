@@ -8,13 +8,15 @@ import { cn } from "@/utils/helpers";
 type ModalProps = {
 	open: boolean;
 	header?: string;
+	subHeader?: string;
 	children: JSX.Element;
 	size?: "sm" | "md" | "lg";
 	multiple?: boolean;
 	onClose?: () => void;
+	canClickOutside?: boolean;
 };
 
-export default function Modal({ open, header, children, size = "md", multiple = false, onClose }: ModalProps) {
+export default function Modal({ open, header, subHeader, children, size = "md", multiple = false, onClose, canClickOutside = true }: ModalProps) {
 	useEffect(() => {
 		if (open) {
 			// Pushing the change to the end of the call stack
@@ -64,8 +66,8 @@ export default function Modal({ open, header, children, size = "md", multiple = 
 							<Dialog.Content
 								asChild
 								forceMount
-								onPointerDownOutside={avoidDefaultDomBehavior}
-								onInteractOutside={avoidDefaultDomBehavior}
+								onPointerDownOutside={canClickOutside ? undefined : avoidDefaultDomBehavior}
+								onInteractOutside={canClickOutside ? undefined : avoidDefaultDomBehavior}
 								className={cn(
 									multiple ? "z-[1003]" : "z-[1001]",
 									"w-screen h-screen max-w-full max-h-full rounded-none m-0",
@@ -103,7 +105,10 @@ export default function Modal({ open, header, children, size = "md", multiple = 
 													: "justify-start"
 											)}
 										>
-											<h1 className="text-xl font-semibold text-black">{header}</h1>
+											<div className="flex flex-col gap-y-1 justify-center">
+												<h1 className="text-xl font-semibold text-black">{header}</h1>
+												{subHeader && <p className="text-[12px] text-subdube">{subHeader}</p>}
+											</div>
 											{onClose != null && (
 												<button
 													onClick={onClose}

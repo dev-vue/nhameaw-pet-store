@@ -89,17 +89,44 @@ body {
 /* Hide default calendar icon for input[type=date] with class 'hide-date-icon' */
 input[type="date"].hide-date-icon::-webkit-calendar-picker-indicator {
   opacity: 0;
-  pointer-events: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
 }
 
 input[type="date"].hide-date-icon::-moz-calendar-picker-indicator {
   opacity: 0;
-  pointer-events: auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
 }
 
 input[type="date"].hide-date-icon::-ms-input-placeholder {
   opacity: 0;
-  pointer-events: auto;
+  width: 100%;
+}
+
+/* Hide placeholder text (dd/mm/yyyy) when no date is selected */
+input[type="date"].hide-date-icon:invalid {
+  color: transparent;
+}
+
+input[type="date"].hide-date-icon:invalid:focus {
+  color: #374151;
+}
+
+input[type="date"].hide-date-icon:valid {
+  color: #374151;
 }
 
 input[type="date"].hide-date-icon {
@@ -247,4 +274,9 @@ input::-webkit-inner-spin-button {
 /* Firefox */
 input[type=number] {
   -moz-appearance: textfield;
+}
+
+button:focus-visible {
+  border: none !important;
+  outline: none !important;
 }

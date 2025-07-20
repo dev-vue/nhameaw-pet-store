@@ -2,9 +2,10 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { ChevronLeft, Menu, Search, ShoppingCart } from "lucide-react";
+import { ChevronLeft, Menu, Search, ShoppingCart, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useMyCartCount } from "@/lib/react-query/cart";
 
 const Header = ({ onMenuClick }: { onMenuClick: () => void; }) => {
 
@@ -15,9 +16,12 @@ const Header = ({ onMenuClick }: { onMenuClick: () => void; }) => {
     const [searchText, setSearchText] = useState("");
     const [searchTextLabel, setSearchTextLabel] = useState("");
 
+    const { data: cartItemCount } = useMyCartCount({ lineUserId: "U3a1e3dc0b443f061ad62aafc12c16633" });
+
     const { push, back } = useRouter();
 
     function onSearch() {
+        console.log('onSearch')
         setShowSearch(false)
         push(`/search?searchtext=${searchText}`)
         setSearchTextLabel(searchText)
@@ -33,7 +37,7 @@ const Header = ({ onMenuClick }: { onMenuClick: () => void; }) => {
             setSearchTextLabel("")
             setSearchText("")
         }
-    }, [pathname])
+    }, [pathname, showSearch])
 
     return (
         <>
@@ -60,12 +64,20 @@ const Header = ({ onMenuClick }: { onMenuClick: () => void; }) => {
                                             placeholder="ค้นหาสินค้า"
                                             value={searchText}
                                             onChange={(e) => setSearchText(e.target.value)}
-                                            className="w-full placeholder:text-subdube text-subdube pl-10 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-base"
+                                            className="w-full placeholder:text-subdube text-subdube pl-10 pr-10 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-base"
                                             autoFocus
                                         />
                                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
                                             <Search className="h-5 w-5 text-subdube" />
                                         </div>
+                                        {searchText && (
+                                            <button
+                                                onClick={() => setSearchText('')}
+                                                className="absolute inset-y-0 right-0 flex items-center pr-3 text-subdube hover:text-gray-700 transition-colors"
+                                            >
+                                                <X className="h-5 w-5" />
+                                            </button>
+                                        )}
                                     </div>
                                     <Button size="md" type="submit">
                                         ค้นหา
@@ -103,9 +115,16 @@ const Header = ({ onMenuClick }: { onMenuClick: () => void; }) => {
                         </div>
 
                         <div className="flex items-center space-x-4">
-                            <Button size="md" leftIcon={<ShoppingCart className="h-5 w-5" />} onClick={() => push('/my-cart')}>
-                                ตะกร้า
-                            </Button>
+                            <div className="relative">
+                                <Button size="md" leftIcon={<ShoppingCart className="h-5 w-5" />} onClick={() => push('/my-cart')}>
+                                    ตะกร้า
+                                </Button>
+                                {cartItemCount?.total && cartItemCount?.total > 0 && (
+                                    <div className="absolute -top-2 -right-2 bg-critical text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                                        {cartItemCount?.total > 99 ? '99+' : cartItemCount?.total}
+                                    </div>
+                                )}
+                            </div>
                             <div className="relative">
                                 <input
                                     type="text"
@@ -134,36 +153,46 @@ const Header = ({ onMenuClick }: { onMenuClick: () => void; }) => {
                                 width={40}
                                 height={40}
                                 alt="nhamaew-icon"
-                                className="w-10 h-10 md:w-[60px] md:h-[60px]"
+                                className="w-12 h-12 md:w-[60px] md:h-[60px]"
+                                onClick={() => push('/')}
                             />
-                            <div>
+                            <div className="hidden sm:flex flex-col items-center">
                                 <h1 className="text-xs font-semibold text-primary text-center">nhamaew pet store</h1>
                                 <p className="text-[10px] text-subdube text-center">สินค้าสัตว์เลี้ยงโดยทีมสัตวแพทย์</p>
                             </div>
                         </div>
-                        <Button size="sm" className="w-fit justify-self-end" leftIcon={<ShoppingCart className="h-5 w-5" />} onClick={() => push('/my-cart')}>
-                            ตะกร้า
-                        </Button>
-                    </div>
-
-                    <div className="lg:hidden px-4 pb-4">
-                        <div className="relative">
-                            <input
-                                type="text"
-                                placeholder="ค้นหาสินค้า"
-                                value={searchTextLabel}
-                                className="w-full placeholder:text-subdube text-subdube pl-10 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm cursor-pointer bg-white"
-                                readOnly
-                                onClick={() => setShowSearch(true)}
-                            />
-                            <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                                <Search className="h-5 w-5 text-subdube" />
-                            </div>
+                        <div className="relative justify-self-end">
+                            <Button size="sm" className="w-fit justify-self-end" leftIcon={<ShoppingCart className="h-5 w-5" />} onClick={() => push('/my-cart')}>
+                                ตะกร้า
+                            </Button>
+                            {cartItemCount?.total && cartItemCount?.total > 0 && (
+                                <div className="absolute -top-2 -right-2 bg-critical text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                                    {cartItemCount?.total > 99 ? '99+' : cartItemCount?.total}
+                                </div>
+                            )}
                         </div>
                     </div>
+
+                    {!pathname.startsWith("/product") && !pathname.startsWith("/my-cart") && !pathname.startsWith("/favourite") && !pathname.startsWith("/history") &&
+                        <div className="lg:hidden px-4 pb-4">
+                            <div className="relative">
+                                <input
+                                    type="text"
+                                    placeholder="ค้นหาสินค้า"
+                                    value={searchTextLabel}
+                                    className="w-full placeholder:text-subdube text-subdube pl-10 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm cursor-pointer bg-white"
+                                    readOnly
+                                    onClick={() => setShowSearch(true)}
+                                />
+                                <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <Search className="h-5 w-5 text-subdube" />
+                                </div>
+                            </div>
+                        </div>
+                    }
                 </div>
                 {
-                    pathname !== "/" &&
+                    (pathname !== "/") &&
                     <div className="flex bg-secondary items-center">
                         <div className="container mx-auto space-y-8 py-3">
                             <div className="px-4">

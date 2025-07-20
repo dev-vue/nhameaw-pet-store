@@ -106,7 +106,7 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="fixed inset-0 bg-black z-[999] flex items-center justify-center"
+                    className="fixed inset-0 bg-[#000000] z-[999] flex items-center justify-center"
                 >
                     {/* Header */}
                     <div className="absolute top-0 left-0 right-0 z-10 flex justify-between items-center p-4">
@@ -118,19 +118,11 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
                             <span className="text-sm">ย้อนกลับ</span>
                         </button>
 
-                        <div className="bg-black/50 text-white px-3 py-1 rounded-full text-sm">
+                        {/* ImageCounter */}
+                        <div className="bg-secondary rounded-full text-white px-3 py-1 mt-10 text-sm absolute left-1/2 transform -translate-x-1/2">
                             {index + 1}/{media.length}
                         </div>
-
-                        {/* Close Button (Alternative) */}
-                        <button
-                            onClick={onClose}
-                            className=" bg-black/30 hover:bg-black/50 text-white p-2 rounded-full transition-colors z-10"
-                        >
-                            <X className="w-6 h-6" />
-                        </button>
                     </div>
-                    f
                     {/* Main Content */}
                     <div className="relative w-full h-full flex items-center justify-center">
                         {/* Navigation Buttons */}
@@ -138,15 +130,15 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
                             <>
                                 <button
                                     onClick={handlePrevious}
-                                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full transition-colors z-10"
+                                    className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-secondary hover:bg-black/50 text-white p-3 rounded-full transition-colors z-10"
                                 >
-                                    <ChevronLeft className="w-6 h-6" />
+                                    <ChevronLeft className="w-6 md:w-10 h-6 md:h-10" />
                                 </button>
                                 <button
                                     onClick={handleNext}
-                                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white p-3 rounded-full transition-colors z-10"
+                                    className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-secondary hover:bg-black/50 text-white p-3 rounded-full transition-colors z-10"
                                 >
-                                    <ChevronRight className="w-6 h-6" />
+                                    <ChevronRight className="w-6 md:w-10 h-6 md:h-10" />
                                 </button>
                             </>
                         )}

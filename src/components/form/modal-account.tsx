@@ -43,6 +43,20 @@ export function AccountModal({ open, onClose }: AccountModalProps) {
         console.log('data', data)
     }
 
+    const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = e.target.value;
+        if (value) {
+            form.setValue('dob', new Date(value));
+        } else {
+            form.setValue('dob', undefined);
+        }
+    };
+
+    const formatDateForInput = (date: Date | undefined) => {
+        if (!date) return '';
+        return date.toISOString().split('T')[0];
+    };
+
     return (
         <Modal open={open} onClose={onClose} header="บัญชีของฉัน" size="md">
             <div className="flex flex-col h-full">
@@ -62,44 +76,52 @@ export function AccountModal({ open, onClose }: AccountModalProps) {
 
                             {/* Form Fields - Scrollable content */}
                             <div className={cn(
-                                "w-full max-w-md flex flex-col gap-4 ",
+                                "w-full flex flex-col gap-4",
                                 // Add padding bottom on mobile only to prevent content being hidden behind fixed buttons
                                 "pb-24 md:pb-0"
                             )}>
                                 <div>
-                                    <FormLabel isRequired>
-                                        ชื่อไลน์
-                                    </FormLabel>
-                                    <Input
-                                        type="text"
-                                        value={name}
-                                        disabled
-                                    />
-                                </div>
-                                <div>
                                     <FormField
                                         control={form.control}
                                         name="gender"
-                                        render={({ field }) => {
-                                            return (
-                                                <FormItem>
-                                                    <FormLabel isRequired>
-                                                        เพศ
-                                                    </FormLabel>
-                                                    <Combobox
-                                                        options={GENDER_OPTIONS}
-                                                        placeholder="เลือกเพศ"
+                                        render={({ field }) => (
+                                            <FormItem>
+                                                <FormLabel isRequired>เพศ</FormLabel>
+                                                {/* <Combobox
+                                                    options={GENDER_OPTIONS}
+                                                    placeholder="เลือกเพศ"
+                                                    value={field.value}
+                                                    onChange={field.onChange}
+                                                    isError={form.formState.errors.gender}
+                                                /> */}
+                                                <div className="relative w-full">
+                                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none z-10">
+                                                        <User className="h-4 w-4 text-gray-400" />
+                                                    </span>
+                                                    <select
                                                         value={field.value}
-                                                        valueType="string"
                                                         onChange={field.onChange}
-                                                        isError={form.formState.errors.gender}
-                                                    />
-                                                    <FormMessage />
-                                                </FormItem>
-                                            );
-                                        }}
+                                                        className={cn(
+                                                            "w-full rounded-lg border border-gray-200 px-4 py-2 text-base focus:outline-none pl-10",
+                                                            "flex items-center justify-start text-left",
+                                                            // Error styles
+                                                            form.formState.errors.gender && "border-red-500 focus:ring-red-500 focus:border-red-500",
+                                                            // Hide default calendar icon and use custom one
+                                                            "hide-date-icon")}
+                                                    >
+                                                        {
+                                                            GENDER_OPTIONS.map((option) => (
+                                                                <option key={option.value} value={option.value}>{option.label}</option>
+                                                            ))
+                                                        }
+                                                    </select>
+                                                </div>
+                                                <FormMessage />
+                                            </FormItem>
+                                        )}
                                     />
                                 </div>
+
                                 <div>
                                     <FormField
                                         control={form.control}
@@ -111,36 +133,65 @@ export function AccountModal({ open, onClose }: AccountModalProps) {
                                                     <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none z-10">
                                                         <CalendarIcon className="h-4 w-4 text-gray-400" />
                                                     </span>
-                                                    <Popover
-                                                        type="calendar"
-                                                        trigger={
-                                                            <button
-                                                                type="button"
-                                                                className={cn(
-                                                                    // Base styles matching Input and Combobox
-                                                                    "w-full rounded-lg border border-gray-200 px-4 py-2 text-base focus:outline-none",
-                                                                    "flex items-center justify-start text-left pl-10",
-                                                                    // Placeholder/text color
-                                                                    !field.value ? "text-gray-500" : "text-gray-900",
-                                                                    // Error styles
-                                                                    form.formState.errors.dob && "border-red-500 focus:ring-red-500 focus:border-red-500"
-                                                                )}
-                                                            >
-                                                                {field.value ? (
-                                                                    convertDateToThai(field.value, "dd MMMM yyyy")
-                                                                ) : (
-                                                                    "เลือกวันเกิด"
-                                                                )}
-                                                            </button>
-                                                        }
-                                                        side="bottom"
-                                                    >
-                                                        <Calendar
-                                                            mode="single"
-                                                            selected={field.value!}
-                                                            onSelect={field.onChange}
+
+                                                    {/* Mobile: Native Date Input styled like desktop button */}
+                                                    <div className="relative">
+                                                        <input
+                                                            type="date"
+                                                            value={formatDateForInput(field.value ?? undefined)}
+                                                            onChange={handleDateChange}
+                                                            className={cn(
+                                                                "w-full rounded-lg border border-gray-200 px-4 py-2 text-base focus:outline-none pl-10",
+                                                                "flex items-center justify-start text-left",
+                                                                // Error styles
+                                                                form.formState.errors.dob && "border-red-500 focus:ring-red-500 focus:border-red-500",
+                                                                // Hide default calendar icon and use custom one
+                                                                "hide-date-icon",
+                                                                // Text color based on selection
+                                                                field.value ? "text-gray-900" : "text-gray-500"
+                                                            )}
                                                         />
-                                                    </Popover>
+                                                        {/* Placeholder text overlay when no date selected */}
+                                                        {/* {!field.value && (
+                                                            <div className="absolute inset-0 flex items-center justify-start pl-10 pointer-events-none">
+                                                                <span className="text-gray-500 text-base">เลือกวันเกิด</span>
+                                                            </div>
+                                                        )} */}
+                                                    </div>
+
+                                                    {/* Desktop: Custom Calendar Popup */}
+                                                    {/* <div className="hidden md:block">
+                                                        <Popover
+                                                            type="calendar"
+                                                            trigger={
+                                                                <button
+                                                                    type="button"
+                                                                    className={cn(
+                                                                        // Base styles matching Input and Combobox
+                                                                        "w-full rounded-lg border border-gray-200 px-4 py-2 text-base focus:outline-none",
+                                                                        "flex items-center justify-start text-left pl-10",
+                                                                        // Placeholder/text color
+                                                                        !field.value ? "text-gray-500" : "text-gray-900",
+                                                                        // Error styles
+                                                                        form.formState.errors.dob && "border-red-500 focus:ring-red-500 focus:border-red-500"
+                                                                    )}
+                                                                >
+                                                                    {field.value ? (
+                                                                        convertDateToThai(field.value, "dd MMMM yyyy")
+                                                                    ) : (
+                                                                        "เลือกวันเกิด"
+                                                                    )}
+                                                                </button>
+                                                            }
+                                                            side="bottom"
+                                                        >
+                                                            <Calendar
+                                                                mode="single"
+                                                                selected={field.value ? field.value : undefined}
+                                                                onSelect={field.onChange}
+                                                            />
+                                                        </Popover>
+                                                    </div> */}
                                                 </div>
                                                 <FormMessage />
                                             </FormItem>
@@ -152,45 +203,44 @@ export function AccountModal({ open, onClose }: AccountModalProps) {
                             {/* Action Buttons */}
                             {/* Mobile: Fixed at bottom of screen */}
                             <div className={cn(
-                                "w-full flex gap-4 mt-8",
-                                // Mobile: Fixed at bottom of screen with shadow
-                                "fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 shadow-lg z-50",
-                                // Hide on desktop/tablet
-                                "md:hidden"
+                                "md:hidden",
+                                "fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 z-50"
                             )}>
-                                <Button
-                                    type="button"
-                                    variant="secondary"
-                                    className="flex-1"
-                                    onClick={onClose}
-                                >
-                                    ยกเลิก
-                                </Button>
-                                <Button
-                                    type="submit"
-                                    size={'md'}
-                                    className="flex-1"
-                                    variant={'default'}
-                                >
-                                    บันทึก
-                                </Button>
+                                <div className="flex w-full gap-4">
+                                    <Button
+                                        type="button"
+                                        variant="secondary"
+                                        size="md"
+                                        onClick={onClose}
+                                        className="flex-1"
+                                    >
+                                        ยกเลิก
+                                    </Button>
+                                    <Button
+                                        type="submit"
+                                        size="md"
+                                        className="flex-1"
+                                    >
+                                        บันทึก
+                                    </Button>
+                                </div>
                             </div>
 
-                            {/* Desktop/Tablet: Normal position in modal */}
+                            {/* Desktop: Inline buttons */}
                             <div className="hidden md:flex w-full max-w-md mx-auto gap-4 mt-8">
                                 <Button
                                     type="button"
                                     variant="secondary"
-                                    className="flex-1"
+                                    size="md"
                                     onClick={onClose}
+                                    className="flex-1"
                                 >
                                     ยกเลิก
                                 </Button>
                                 <Button
                                     type="submit"
-                                    size={'md'}
+                                    size="md"
                                     className="flex-1"
-                                    variant={'default'}
                                 >
                                     บันทึก
                                 </Button>

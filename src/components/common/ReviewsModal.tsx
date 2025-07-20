@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Star, Play } from 'lucide-react';
 import Modal from './Modal';
 import ImageViewer from './ImageViewer';
+import { useRouter } from 'next/navigation';
 
 interface Review {
     id: string;
@@ -28,10 +29,10 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
     productRating,
     productName
 }) => {
+    const { push } = useRouter();
     const [imageViewerOpen, setImageViewerOpen] = useState(false);
     const [currentMedia, setCurrentMedia] = useState<string[]>([]);
     const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
-    console.log('productName', productName)
 
     const isVideo = (url: string) => {
         return url.includes('.mp4') || url.includes('.webm') || url.includes('.ogg') || url.includes('video');
@@ -42,6 +43,7 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
         setCurrentMediaIndex(index);
         setImageViewerOpen(true);
     };
+
 
     const renderMediaGrid = (media: string[]) => {
         if (media.length === 0) return null;
@@ -286,7 +288,7 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
                         />
                     )}
                     {/* Overlay with count */}
-                    <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
+                    <div className="absolute bottom-2 right-2 bg-black/60 rounded-full px-2 py-1">
                         <span className="text-white font-semibold text-sm">
                             +{remainingCount}
                         </span>
@@ -302,9 +304,10 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
                 open={open}
                 onClose={onClose}
                 header="รีวิวจากผู้ใช้จริง"
+                subHeader='จากทุกช่องทางการจัดจำหน่าย'
                 size="md"
             >
-                <div className="space-y-4">
+                <div className="space-y-4 pb-44 md:pb-0">
                     {/* Product Rating Summary */}
                     <div className="flex items-center gap-2 mb-5">
                         <div className="flex items-center gap-1">
@@ -366,7 +369,7 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
                                 )}
 
                                 {/* Review Stats */}
-                                <div className="flex items-center gap-4 text-xs text-gray-500 pt-2 border-t border-gray-100">
+                                <div className="flex items-center gap-4 text-xs text-subdube py-2 border-b border-gray-light">
                                     2025-05-20 17:52
                                 </div>
                             </div>

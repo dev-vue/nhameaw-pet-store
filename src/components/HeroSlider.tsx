@@ -2,28 +2,15 @@
 
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
-import Image from 'next/image';
 
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import { Banner } from '@/types/banner';
 
-const slides = [
-    {
-        imageUrl: '/images/banner-demo.png',
-        alt: 'Pet promotion'
-    },
-    {
-        imageUrl: '/images/banner-demo.png',
-        alt: 'Cat food sale'
-    }
-    // {
-    //     imageUrl: '/images/banner-demo.png',
-    //     alt: 'New dog toys'
-    // }
-];
 
-const HeroSlider = () => {
+const HeroSlider = ({ banners }: { banners: Banner[] }) => {
+
     return (
         <section className="relative rounded-lg overflow-hidden">
             <Swiper
@@ -39,10 +26,10 @@ const HeroSlider = () => {
                 modules={[Autoplay, Pagination, Navigation]}
                 className="hero-swiper h-full md:h-auto"
             >
-                {slides.map((slide, index) => (
+                {banners.map((slide, index) => (
                     <SwiperSlide key={index}>
                         <div className="relative w-full h-full">
-                            <img src={slide.imageUrl} alt={slide.alt} className='w-full h-full object-cover' />
+                            <img src={slide.imageUrl} alt={slide.name} className='w-full h-full object-cover' />
                         </div>
                     </SwiperSlide>
                 ))}

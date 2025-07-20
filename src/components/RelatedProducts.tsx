@@ -1,6 +1,7 @@
 import React from 'react';
 import ProductCard from './ProductCard';
 import { MOCK_PRODUCTS } from '@/constants/mockData';
+import { useProducts } from '@/lib/react-query/product';
 
 interface RelatedProductsProps {
     currentProductId: number;
@@ -22,6 +23,13 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
         return null;
     }
 
+    const { data: productList, isLoading: productListLoading, refetch: productListRefetch } = useProducts({
+        keyword: "",
+        page: 0,
+        size: 10,
+        sortDirection: "BSP"
+    });
+
     return (
         <div className={`bg-white rounded-lg ${className}`}>
             <h2 className="text-lg lg:text-xl font-semibold text-black mb-4 lg:mb-6">
@@ -30,7 +38,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
 
             {/* Products Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 md:gap-4">
-                {relatedProducts.map((product) => (
+                {productList?.content?.map((product) => (
                     <div key={product.id} className="h-full">
                         <ProductCard
                             product={product}
@@ -38,13 +46,6 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
                     </div>
                 ))}
             </div>
-
-            {/* Show message if no products */}
-            {relatedProducts.length === 0 && (
-                <div className="text-center py-8">
-                    <p className="text-gray-500">ไม่พบสินค้าที่เกี่ยวข้อง</p>
-                </div>
-            )}
         </div>
     );
 };

@@ -14,9 +14,13 @@ import ModalBottom from '@/components/common/ModalBottom';
 import ProductSelect from '@/components/ProductSelect';
 import ReviewsModal from '@/components/common/ReviewsModal';
 import { swal } from '@/components/common/SweetAlert';
+import { useProductDetail } from '@/lib/react-query/product';
+import Loading from '@/components/common/Loading';
+import { ProductDetail } from '@/types/product';
 
 export default function ProductDetailPage() {
     const { id } = useParams();
+    const { data: productDetail, isLoading: productDetailLoading } = useProductDetail(id as string);
     const { push } = useRouter();
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [isFavorited, setIsFavorited] = useState(false);
@@ -69,11 +73,11 @@ export default function ProductDetailPage() {
         clickable: true,
         el: '.swiper-custom-pagination',
         renderBullet: function (index: number, className: string) {
-            return '<span class="' + className + ' !w-14 !h-14 !rounded-[14px] mx-1 !bg-white border !border-gray-light"><img src="' + productImages[index] + '" class="!rounded-[14px] w-full h-full object-cover" /></span>';
+            return '<span class="' + className + ' !w-14 !h-14 !rounded-[14px] mx-1 !bg-white border !border-gray-light"><img src="' + productDetail?.fileList?.[index].url + '" class="!rounded-[14px] w-full h-full object-cover" /></span>';
         },
     };
 
-
+    if (productDetailLoading) return <Loading fullscreen />
 
     return (
         <div className="min-h-screen pb-20">
@@ -96,12 +100,12 @@ export default function ProductDetailPage() {
                                 onSlideChange={(swiper) => setCurrentImageIndex(swiper.realIndex)}
                                 pagination={pagination}
                             >
-                                {productImages.map((image, index) => (
+                                {productDetail?.fileList?.map((image, index) => (
                                     <SwiperSlide key={index}>
                                         <div className="aspect-square bg-white flex items-center justify-center lg:border lg:rounded-[20px] lg:border-gray-light">
                                             <img
-                                                src={image}
-                                                alt={`${product.name} - รูปที่ ${index + 1}`}
+                                                src={image.url}
+                                                alt={`${image.name}`}
                                                 className="w-full h-full object-contain"
                                             />
                                         </div>
@@ -117,17 +121,17 @@ export default function ProductDetailPage() {
                             {/* Custom Navigation Buttons */}
                             {productImages.length > 1 && (
                                 <>
-                                    <button className="swiper-button-prev-custom absolute left-4 top-1/2 transform -translate-y-1/2 bg-black/20 text-white p-2 rounded-full z-10 hover:bg-black/40 transition-colors">
+                                    <button className="swiper-button-prev-custom absolute left-4 top-1/2 transform -translate-y-1/2 bg-secondary text-white p-2 rounded-full z-10 hover:bg-black/40 transition-colors">
                                         <ChevronLeft className="w-5 h-5" />
                                     </button>
-                                    <button className="swiper-button-next-custom absolute right-4 top-1/2 transform -translate-y-1/2 bg-black/20 text-white p-2 rounded-full z-10 hover:bg-black/40 transition-colors">
+                                    <button className="swiper-button-next-custom absolute right-4 top-1/2 transform -translate-y-1/2 bg-secondary text-white p-2 rounded-full z-10 hover:bg-black/40 transition-colors">
                                         <ChevronLeft className="w-5 h-5 rotate-180" />
                                     </button>
                                 </>
                             )}
 
                             {/* Custom Pagination */}
-                            <div className="swiper-custom-pagination flex justify-center mt-4"></div>
+                            <div className="swiper-custom-pagination !hidden lg:!flex justify-center mt-4"></div>
                         </div>
                     </div>
 
@@ -157,7 +161,7 @@ export default function ProductDetailPage() {
                                     </div>
                                     <button type='button' className='flex items-center space-x-2' onClick={handleViewAllReviews}>
                                         <span className="text-base lg:text-lg text-secondary whitespace-nowrap">
-                                            กดดูรีวิวอื่นๆ
+                                            ดูรีวิว
                                         </span>
                                         <ChevronRight className="w-4 h-4 lg:w-5 lg:h-5 text-primary" />
                                     </button>
@@ -193,61 +197,60 @@ export default function ProductDetailPage() {
                         {/* Product Details */}
                         <div className="bg-white p-4 lg:p-6">
                             <div className="space-y-4">
-                                {/* Guarantee Section */}
+                                {/* Guarantee */}
                                 <div className="flex items-start space-x-3">
-                                    <img src="/icons/shieldcheck.png" alt="Shield" className="w-5 h-5 lg:w-6 lg:h-6" />
+                                    <img src="/icons/detail-safety.svg" alt="safety" className="w-5 h-5 lg:w-6 lg:h-6" />
                                     <span className="text-sm lg:text-base text-gray-800">ปลอดภัย รับประกันสินค้าของแท้ 100%</span>
                                 </div>
 
-                                {/* Delivery Info */}
+                                {/* Venter */}
                                 <div className="flex items-start space-x-3">
-                                    <img src="/icons/docpet.png" alt="docpet" className="w-5 h-5 lg:w-6 lg:h-6" />
+                                    <img src="/icons/detail-venter.svg" alt="venter" className="w-5 h-5 lg:w-6 lg:h-6" />
                                     <span className="text-sm lg:text-base text-gray-800">
-                                        คุณกับคอมเมอร์เชียลซูเปอร์เซี่ยงให้เคลทาสปลอง
-                                        ส่วนเทพเยอร์ก้อยก้าย
+                                        ทุกขั้นตอนการจัดจำหน่าย อยู่ภายใต้การดูแลของสัตวแพทย์มืออาชีพ
                                     </span>
                                 </div>
 
-                                {/* Return Policy */}
+                                {/* Consult */}
                                 <div className="flex items-start space-x-3">
-                                    <img src="/icons/chat.png" alt="chat" className="w-5 h-5 lg:w-6 lg:h-6" />
-                                    <span className="text-sm lg:text-base text-gray-800">บริการส่งแล้วแพทย์สำเร็จรูปสินค้าและการใช้ชินค่า</span>
+                                    <img src="/icons/detail-consult.svg" alt="consult" className="w-5 h-5 lg:w-6 lg:h-6" />
+                                    <span className="text-sm lg:text-base text-gray-800">ปรึกษาสัตวแพทย์ฟรีเกี่ยวกับสินค้าและการใช้สินค้า</span>
                                 </div>
 
-                                {/* Company Info */}
+                                {/* Teams */}
                                 <div className="flex items-start space-x-3">
-                                    <img src="/icons/users.png" alt="users" className="w-5 h-5 lg:w-6 lg:h-6" />
+                                    <img src="/icons/detail-team.svg" alt="team" className="w-5 h-5 lg:w-6 lg:h-6" />
                                     <div className="text-sm lg:text-base text-gray-800">
-                                        <div>สินค้าจากพาทเวาร์โมบิล์ CSR VET GROUP
-                                            CO., LTD. ประสบการณ์และเทคโนโลยีสำหรับ
-                                            สัตวแพทย์กว่า 7 ปี
+                                        <div>ทีมสัตว์แพทย์จากบริษัท CSR VET GROUP CO., LTD. ประสบการณ์ด้านผลิตภัณฑ์สำหรับสัตว์เลี้ยงมากกว่า 7 ปี
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* Shipping Time */}
+                                {/* Shipping */}
                                 <div className="flex items-start space-x-3">
-                                    <img src="/icons/package-send.png" alt="users" className="w-5 h-5 lg:w-6 lg:h-6" />
+                                    <img src="/icons/detail-delivery.svg" alt="delivery" className="w-5 h-5 lg:w-6 lg:h-6" />
                                     <span className="text-sm lg:text-base text-gray-800">จัดส่งสินค้าทุกวัน เมื่อสั่งซื้อก่อน 14.00 น.</span>
                                 </div>
                             </div>
                         </div>
-
-                        {/* Reviews Section */}
-                        <div className="order-3 lg:order-3">
-                            <ReviewSection
-                                productRating={product.rating}
-                                reviews={reviews}
-                                onViewAllReviews={handleViewAllReviews}
-                                className="mt-2 lg:mt-6"
-                            />
-                        </div>
-
-                        {/* Product Accordion */}
-                        <div className="order-4 lg:order-4 mt-4">
-                            <ProductAccordion productDetails={product} />
-                        </div>
                     </div>
+                </div>
+
+                {/* Reviews Section */}
+                <div className="w-full">
+                    <ReviewSection
+                        productRating={productDetail?.averageReviewScore ?? 0}
+                        reviews={reviews}
+                        onViewAllReviews={handleViewAllReviews}
+                        className="mt-2 lg:mt-6"
+                    />
+                </div>
+
+                {/* Product Accordion */}
+                <div className="w-full mt-4">
+                    <ProductAccordion
+                        productDetails={productDetail as ProductDetail}
+                    />
                 </div>
 
                 {/* Related Products Section */}
@@ -260,7 +263,7 @@ export default function ProductDetailPage() {
             </div>
 
             {/* Fixed Bottom Action Buttons */}
-            <div className="z-50 fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4">
+            <div className="z-[1000] fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4">
                 <div className="container mx-auto">
                     <div className="flex justify-end space-x-3">
                         <Button
@@ -287,9 +290,11 @@ export default function ProductDetailPage() {
                 onClose={() => setModalAddtoCart(false)}
                 header="ตัวเลือกสินค้า"
                 size="lg"
+                zIndex='z-[1001]'
             >
                 <ProductSelect
-                    id={product.id}
+                    id={productDetail?.productId ?? ''}
+                    productDetail={productDetail as ProductDetail}
                     onClose={() => setModalAddtoCart(false)}
                     onAddToCart={(selectedOptions) => {
                         console.log('selectedOptions', selectedOptions)

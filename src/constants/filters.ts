@@ -1,9 +1,9 @@
 // Filter Types และ Enums
 export enum ProductSortType {
-    BEST_SELLING = 'BEST_SELLING',
-    LATEST = 'LATEST',
-    PRICE_LOW_TO_HIGH = 'PRICE_LOW_TO_HIGH',
-    PRICE_HIGH_TO_LOW = 'PRICE_HIGH_TO_LOW'
+    BEST_SELLING = 'BSP',
+    LATEST = 'LP',
+    PRICE_LOW_TO_HIGH = 'ASC',
+    PRICE_HIGH_TO_LOW = 'DESC'
 }
 
 export enum GenderType {
@@ -55,7 +55,7 @@ export const GENDER_OPTIONS = [
 ];
 
 // Helper functions
-export const getProductFilterLabels = () => PRODUCT_FILTER_OPTIONS.map(option => option.label);
+export const getProductFilterLabels = () => PRODUCT_FILTER_OPTIONS.map(option => option);
 
 export const getProductFilterByValue = (value: ProductSortType) =>
     PRODUCT_FILTER_OPTIONS.find(option => option.value === value);

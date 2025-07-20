@@ -25,6 +25,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className={`${notoSansThai.variable} ${dmSans.variable} font-sans`}>
+
       <body suppressHydrationWarning>
         <div id="portal"></div>
         <Providers session={session}>

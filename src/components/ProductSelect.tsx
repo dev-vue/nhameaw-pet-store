@@ -4,13 +4,16 @@ import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 import { Button } from './ui/Button';
 import Image from 'next/image'
-import { Minus, Plus } from 'lucide-react';
+import { Maximize2, Minus, Plus } from 'lucide-react';
+import { ProductDetail } from '@/types/product';
+import ImageViewer from "@/components/common/ImageViewer"; // adjust path if needed
 
-const ProductSelect = ({ id, onClose, onAddToCart }: { id: number, onClose: () => void, onAddToCart?: (selectedOptions: any) => void }) => {
+const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string, productDetail: ProductDetail, onClose: () => void, onAddToCart?: (selectedOptions: any) => void }) => {
 
     const [selectedType, setSelectedType] = useState<'cat' | 'dog'>('cat');
     const [selectedPackage, setSelectedPackage] = useState<string>('1 กล่อด(แพ็คเดียว)');
     const [quantity, setQuantity] = useState(1);
+    const [viewerOpen, setViewerOpen] = useState(false);
 
     const product = {
         id: Number(id),
@@ -50,20 +53,39 @@ const ProductSelect = ({ id, onClose, onAddToCart }: { id: number, onClose: () =
             <div className="p-4">
                 <div className="flex justify-start items-end gap-2 mb-4">
                     {/* Product Images */}
-                    <Image
-                        src="/images/product-demo-rm-bg.png"
-                        alt="O3vit สำหรับแมว"
-                        width={60}
-                        height={150}
-                        className="md:h-[150px] h-[100px] w-auto object-contain"
-                    />
+                    <div
+                        className="cursor-pointer inline-block relative border border-gray-light rounded-[10px]"
+                        onClick={() => setViewerOpen(true)}
+                    >
+                        <Image
+                            src="/images/product-demo-rm-bg.png"
+                            alt="O3vit สำหรับแมว"
+                            width={60}
+                            height={150}
+                            className="md:h-[150px] h-[100px] w-auto object-contain"
+                        />
+                        <div className='absolute top-0 right-0 p-2 flex items-center justify-center bg-secondary rounded-full'>
+                            <Maximize2 className="w-5 h-5 text-white" />
+                        </div>
+                    </div>
+                    {viewerOpen && (
+                        <ImageViewer
+                            media={["/images/product-demo-rm-bg.png"]}
+                            currentIndex={0}
+                            isOpen={viewerOpen}
+                            onClose={() => setViewerOpen(false)}
+                        />
+                    )}
+
 
                     {/* Price */}
                     <span className="text-primary md:text-xl text-sm font-bold">฿{product.price}-{product.price + 950}</span>
                     {product.originalPrice && (
-                        <span className="stext-gray-500 line-through md:text-xl text-sm">฿{product.originalPrice}</span>
+                        <span className="text-disabled line-through md:text-xl text-sm">฿{product.originalPrice}</span>
                     )}
                 </div>
+
+                <hr className='w-full my-4 border-gray-light' />
 
                 {/* Type Selection */}
                 <div className="mb-6">
@@ -72,7 +94,7 @@ const ProductSelect = ({ id, onClose, onAddToCart }: { id: number, onClose: () =
                         <button
                             onClick={() => setSelectedType('cat')}
                             className={`flex py-2 px-3 rounded-full border ${selectedType === 'cat'
-                                ? 'bg-blue-50 border-blue-500 text-blue-500'
+                                ? 'bg-primary-light border-primary text-primary'
                                 : 'border-gray-300 text-gray-700'
                                 }`}
                         >
@@ -90,7 +112,7 @@ const ProductSelect = ({ id, onClose, onAddToCart }: { id: number, onClose: () =
                         <button
                             onClick={() => setSelectedType('dog')}
                             className={`flex py-2 px-3 rounded-full border ${selectedType === 'dog'
-                                ? 'bg-orange-50 border-orange-500 text-orange-500'
+                                ? 'bg-primary-light border-primary text-primary'
                                 : 'border-gray-300 text-gray-700'
                                 }`}
                         >
@@ -108,28 +130,27 @@ const ProductSelect = ({ id, onClose, onAddToCart }: { id: number, onClose: () =
                     </div>
                 </div>
 
+                <hr className='w-full my-4 border-gray-light' />
+
+
                 {/* Package Selection */}
                 <div className="mb-6">
                     <p className="text-sm mb-2">เลือกจำนวน</p>
                     <div className="flex gap-2">
-                        <button
-                            onClick={() => setSelectedPackage('1 กล่อด(แพ็คเดียว)')}
-                            className={`flex py-2 px-3 rounded-full border ${selectedPackage === '1 กล่อด(แพ็คเดียว)'
-                                ? 'bg-primary-light border-primary text-primary'
-                                : 'border-gray-300 text-gray-700'
-                                }`}
-                        >
-                            1 กล่อด(แพ็คเดียว)
-                        </button>
-                        <button
-                            onClick={() => setSelectedPackage('1 กล่อง (3หลอด)')}
-                            className={`flex py-2 px-3 rounded-full border ${selectedPackage === '1 กล่อง (3หลอด)'
-                                ? 'bg-primary-light border-primary text-primary'
-                                : 'border-gray-300 text-gray-700'
-                                }`}
-                        >
-                            1 กล่อง (3หลอด)
-                        </button>
+                        {
+                            productDetail.typeSizeList?.map((typeSize, index) => (
+                                <button
+                                    key={index}
+                                    onClick={() => setSelectedPackage(typeSize.productItemId)}
+                                    className={`flex py-2 px-3 rounded-full border ${selectedPackage === typeSize.productItemId
+                                        ? 'bg-primary-light border-primary text-primary'
+                                        : 'border-gray-300 text-gray-700'
+                                        }`}
+                                >
+                                    {typeSize.productItemName}
+                                </button>
+                            ))
+                        }
                     </div>
                 </div>
 
@@ -142,7 +163,7 @@ const ProductSelect = ({ id, onClose, onAddToCart }: { id: number, onClose: () =
                     <div className="flex items-center justify-end">
                         <button
                             onClick={() => quantity > 1 && setQuantity(quantity - 1)}
-                            className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200"
+                            className="w-10 h-10 bg-secondary text-white rounded-full flex items-center justify-center hover:bg-gray-200"
                         >
                             <Minus className="w-4 h-4" />
                         </button>
@@ -155,7 +176,7 @@ const ProductSelect = ({ id, onClose, onAddToCart }: { id: number, onClose: () =
                         />
                         <button
                             onClick={() => setQuantity(quantity + 1)}
-                            className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200"
+                            className="w-10 h-10 bg-secondary text-white rounded-full flex items-center justify-center hover:bg-gray-200"
                         >
                             <Plus className="w-4 h-4" />
                         </button>

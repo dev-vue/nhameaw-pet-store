@@ -141,34 +141,7 @@ export const MOCK_REVIEWS: Review[] = [
         content: 'ดีมากได้ตามที่ได้ดูจาก 25 ml\nผลิตภัณฑ์ที่ปลอดภัยให้กับเด็ก ความปลอดภัยในการใช้งาน การป้องกันและการดูแล การดูแลรักษา การป้องกันเชื้อโรค การป้องกันโรคและแล้วแต่...',
         buyerCount: 0,
         commentCount: 0,
-        images: ['/images/product-demo-rm-bg.png', '/images/product-demo-rm-bg.png']
-    },
-    {
-        id: '3',
-        rating: 4.5,
-        author: 'K*****S',
-        content: 'สินค้าดีคุ้มค่า ใช้งานง่าย ผลลัพธ์ตามที่คาดหวัง แนะนำให้ลองใช้ดูครับ',
-        buyerCount: 2,
-        commentCount: 1,
-        images: ['/images/product-demo-rm-bg.png']
-    },
-    {
-        id: '4',
-        rating: 5.0,
-        author: 'P*****M',
-        content: 'ประทับใจมาก มีการใช้งานที่ง่ายและสะดวก ผลิตภัณฑ์มีคุณภาพสูง ราคาเหมาะสมกับคุณภาพ',
-        buyerCount: 1,
-        commentCount: 0,
         images: ['/images/product-demo-rm-bg.png', '/images/product-demo-rm-bg.png', '/images/product-demo-rm-bg.png', '/images/product-demo-rm-bg.png', '/images/product-demo-rm-bg.png']
-    },
-    {
-        id: '5',
-        rating: 4.8,
-        author: 'N*****W',
-        content: 'เยี่ยมมาก! ใช้แล้วเห็นผลจริงๆ สัตว์เลี้ยงสุขภาพดีขึ้นเยอะ ขอบคุณครับ',
-        buyerCount: 3,
-        commentCount: 2,
-        images: ['/images/product-demo-rm-bg.png', '/images/product-demo-rm-bg.png', '/images/product-demo-rm-bg.png', '/images/product-demo-rm-bg.png']
     }
 ];
 

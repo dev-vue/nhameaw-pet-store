@@ -11,10 +11,11 @@ type ModalBottomProps = {
 	children: JSX.Element;
 	size?: "sm" | "md" | "lg";
 	multiple?: boolean;
+	zIndex?: string;
 	onClose?: () => void;
 };
 
-export default function ModalBottom({ open, header, children, size = "md", multiple = false, onClose }: ModalBottomProps) {
+export default function ModalBottom({ open, header, children, size = "md", multiple = false, zIndex = "z-[1001]", onClose }: ModalBottomProps) {
 	useEffect(() => {
 		if (open) {
 			// Pushing the change to the end of the call stack
@@ -42,12 +43,12 @@ export default function ModalBottom({ open, header, children, size = "md", multi
 			<AnimatePresence>
 				{open && (
 					<Dialog.Portal forceMount>
-						<div className="fixed inset-0 flex flex-col justify-end lg:items-center lg:justify-center z-50">
+						<div className={`fixed inset-0 flex flex-col justify-end lg:items-center lg:justify-center ${zIndex}`}>
 							<Dialog.Overlay
 								forceMount
 								asChild
 								className={cn(
-									multiple ? "z-[1002]" : "z-[1000]",
+									zIndex,
 									"data-[state=open]:animate-overlayShow fixed inset-0 h-full w-screen bg-black/40 backdrop-blur-[2px]"
 								)}
 							>

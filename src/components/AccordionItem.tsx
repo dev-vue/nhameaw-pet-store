@@ -21,13 +21,18 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
                 onClick={() => setIsOpen(!isOpen)}
             >
                 <h3 className="text-base font-medium text-gray-900">{title}</h3>
-                <span className="text-primary">
-                    {isOpen ? (
-                        <ChevronUp className="h-5 w-5" />
-                    ) : (
-                        <ChevronDown className="h-5 w-5" />
-                    )}
-                </span>
+
+                {isOpen ? (
+                    <span className='flex items-center gap-x-2'>
+                        <p>ดูน้อยลง</p>
+                        <ChevronUp className="h-5 w-5 text-primary" />
+                    </span>
+                ) : (
+                    <span className='flex items-center gap-x-2'>
+                        <p>ดูเพิ่มเติม</p>
+                        <ChevronDown className="h-5 w-5 text-primary" />
+                    </span>
+                )}
             </button>
             <div
                 className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-[1000px] pb-4 px-2' : 'max-h-0'

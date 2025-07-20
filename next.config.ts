@@ -1,13 +1,23 @@
 import type { NextConfig } from "next";
 
 /** @type {import('next').NextConfig} */
+
+const imageHost = String(process.env.NEXT_PUBLIC_IMAGE_HOST) ?? "";
+const imageHost2 = String(process.env.NEXT_PUBLIC_IMAGE_HOST2) ?? "";
+
 const nextConfig: NextConfig = {
   output: 'standalone',
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'placehold.co',
+        hostname: imageHost,
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: imageHost2,
         port: '',
         pathname: '/**',
       },
