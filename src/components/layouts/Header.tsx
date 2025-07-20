@@ -37,7 +37,7 @@ const Header = ({ onMenuClick }: { onMenuClick: () => void; }) => {
             setSearchTextLabel("")
             setSearchText("")
         }
-    }, [pathname, showSearch])
+    }, [pathname, showSearch, searchParams])
 
     return (
         <>

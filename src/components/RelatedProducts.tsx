@@ -14,6 +14,13 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
     category,
     className = ''
 }) => {
+    const { data: productList, isLoading: productListLoading, refetch: productListRefetch } = useProducts({
+        keyword: "",
+        page: 0,
+        size: 10,
+        sortDirection: "BSP"
+    });
+
     // Get related products (excluding current product)
     const relatedProducts = MOCK_PRODUCTS
         .filter(product => product.id !== currentProductId)
@@ -22,13 +29,6 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
     if (relatedProducts.length === 0) {
         return null;
     }
-
-    const { data: productList, isLoading: productListLoading, refetch: productListRefetch } = useProducts({
-        keyword: "",
-        page: 0,
-        size: 10,
-        sortDirection: "BSP"
-    });
 
     return (
         <div className={`bg-white rounded-lg ${className}`}>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, X, Play, Pause } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 
@@ -67,7 +67,7 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
         }
     };
 
-    const handleKeyDown = (e: KeyboardEvent) => {
+    const handleKeyDown = useCallback((e: KeyboardEvent) => {
         if (!isOpen) return;
 
         switch (e.key) {
@@ -87,14 +87,14 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
                 }
                 break;
         }
-    };
+    }, [isOpen, index, isVideoPlaying, media, onClose, handleNext, handlePrevious, toggleVideoPlay]);
 
     useEffect(() => {
         if (isOpen) {
             document.addEventListener('keydown', handleKeyDown);
             return () => document.removeEventListener('keydown', handleKeyDown);
         }
-    }, [isOpen, index, isVideoPlaying]);
+    }, [isOpen, handleKeyDown]);
 
     if (!isOpen) return null;
 
