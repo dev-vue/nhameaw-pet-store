@@ -119,8 +119,14 @@ export default function SearchPage() {
                             ))
                         ) : (
                             <div className="col-span-full text-center py-8">
-                                <p className="text-gray-500 text-lg">ไม่พบสินค้าที่ค้นหา</p>
-                                <p className="text-gray-400 text-sm mt-2">ลองเปลี่ยนคำค้นหาหรือตัวกรองดู</p>
+                                <div className="flex flex-col items-center">
+                                    <img
+                                        src="/images/204-no-data.png"
+                                        alt="No favorite items"
+                                        className="w-48 h-48 object-contain"
+                                    />
+                                    <p className="mt-4 text-subdube text-base">ยังไม่มีรายการ</p>
+                                </div>
                             </div>
                         )
                 }
