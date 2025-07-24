@@ -6,37 +6,44 @@ import { Button } from "@/components/ui/Button";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ShippingAddress } from "@/types/address";
+import { useEffect } from "react";
 
 export type AddressModalProps = {
     open: boolean;
     onClose: () => void;
-    onSave?: (data: AddressFormData) => void;
+    onSave?: (data: ShippingAddressFormData) => void;
+    shippingAddressData?: ShippingAddress;
 };
 
 const formSchema = z.object({
-    recipientName: z.string().min(1, { message: "กรุณาระบุชื่อ-นามสกุลผู้รับ" }),
-    phoneNumber: z.string().min(10, { message: "กรุณาระบุหมายเลขโทรศัพท์ให้ถูกต้อง" }),
-    address: z.string().min(1, { message: "กรุณาระบุที่อยู่สำหรับจัดส่ง" }),
-    additionalInfo: z.string().optional(),
+    recipientFullName: z.string().min(1, { message: "กรุณาระบุชื่อ-นามสกุลผู้รับ" }),
+    recipientPhoneNumber: z.string().min(10, { message: "กรุณาระบุหมายเลขโทรศัพท์ให้ถูกต้อง" }),
+    shippingAddress: z.string().min(1, { message: "กรุณาระบุที่อยู่สำหรับจัดส่ง" }),
+    additionalAddress: z.string().optional(),
 });
 
-export type AddressFormData = z.infer<typeof formSchema>;
+export type ShippingAddressFormData = z.infer<typeof formSchema>;
 
-const defaultValues: Partial<AddressFormData> = {
-    recipientName: "โรงพยาบาลสัตว์",
-    phoneNumber: "099-888-9999",
-    address: "100/847 ต.23/1/หมู่บ้านสามขวา ตำบลบางพลัด อำเภอบ้านดอน จังหวัดกรุงเทพ 11120",
-    additionalInfo: "",
-};
-
-export function AddressModal({ open, onClose, onSave }: AddressModalProps) {
-    const form = useForm<AddressFormData>({
+export function AddressModal({ open, onClose, onSave, shippingAddressData }: AddressModalProps) {
+    const form = useForm<ShippingAddressFormData>({
         resolver: zodResolver(formSchema),
-        defaultValues: defaultValues,
+        defaultValues: {
+            recipientFullName: shippingAddressData?.recipientFullName ?? "",
+            recipientPhoneNumber: shippingAddressData?.recipientPhoneNumber ?? "",
+            shippingAddress: shippingAddressData?.shippingAddress ?? "",
+            additionalAddress: shippingAddressData?.additionalAddress ?? "",
+        },
     });
 
-    const onSubmit = (data: AddressFormData) => {
-        console.log('Address data:', data);
+    useEffect(() => {
+        if (shippingAddressData) {
+            form.reset(shippingAddressData);
+        }
+    }, [shippingAddressData]);
+
+
+    const onSubmit = (data: ShippingAddressFormData) => {
         if (onSave) {
             onSave(data);
         }
@@ -67,7 +74,7 @@ export function AddressModal({ open, onClose, onSave }: AddressModalProps) {
                                 <div>
                                     <FormField
                                         control={form.control}
-                                        name="recipientName"
+                                        name="recipientFullName"
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel isRequired>
@@ -87,7 +94,7 @@ export function AddressModal({ open, onClose, onSave }: AddressModalProps) {
                                 <div>
                                     <FormField
                                         control={form.control}
-                                        name="phoneNumber"
+                                        name="recipientPhoneNumber"
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel isRequired>
@@ -107,7 +114,7 @@ export function AddressModal({ open, onClose, onSave }: AddressModalProps) {
                                 <div>
                                     <FormField
                                         control={form.control}
-                                        name="address"
+                                        name="shippingAddress"
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel isRequired>
@@ -118,7 +125,7 @@ export function AddressModal({ open, onClose, onSave }: AddressModalProps) {
                                                     className={cn(
                                                         "w-full rounded-lg border border-gray-200 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary resize-none",
                                                         "min-h-[100px]",
-                                                        form.formState.errors.address && "border-red-500 focus:ring-red-500 focus:border-red-500"
+                                                        form.formState.errors.shippingAddress && "border-red-500 focus:ring-red-500 focus:border-red-500"
                                                     )}
                                                     {...field}
                                                 />
@@ -131,7 +138,7 @@ export function AddressModal({ open, onClose, onSave }: AddressModalProps) {
                                 <div>
                                     <FormField
                                         control={form.control}
-                                        name="additionalInfo"
+                                        name="additionalAddress"
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel>

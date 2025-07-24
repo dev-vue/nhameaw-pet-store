@@ -1,6 +1,6 @@
-import { MyCartCountResponse, MyCartData } from "@/types/cart";
+import { AddItemToCart, MyCartCountResponse, MyCartData, DeleteCartItem } from "@/types/cart";
 import api from "@/utils/api";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 /**
  * API function to fetch getMyCartCount (no hooks)
  * @returns Promise with getMyCartCount
@@ -73,5 +73,88 @@ export const useMyCart = (params: { lineUserId: string; }) => {
         enabled: !!params.lineUserId && params.lineUserId !== "",
         gcTime: 5 * 60 * 1000, // 5 minutes
         staleTime: 2 * 60 * 1000, // 2 minutes
+    });
+};
+
+/**
+ * Interface for updating product favourite request
+ */
+
+/**
+ * API function to update product favourite (no hooks)
+ * @returns Promise with updated  product favourite data
+ */
+export const addItemToCart = async (params: AddItemToCart) => {
+    try {
+        const { data } = await api.post<any>(`/api/pet-store/v1/add-items-my-cart`, params);
+
+        return data;
+    } catch (error) {
+        console.error('Error updating shipping address:', error);
+        throw error;
+    }
+};
+
+/**
+ * Custom hook to update product favourite using React Query mutation
+ * @returns useMutation result for updating product favourite
+ */
+export const useAddItemToCart = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation<AddItemToCart, Error, AddItemToCart>({
+        mutationFn: addItemToCart,
+        onSuccess: (data, variables) => {
+            queryClient.invalidateQueries({
+                queryKey: ["getMyCartData"],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["getMyCartCount"],
+            });
+        },
+        onError: (error) => {
+            console.error('Failed to update shipping address:', error);
+        },
+    });
+};
+
+/**
+ * API function to delete cart item (no hooks)
+ * @returns Promise with delete cart item response
+ */
+export const deleteCartItem = async (params: DeleteCartItem) => {
+    try {
+        const { data } = await api.delete<any>(`/api/pet-store/v1/delete-items-my-cart`, {
+            data: params
+        });
+
+        return data;
+    } catch (error) {
+        console.error('Error deleting cart item:', error);
+        throw error;
+    }
+};
+
+/**
+ * Custom hook to delete cart item using React Query mutation
+ * @returns useMutation result for deleting cart item
+ */
+export const useDeleteCartItem = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation<any, Error, DeleteCartItem>({
+        mutationFn: deleteCartItem,
+        onSuccess: (data, variables) => {
+            // Invalidate cart queries to refresh the data
+            queryClient.invalidateQueries({
+                queryKey: ["getMyCartData"],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["getMyCartCount"],
+            });
+        },
+        onError: (error) => {
+            console.error('Failed to delete cart item:', error);
+        },
     });
 };

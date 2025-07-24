@@ -106,7 +106,7 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="fixed inset-0 bg-[#000000] z-[999] flex items-center justify-center"
+                    className="fixed inset-0 bg-[#000000] z-[9999] flex items-center justify-center"
                 >
                     {/* Header */}
                     <div className="absolute top-0 left-0 right-0 z-10 flex justify-between items-center p-4">
@@ -151,7 +151,7 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
                                 animate={{ opacity: 1, scale: 1 }}
                                 exit={{ opacity: 0, scale: 0.8 }}
                                 transition={{ duration: 0.3 }}
-                                className="relative max-w-full max-h-full"
+                                className="relative max-w-fit max-h-fit"
                             >
                                 {isVideo(media[index]) ? (
                                     <div className="relative">
@@ -163,6 +163,7 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
                                             onPlay={() => setIsVideoPlaying(true)}
                                             onPause={() => setIsVideoPlaying(false)}
                                             onClick={toggleVideoPlay}
+                                            autoPlay
                                         />
                                         <button
                                             onClick={toggleVideoPlay}

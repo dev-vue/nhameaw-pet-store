@@ -6,8 +6,11 @@ import { ChevronLeft, Menu, Search, ShoppingCart, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMyCartCount } from "@/lib/react-query/cart";
+import { useSession } from "next-auth/react";
 
-const Header = ({ onMenuClick }: { onMenuClick: () => void; }) => {
+const Header = ({ onMenuClick, className }: { onMenuClick: () => void; className?: string }) => {
+
+    const { data: session } = useSession();
 
     const searchParams = useSearchParams();
     const pathname = usePathname();
@@ -16,7 +19,7 @@ const Header = ({ onMenuClick }: { onMenuClick: () => void; }) => {
     const [searchText, setSearchText] = useState("");
     const [searchTextLabel, setSearchTextLabel] = useState("");
 
-    const { data: cartItemCount } = useMyCartCount({ lineUserId: "U3a1e3dc0b443f061ad62aafc12c16633" });
+    const { data: cartItemCount } = useMyCartCount({ lineUserId: session?.user?.id ?? "" });
 
     const { push, back } = useRouter();
 
@@ -89,6 +92,7 @@ const Header = ({ onMenuClick }: { onMenuClick: () => void; }) => {
                     </div>
                 </div>
             )}
+
             <header className="bg-white sticky top-0 z-30">
                 <div className="container mx-auto">
                     {/* Desktop Header */}
@@ -119,11 +123,12 @@ const Header = ({ onMenuClick }: { onMenuClick: () => void; }) => {
                                 <Button size="md" leftIcon={<ShoppingCart className="h-5 w-5" />} onClick={() => push('/my-cart')}>
                                     ตะกร้า
                                 </Button>
-                                {cartItemCount?.total && cartItemCount?.total > 0 && (
+                                {
+                                    (cartItemCount && cartItemCount?.total > 0) &&
                                     <div className="absolute -top-2 -right-2 bg-critical text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                                        {cartItemCount?.total > 99 ? '99+' : cartItemCount?.total}
+                                        {cartItemCount.total > 99 ? '99+' : cartItemCount.total}
                                     </div>
-                                )}
+                                }
                             </div>
                             <div className="relative">
                                 <input
@@ -142,8 +147,8 @@ const Header = ({ onMenuClick }: { onMenuClick: () => void; }) => {
                     </div>
 
                     {/* Mobile & Tablet Header */}
-                    <div className="lg:hidden grid grid-cols-3 items-center py-4 px-4">
-                        <button onClick={onMenuClick} className="cursor-pointer flex items-center space-x-2 text-primary pr-3 py-2 text-sm">
+                    <div className={`lg:hidden grid grid-cols-3 items-center py-4 px-4 ${className ? className : ''}`}>
+                        <button onClick={onMenuClick} className={`cursor-pointer flex items-center space-x-2 text-primary pr-3 py-2 text-sm`}>
                             <Menu className="h-5 w-5" />
                             <span>เมนู</span>
                         </button>
@@ -165,11 +170,12 @@ const Header = ({ onMenuClick }: { onMenuClick: () => void; }) => {
                             <Button size="sm" className="w-fit justify-self-end" leftIcon={<ShoppingCart className="h-5 w-5" />} onClick={() => push('/my-cart')}>
                                 ตะกร้า
                             </Button>
-                            {cartItemCount?.total && cartItemCount?.total > 0 && (
+                            {
+                                (cartItemCount && cartItemCount?.total > 0) &&
                                 <div className="absolute -top-2 -right-2 bg-critical text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
-                                    {cartItemCount?.total > 99 ? '99+' : cartItemCount?.total}
+                                    {cartItemCount.total > 99 ? '99+' : cartItemCount.total}
                                 </div>
-                            )}
+                            }
                         </div>
                     </div>
 

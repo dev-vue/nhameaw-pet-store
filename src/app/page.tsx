@@ -13,7 +13,6 @@ import { useBannersAndCategory } from '@/lib/react-query/banner';
 import Loading from '@/components/common/Loading';
 import { useInfiniteProducts } from '@/lib/react-query/product';
 import { Product } from '@/types/product';
-import { useCategories } from '@/lib/react-query/category';
 
 export default function HomePage() {
 

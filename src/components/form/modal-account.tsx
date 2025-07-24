@@ -8,16 +8,16 @@ import { Button } from "@/components/ui/Button";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Popover from "@/components/common/Popover";
-import { Calendar } from "@/components/ui/Calendar";
-import { Combobox } from "../common/Combobox";
+import { useLineProfile, useRegisterUpdateProfile } from "@/lib/react-query/user";
+import { useSession } from "next-auth/react";
+import { GENDER_OPTIONS } from "@/constants";
+import { LineProfileData } from "@/types/user";
 
 export type AccountModalProps = {
     open: boolean;
     onClose: () => void;
+    profileData?: LineProfileData
 };
-
-import { GENDER_OPTIONS } from "@/constants";
 
 const formSchema = z.object({
     gender: z.string({ required_error: "กรุณาระบุเพศ" }).min(1, { message: "กรุณาระบุเพศ" }),
@@ -26,21 +26,46 @@ const formSchema = z.object({
 
 type FormData = z.infer<typeof formSchema>;
 
-const defaultValues: Partial<FormData> = {
-    gender: "",
-    dob: undefined
-};
+export function AccountModal({ open, onClose, profileData }: AccountModalProps) {
 
-export function AccountModal({ open, onClose }: AccountModalProps) {
-    const [name] = useState("W3DDE");
+    const { data: session } = useSession();
+    const { mutate: updateProfile, isPending: updatingProfilePending } = useRegisterUpdateProfile();
 
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
-        defaultValues: defaultValues,
+        defaultValues: {
+            gender: profileData?.gender ?? "",
+            dob: profileData?.birthDate ? new Date(profileData?.birthDate) : undefined
+        },
     });
 
     const onSubmit = (data: FormData) => {
-        console.log('data', data)
+        if (!session?.user?.id || !session?.user?.image) {
+            console.error('Missing required session data');
+            return;
+        }
+
+        // Format date to string (DD-MM-YYYY format)
+        const birthDate = data.dob
+            ? `${String(data.dob.getDate()).padStart(2, '0')}-${String(data.dob.getMonth() + 1).padStart(2, '0')}-${data.dob.getFullYear()}`
+            : '';
+
+        updateProfile({
+            lineUserId: session.user.id,
+            displayName: session.user.name ?? "",
+            pictureUrl: session.user.image,
+            gender: data.gender,
+            birthDate: birthDate
+        }, {
+            onSuccess: (response) => {
+                console.log('Profile updated successfully:', response);
+                onClose(); // Close modal on success
+            },
+            onError: (error) => {
+                console.error('Failed to update profile:', error);
+                // You can add toast/alert notification here if needed
+            }
+        });
     }
 
     const handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -80,6 +105,20 @@ export function AccountModal({ open, onClose }: AccountModalProps) {
                                 // Add padding bottom on mobile only to prevent content being hidden behind fixed buttons
                                 "pb-24 md:pb-0"
                             )}>
+
+                                <div>
+                                    <FormItem>
+                                        <FormLabel isRequired>
+                                            ชื่อไลน์
+                                        </FormLabel>
+                                        <Input
+                                            type="text"
+                                            value={session?.user.name ?? ""}
+                                            disabled
+                                        />
+                                        <FormMessage />
+                                    </FormItem>
+                                </div>
                                 <div>
                                     <FormField
                                         control={form.control}
@@ -87,13 +126,6 @@ export function AccountModal({ open, onClose }: AccountModalProps) {
                                         render={({ field }) => (
                                             <FormItem>
                                                 <FormLabel isRequired>เพศ</FormLabel>
-                                                {/* <Combobox
-                                                    options={GENDER_OPTIONS}
-                                                    placeholder="เลือกเพศ"
-                                                    value={field.value}
-                                                    onChange={field.onChange}
-                                                    isError={form.formState.errors.gender}
-                                                /> */}
                                                 <div className="relative w-full">
                                                     <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none z-10">
                                                         <User className="h-4 w-4 text-gray-400" />
@@ -151,47 +183,7 @@ export function AccountModal({ open, onClose }: AccountModalProps) {
                                                                 field.value ? "text-gray-900" : "text-gray-500"
                                                             )}
                                                         />
-                                                        {/* Placeholder text overlay when no date selected */}
-                                                        {/* {!field.value && (
-                                                            <div className="absolute inset-0 flex items-center justify-start pl-10 pointer-events-none">
-                                                                <span className="text-gray-500 text-base">เลือกวันเกิด</span>
-                                                            </div>
-                                                        )} */}
                                                     </div>
-
-                                                    {/* Desktop: Custom Calendar Popup */}
-                                                    {/* <div className="hidden md:block">
-                                                        <Popover
-                                                            type="calendar"
-                                                            trigger={
-                                                                <button
-                                                                    type="button"
-                                                                    className={cn(
-                                                                        // Base styles matching Input and Combobox
-                                                                        "w-full rounded-lg border border-gray-200 px-4 py-2 text-base focus:outline-none",
-                                                                        "flex items-center justify-start text-left pl-10",
-                                                                        // Placeholder/text color
-                                                                        !field.value ? "text-gray-500" : "text-gray-900",
-                                                                        // Error styles
-                                                                        form.formState.errors.dob && "border-red-500 focus:ring-red-500 focus:border-red-500"
-                                                                    )}
-                                                                >
-                                                                    {field.value ? (
-                                                                        convertDateToThai(field.value, "dd MMMM yyyy")
-                                                                    ) : (
-                                                                        "เลือกวันเกิด"
-                                                                    )}
-                                                                </button>
-                                                            }
-                                                            side="bottom"
-                                                        >
-                                                            <Calendar
-                                                                mode="single"
-                                                                selected={field.value ? field.value : undefined}
-                                                                onSelect={field.onChange}
-                                                            />
-                                                        </Popover>
-                                                    </div> */}
                                                 </div>
                                                 <FormMessage />
                                             </FormItem>
@@ -220,8 +212,9 @@ export function AccountModal({ open, onClose }: AccountModalProps) {
                                         type="submit"
                                         size="md"
                                         className="flex-1"
+                                        disabled={updatingProfilePending}
                                     >
-                                        บันทึก
+                                        {updatingProfilePending ? 'กำลังบันทึก...' : 'บันทึก'}
                                     </Button>
                                 </div>
                             </div>
@@ -241,8 +234,9 @@ export function AccountModal({ open, onClose }: AccountModalProps) {
                                     type="submit"
                                     size="md"
                                     className="flex-1"
+                                    disabled={updatingProfilePending}
                                 >
-                                    บันทึก
+                                    {updatingProfilePending ? 'กำลังบันทึก...' : 'บันทึก'}
                                 </Button>
                             </div>
                         </form>

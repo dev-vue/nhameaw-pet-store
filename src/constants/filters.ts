@@ -7,9 +7,10 @@ export enum ProductSortType {
 }
 
 export enum GenderType {
-    MALE = 'male',
-    FEMALE = 'female',
-    OTHER = 'other'
+    DEFAULT = '',
+    MALE = 'M',
+    FEMALE = 'F',
+    OTHER = 'N'
 }
 
 export enum PetType {
@@ -41,6 +42,10 @@ export const PRODUCT_FILTER_OPTIONS = [
 
 export const GENDER_OPTIONS = [
     {
+        label: 'เลือกเพศ',
+        value: GenderType.DEFAULT
+    },
+    {
         label: 'ชาย',
         value: GenderType.MALE
     },
@@ -49,7 +54,7 @@ export const GENDER_OPTIONS = [
         value: GenderType.FEMALE
     },
     {
-        label: 'อื่นๆ',
+        label: 'ไม่ระบุ',
         value: GenderType.OTHER
     }
 ];

@@ -12,6 +12,7 @@ import { createPortal } from "react-dom";
 import MainLayout from "./main";
 import ProductLayout from "./product";
 import MyCartLayout from "./mycart";
+import 'react-toastify/dist/ReactToastify.css';
 
 export type LayoutsProps = {
     children: JSX.Element | React.ReactNode;
@@ -77,6 +78,10 @@ export default function Layouts({ children }: LayoutsProps) {
         return children;
     }
 
+    if (pathname.startsWith("/auth/auto-signin")) {
+        return children;
+    }
+
     if (pathname.startsWith("/product")) {
         return (
             <QueryClientProvider client={queryClient}>
@@ -97,7 +102,7 @@ export default function Layouts({ children }: LayoutsProps) {
             <QueryClientProvider client={queryClient}>
                 <Suspense fallback={<Loading fullscreen />}>
                     <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-                    <Header onMenuClick={() => setSidebarOpen(true)} />
+                    <Header onMenuClick={() => setSidebarOpen(true)} className="!hidden" />
                     {
                         title &&
                         <div className="bg-white">

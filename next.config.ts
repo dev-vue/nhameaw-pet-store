@@ -4,6 +4,8 @@ import type { NextConfig } from "next";
 
 const imageHost = String(process.env.NEXT_PUBLIC_IMAGE_HOST) ?? "";
 const imageHost2 = String(process.env.NEXT_PUBLIC_IMAGE_HOST2) ?? "";
+const imageHostLine = String(process.env.NEXT_PUBLIC_IMAGE_HOST_LINE) ?? "";
+
 
 const nextConfig: NextConfig = {
   output: 'standalone',
@@ -18,6 +20,12 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: imageHost2,
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: imageHostLine,
         port: '',
         pathname: '/**',
       },

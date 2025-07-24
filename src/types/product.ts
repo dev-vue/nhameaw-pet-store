@@ -37,8 +37,10 @@ export interface ProductDetail {
     sold?: string;
     productBalance?: string;
     averageReviewScore?: number;
+    isFavorite: boolean;
     fileList?: FileList[];
-    typeSizeList?: TypeSizeList[];
+    typeSizeList: TypeSizeList[];
+    quantityList: QuantityListItem[];
 }
 
 export interface FileList {
@@ -62,9 +64,18 @@ export interface FileData {
     url: string;
 }
 
-export interface QuantityItem {
-    // Define based on actual quantityList structure when available
-    [key: string]: any;
+export interface QuantityListItem {
+    productQuantityId: string;
+    productId: string;
+    productQuantityName: string;
+    productQuantity: number;
+    price: number;
+    percentDiscount: number | null;
+    discountPrice: number;
+    status: "AVAILABLE" | "UNAVAILABLE" | "OUT_OF_STOCK";
+    file: FileData;
+    showDelete: boolean;
+    delete: boolean;
 }
 
 export interface TypeSizeList {
@@ -78,7 +89,7 @@ export interface TypeSizeList {
     status: "AVAILABLE" | "UNAVAILABLE" | "OUT_OF_STOCK";
     sku: string | null;
     file: FileData;
-    quantityList: QuantityItem[];
+    quantityList: QuantityListItem[];
     delete: boolean;
     showDelete: boolean;
 }

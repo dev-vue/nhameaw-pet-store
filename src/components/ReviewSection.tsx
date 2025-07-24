@@ -1,16 +1,7 @@
 import { Star, ChevronRight } from 'lucide-react';
 import ReviewCard from '@/components/ReviewCard';
 import { Button } from './ui/Button';
-
-interface Review {
-    id: string;
-    rating: number;
-    author: string;
-    content: string;
-    buyerCount: number;
-    commentCount: number;
-    images: string[];
-}
+import { Review } from '@/types/review';
 
 interface ReviewSectionProps {
     productRating: number;
@@ -46,7 +37,7 @@ const ReviewSection = ({
             <div className="divide-y divide-gray-light">
                 {reviews.map((review) => (
                     <ReviewCard
-                        key={review.id}
+                        key={review.review_id}
                         review={review}
                     />
                 ))}

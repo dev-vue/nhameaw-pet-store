@@ -3,33 +3,40 @@ import { Star, Play } from 'lucide-react';
 import Modal from './Modal';
 import ImageViewer from './ImageViewer';
 import { useRouter } from 'next/navigation';
-
-interface Review {
-    id: string;
-    rating: number;
-    author: string;
-    content: string;
-    buyerCount: number;
-    commentCount: number;
-    images: string[];
-}
+import { useInfiniteProductReviews } from '@/lib/react-query/review';
+import { Review } from '@/types/review';
 
 interface ReviewsModalProps {
     open: boolean;
     onClose: () => void;
-    reviews: Review[];
     productRating: number;
     productName: string;
+    productId: string;
+    reviewId?: string;
 }
 
 const ReviewsModal: React.FC<ReviewsModalProps> = ({
     open,
     onClose,
-    reviews,
+    productId,
     productRating,
-    productName
+    reviewId
 }) => {
     const { push } = useRouter();
+
+    const {
+        data: reviewsData,
+        isLoading: reviewsLoading,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+    } = useInfiniteProductReviews({
+        productId: productId,
+        size: 6,
+    });
+
+    const allReview: Review[] = reviewsData?.pages.flatMap(page => page.content ?? []) ?? [];
+
     const [imageViewerOpen, setImageViewerOpen] = useState(false);
     const [currentMedia, setCurrentMedia] = useState<string[]>([]);
     const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
@@ -43,7 +50,6 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
         setCurrentMediaIndex(index);
         setImageViewerOpen(true);
     };
-
 
     const renderMediaGrid = (media: string[]) => {
         if (media.length === 0) return null;
@@ -320,13 +326,13 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
 
                     {/* Reviews List */}
                     <div className="space-y-4">
-                        {reviews.map((review, index) => (
-                            <div key={review.id} className="bg-white p-4">
+                        {allReview.map((review, index) => (
+                            <div key={review.review_id} className="bg-white p-4">
                                 {/* Review Content */}
                                 <div className="mb-3">
                                     {/* Review Author */}
                                     <p className="text-sm text-gray-700 mb-2">
-                                        <span className="font-medium">{review.author}</span>
+                                        <span className="font-medium">{review.review_by}</span>
                                     </p>
                                     {/* Review Rating */}
                                     <div className="flex items-center gap-2 mb-3">
@@ -334,7 +340,7 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
                                             {[1, 2, 3, 4, 5].map((star) => (
                                                 <Star
                                                     key={star}
-                                                    className={`w-4 h-4 ${star <= review.rating
+                                                    className={`w-4 h-4 ${star <= review.review_rating
                                                         ? 'fill-warning text-warning'
                                                         : 'text-gray-300'
                                                         }`}
@@ -348,7 +354,7 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
                                     </p>
                                     {/* Review Content */}
                                     <p className="text-sm leading-relaxed whitespace-pre-line">
-                                        {review.content}
+                                        {review.review_desc}
                                     </p>
                                 </div>
 
@@ -362,22 +368,50 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
                                 </div>
 
                                 {/* Review Images/Videos */}
-                                {review.images.length > 0 && (
+                                {review.file_list.length > 0 && (
                                     <div className="mb-3">
-                                        {renderMediaGrid(review.images)}
+                                        {renderMediaGrid(review.file_list.map(file => file.url))}
                                     </div>
                                 )}
 
                                 {/* Review Stats */}
                                 <div className="flex items-center gap-4 text-xs text-subdube py-2 border-b border-gray-light">
-                                    2025-05-20 17:52
+                                    {review.review_date} {review.review_time}
                                 </div>
                             </div>
                         ))}
                     </div>
 
+                    {/* Load More Button */}
+                    {hasNextPage && allReview.length > 0 && (
+                        <div className="text-center py-4">
+                            <button
+                                onClick={() => fetchNextPage()}
+                                disabled={isFetchingNextPage}
+                                className="inline-flex items-center justify-center gap-2 px-6 py-2 bg-white text-secondary hover:text-white hover:bg-secondary border border-gray-light rounded-full disabled:opacity-50 disabled:cursor-not-allowed"
+                            >
+                                {isFetchingNextPage ? (
+                                    <>
+                                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+                                        <span>กำลังโหลด...</span>
+                                    </>
+                                ) : (
+                                    <span>ดูเพิ่มเติม</span>
+                                )}
+                            </button>
+                        </div>
+                    )}
+
+                    {/* Loading State for Initial Load */}
+                    {reviewsLoading && (
+                        <div className="text-center py-8">
+                            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
+                            <p className="text-gray-500">กำลังโหลดรีวิว...</p>
+                        </div>
+                    )}
+
                     {/* Empty State */}
-                    {reviews.length === 0 && (
+                    {allReview.length === 0 && !reviewsLoading && (
                         <div className="text-center py-8">
                             <div className="text-gray-400 mb-2">
                                 <Star className="w-12 h-12 mx-auto opacity-50" />

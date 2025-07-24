@@ -76,9 +76,13 @@ export const useInfiniteProducts = (params: { keyword: string; size: number; sor
  * API function to fetch product detail (no hooks)
  * @returns Promise with product detail
  */
-export const getProductDetail = async (id: string) => {
+export const getProductDetail = async (params: { productid: string, lineUserId?: string }) => {
     try {
-        const { data } = await api.get<ProductDetail>(`/api/pet-store/v1/product-detail/${id}`)
+        const { data } = await api.post<ProductDetail>(`/api/pet-store/v1/get-product-detail`, {
+            productId: params.productid,
+            lineUserId: params.lineUserId ?? ""
+        })
+
         return data;
     } catch (error) {
         console.error('Error fetching banners:', error);
@@ -90,12 +94,60 @@ export const getProductDetail = async (id: string) => {
  * Custom hook to fetch product list using React Query
  * @returns useQuery result with product list
  */
-export const useProductDetail = (id: string) => {
+export const useProductDetail = (params: { productid: string, lineUserId?: string }) => {
 
     return useQuery<ProductDetail>({
-        queryKey: ["getProductDetail", id],
-        queryFn: () => getProductDetail(id),
+        queryKey: ["getProductDetail", params],
+        queryFn: () => getProductDetail(params),
         gcTime: 5 * 60 * 1000, // 5 minutes
         staleTime: 2 * 60 * 1000, // 2 minutes
     });
 };
+
+/**
+ * API function to fetch related products by category (no hooks)
+ * @returns Promise with related products list
+ */
+export const getRelatedProducts = async (params: { productId: string; page: number; size: number }) => {
+    try {
+        const { data } = await api.post<ProductsData>(`/api/pet-store/v1/same-product-category`, {
+            productId: params.productId,
+            page: params.page ?? 0,
+            size: params.size ?? 10
+        });
+
+        return data;
+    } catch (error) {
+        console.error('Error fetching related products:', error);
+        throw error;
+    }
+};
+
+/**
+ * Custom hook to fetch infinite related products using React Query
+ * @returns useInfiniteQuery result with related products list
+ */
+export const useInfiniteRelatedProducts = (params: { productId: string; size: number }) => {
+    const defaultParams = {
+        productId: params.productId,
+        size: params.size ?? 10
+    };
+
+    return useInfiniteQuery({
+        queryKey: ["getInfiniteRelatedProducts", defaultParams],
+        queryFn: ({ pageParam = 0 }) => getRelatedProducts({ ...defaultParams, page: pageParam as number }),
+        getNextPageParam: (lastPage, allPages) => {
+            // If it's the last page, return undefined to stop fetching
+            if (lastPage.last) {
+                return undefined;
+            }
+            // Return the next page number (current page + 1)
+            return allPages.length;
+        },
+        initialPageParam: 0,
+        gcTime: 5 * 60 * 1000, // 5 minutes
+        staleTime: 2 * 60 * 1000, // 2 minutes
+        enabled: !!params.productId, // Only run when productId is provided
+    });
+};
+

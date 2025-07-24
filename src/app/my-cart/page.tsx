@@ -1,16 +1,16 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Check, CheckCircle, Minus, Plus, X } from 'lucide-react';
+import { CheckCircle, Minus, Plus, X } from 'lucide-react';
 import Image from 'next/image';
-import { AddressModal, AddressFormData } from '@/components/form/modal-address';
+import { AddressModal, ShippingAddressFormData } from '@/components/form/modal-address';
 import CartFooter from '@/components/CartFooter';
 import { swal } from '@/components/common/SweetAlert';
 import { useRouter } from 'next/navigation';
-import { useMyCart } from '@/lib/react-query/cart';
-import { useShippingAddress } from '@/lib/react-query/address';
+import { useDeleteCartItem, useMyCart } from '@/lib/react-query/cart';
+import { useShippingAddress, useUpdateShippingAddress } from '@/lib/react-query/address';
 import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useSession } from 'next-auth/react';
 
 interface CartItemProps {
     id: string;
@@ -26,10 +26,14 @@ interface CartItemProps {
 export default function MyCartPage() {
 
     const { push } = useRouter();
+    const { data: session } = useSession();
 
+    const lineUserId = session?.user?.id;
 
-    const { data: myCartData } = useMyCart({ lineUserId: "U3a1e3dc0b443f061ad62aafc12c16633" });
-    const { data: shippingAddressData } = useShippingAddress({ lineUserId: "U3a1e3dc0b443f061ad62aafc12c16633" });
+    const { data: myCartData } = useMyCart({ lineUserId: lineUserId ?? "" });
+    const { data: shippingAddressData } = useShippingAddress({ lineUserId: lineUserId ?? "" });
+    const { mutate: updateShippingAddress, isPending: isUpdatingShippingAddress } = useUpdateShippingAddress();
+    const { mutate: deleteCartItem } = useDeleteCartItem();
 
     // Demo cart data
     const [cartItems, setCartItems] = useState<CartItemProps[]>([
@@ -55,13 +59,6 @@ export default function MyCartPage() {
 
     // Address modal state
     const [showAddressModal, setShowAddressModal] = useState(false);
-    const [addressData, setAddressData] = useState<AddressFormData>({
-        recipientName: "โรงพยาบาลสัตว์",
-        phoneNumber: "099-888-9999",
-        address: "100/847 ต.23/1/หมู่บ้านสามขวา ตำบลบางพลัด อำเภอบ้านดอน จังหวัดกรุงเทพ 11120",
-        additionalInfo: "",
-    });
-
     // Calculate totals
     const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
     const originalTotal = cartItems.reduce((total, item) => total + (item.originalPrice * item.quantity), 0);
@@ -84,23 +81,42 @@ export default function MyCartPage() {
 
     const removeItem = (id: number) => {
         setCartItems(cartItems.filter(item => item.id !== id.toString()));
+        deleteCartItem({ id: id })
     };
 
     const handleEditAddress = () => {
         setShowAddressModal(true);
     };
 
-    const handleSaveAddress = (data: AddressFormData) => {
-
-        setAddressData(data);
-        toast.success('บันทึกสำเร็จ', {
-            icon: <CheckCircle className='w-5 h-5 text-success' />, // or use a custom icon component
-            style: {
-                background: "#F1F9EA",
-                borderRadius: "14px",
-                fontWeight: 600,
-                color: 'black',
-                fontFamily: "notoSansThai"
+    const handleSaveAddress = async (data: ShippingAddressFormData) => {
+        updateShippingAddress({
+            lineUserId: lineUserId ?? "",
+            ...data,
+            additionalAddress: data.additionalAddress ?? ""
+        }, {
+            onSuccess() {
+                toast.success('บันทึกสำเร็จ', {
+                    icon: <CheckCircle className='w-5 h-5 text-success' />,
+                    style: {
+                        background: "#F1F9EA",
+                        borderRadius: "14px",
+                        fontWeight: 600,
+                        color: 'black',
+                        fontFamily: "notoSansThai"
+                    }
+                });
+            },
+            onError() {
+                toast.error('พบข้อผิดพลาด', {
+                    icon: <X className='w-5 h-5 text-critical' />,
+                    style: {
+                        background: "#ffc7c7",
+                        borderRadius: "14px",
+                        fontWeight: 600,
+                        color: 'black',
+                        fontFamily: "notoSansThai"
+                    }
+                });
             }
         });
     };
@@ -109,7 +125,6 @@ export default function MyCartPage() {
         // Handle sending cart to admin
         const cartData = {
             items: cartItems,
-            address: addressData,
             totals: {
                 subtotal,
                 total,
@@ -132,14 +147,14 @@ export default function MyCartPage() {
     };
 
     return (
-        <div className="bg-gray-100 max-h-screen overflow-auto">
-            <div className="container mx-auto space-y-8 py-5 md:px-5 px-3 pb-32">
+        <div className="bg-gray-100 min-h-screen">
+            <div className="container mx-auto space-y-8 py-5 md:px-5 px-3 pb-40">
                 {/* Address Section */}
                 <div className="grid grid-cols-2 gap-4">
                     <div className="sm:col-span-1 col-span-2">
                         <div className="bg-white mb-4 p-4 rounded-lg">
                             {
-                                shippingAddressData && (
+                                shippingAddressData && Object.keys(shippingAddressData).length > 0 ? (
                                     <div className="flex items-start">
                                         <img src="/icons/cart-pin.svg" alt="pin" className="w-5 h-5 lg:w-7 lg:h-7" />
                                         <div className="flex-grow">
@@ -167,6 +182,14 @@ export default function MyCartPage() {
                                         </button>
                                     </div>
                                 )
+                                    :
+                                    <div className='flex items-center justify-center h-full py-3'>
+
+                                        <button type='button' onClick={handleEditAddress} className="flex items-center gap-x-1">
+                                            <Plus className='w-4 h-4' />
+                                            <p className='text-primary'>เพิ่มที่อยู่จัดส่ง</p>
+                                        </button>
+                                    </div>
                             }
 
                         </div>
@@ -178,7 +201,7 @@ export default function MyCartPage() {
                                     <div className="flex items-center mb-2">
                                         <div className="mr-3 w-20 h-20 flex-shrink-0">
                                             <Image
-                                                src={item.imageUrl}
+                                                src={item.imageUrl ? item.imageUrl : item.imageMainUrl}
                                                 alt={item.productName}
                                                 width={80}
                                                 height={80}
@@ -197,7 +220,7 @@ export default function MyCartPage() {
                                             </div>
                                             {item.productItemName && <p className="text-sm text-gray-500">{item.productItemName} {item.productItemQuantityName}</p>}
                                             <div className="flex justify-between items-center mt-2">
-                                                <div className="text-primary font-bold text-base">฿{item.price.toLocaleString()}</div>
+                                                <div className="text-primary font-bold text-base">฿{item.price ? item.price.toLocaleString() : 0}</div>
                                                 <div className="flex items-center justify-end gap-x-2">
                                                     <button
                                                         onClick={() => decreaseQuantity(item.id)}
@@ -258,8 +281,10 @@ export default function MyCartPage() {
                 {/* Address Modal */}
                 <AddressModal
                     open={showAddressModal}
+                    shippingAddressData={shippingAddressData}
                     onClose={() => setShowAddressModal(false)}
                     onSave={handleSaveAddress}
+
                 />
             </div>
 
@@ -270,7 +295,7 @@ export default function MyCartPage() {
                 totalItems={totalItems}
                 totalAmount={total}
             />
-            <ToastContainer position="top-center" />
+            <ToastContainer position="top-center" autoClose={3000} hideProgressBar />
         </div>
     );
 }

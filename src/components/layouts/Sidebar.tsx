@@ -9,6 +9,7 @@ import Modal from "../common/Modal";
 import { useRouter } from "next/navigation";
 import { AccountModal } from "../form/modal-account";
 import { Button } from "../ui/Button";
+import { useLineProfile } from "@/lib/react-query/user";
 
 
 
@@ -16,6 +17,9 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void; })
 
     const { data: session, status } = useSession()
     const [myAccountModal, setMyAccountModal] = useState(false);
+
+    const { data: lineProfileData } = useLineProfile(session?.user?.id ?? "");
+
     const { push } = useRouter()
 
     async function SignIn() {
@@ -45,7 +49,8 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void; })
             label: 'บัญชีของฉัน',
             onClick: () => {
                 onClose();
-                myAccount()
+                if (session) myAccount()
+                else push('/auth/auto-signin')
             }
         },
         {
@@ -86,7 +91,7 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void; })
     ]
 
     return (
-        <div className={`fixed inset-0 bg-black/60 z-40 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={onClose}>
+        <div className={`fixed inset-0 bg-black/60 z-[41] transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={onClose}>
             <div
                 className={`
                     fixed top-0 left-0 h-full bg-white shadow-lg z-50 transform transition-transform duration-300 flex flex-col
@@ -110,34 +115,17 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void; })
                             </Button>
                             :
                             <div className="flex gap-3">
-                                <Image src={'/images/profile-demo.png'} className="rounded-[10px]" width={50} height={50} alt="img-profile" />
+                                <Image src={session?.user?.image ?? ''} className="rounded-[10px]" width={50} height={50} alt="img-profile" />
                                 <div className="flex flex-col items-start justify-center">
                                     <h3 className="font-semibold text-xl">
-                                        21BE
+                                        {session?.user?.name}
                                     </h3>
-                                    {/* <p className="text-subdube text-sm">
-                                        อนุกูล อุดมวงศ์
-                                    </p> */}
                                 </div>
                             </div>
                         }
 
                     </div>
                 </div>
-
-                {
-                    session &&
-                    <div className="md:px-20 px-4">
-                        <div className="flex items-center space-x-4 bg-pink-50 p-3 rounded-lg">
-                            <div className="w-12 h-12 rounded-full bg-purple-200 flex-shrink-0">
-                                {/* Placeholder for avatar */}
-                            </div>
-                            <div>
-                                <p className="font-semibold">{session?.user?.name}</p>
-                            </div>
-                        </div>
-                    </div>
-                }
 
                 <nav className="flex-grow md:px-20 px-4 space-y-2 mt-5">
                     {menuItems.map(item => (
@@ -152,10 +140,13 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void; })
                         </button>
                     ))}
                     <hr className="border-gray-light px-3" />
-                    <button type="button" onClick={() => signOut()} className="flex items-center p-3 text-gray-700 rounded-lg hover:bg-gray-100">
-                        <LogOut className="h-6 w-6 mr-4" />
-                        <span>ออกจากระบบ</span>
-                    </button>
+                    {
+                        session &&
+                        <button type="button" onClick={() => signOut({ callbackUrl: '/' })} className="flex w-full items-center p-3 text-gray-700 rounded-lg hover:bg-gray-100">
+                            <LogOut className="h-6 w-6 mr-4" />
+                            <span>ออกจากระบบ</span>
+                        </button>
+                    }
                 </nav>
             </div>
 
@@ -167,6 +158,7 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void; })
                 <AccountModal
                     open={myAccountModal}
                     onClose={() => setMyAccountModal(false)}
+                    profileData={lineProfileData}
                 />
             </Modal>
         </div>

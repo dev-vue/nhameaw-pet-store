@@ -1,19 +1,23 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 import { Button } from './ui/Button';
 import Image from 'next/image'
 import { Maximize2, Minus, Plus } from 'lucide-react';
 import { ProductDetail } from '@/types/product';
 import ImageViewer from "@/components/common/ImageViewer"; // adjust path if needed
+import { AddItemToCart } from '@/types/cart';
+import { useSession } from 'next-auth/react';
 
-const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string, productDetail: ProductDetail, onClose: () => void, onAddToCart?: (selectedOptions: any) => void }) => {
+const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string, productDetail: ProductDetail, onClose: () => void, onAddToCart?: (selectedOptions: AddItemToCart) => void }) => {
 
-    const [selectedType, setSelectedType] = useState<'cat' | 'dog'>('cat');
-    const [selectedPackage, setSelectedPackage] = useState<string>('1 กล่อด(แพ็คเดียว)');
+    const [selectedType, setSelectedType] = useState<string>(productDetail.typeSizeList?.[0]?.productItemId ?? '');
+    const [selectedTypeIndex, setSelectedTypeIndex] = useState<number>(0);
+    const [selectedPackage, setSelectedPackage] = useState<string>(productDetail.typeSizeList?.[0]?.quantityList[0]?.productQuantityId ?? productDetail.quantityList[0]?.productQuantityId);
     const [quantity, setQuantity] = useState(1);
     const [viewerOpen, setViewerOpen] = useState(false);
+
+    const { data: session } = useSession();
 
     const product = {
         id: Number(id),
@@ -27,17 +31,12 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
 
     // Add to cart function
     const handleAddToCart = () => {
-        const selectedVariant = {
-            id: selectedType === 'cat' ? '1' : '2',
-            name: `${product.name} สำหรับ${selectedType === 'cat' ? 'แมว' : 'สุนัข'}`,
-            price: product.price,
-            imageUrl: '/images/product-demo-rm-bg.png',
-            type: selectedType
-        };
-        const cartItem = {
-            variant: selectedVariant,
-            quantity,
-            packageOption: selectedPackage
+        const cartItem: AddItemToCart = {
+            lineUserId: session?.user?.id ?? "",
+            productItemId: selectedType,
+            productItemQuantityId: selectedPackage,
+            productQuantityId: "",
+            quantity: quantity,
         };
         if (onAddToCart) {
             onAddToCart(cartItem);
@@ -58,8 +57,8 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
                         onClick={() => setViewerOpen(true)}
                     >
                         <Image
-                            src="/images/product-demo-rm-bg.png"
-                            alt="O3vit สำหรับแมว"
+                            src={productDetail.productUrl}
+                            alt={productDetail.productName}
                             width={60}
                             height={150}
                             className="md:h-[150px] h-[100px] w-auto object-contain"
@@ -70,7 +69,7 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
                     </div>
                     {viewerOpen && (
                         <ImageViewer
-                            media={["/images/product-demo-rm-bg.png"]}
+                            media={[productDetail.productUrl]}
                             currentIndex={0}
                             isOpen={viewerOpen}
                             onClose={() => setViewerOpen(false)}
@@ -87,72 +86,94 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
 
                 <hr className='w-full my-4 border-gray-light' />
 
-                {/* Type Selection */}
-                <div className="mb-6">
-                    <p className="text-sm mb-2">เลือกชนิด</p>
-                    <div className="flex gap-2">
-                        <button
-                            onClick={() => setSelectedType('cat')}
-                            className={`flex py-2 px-3 rounded-full border ${selectedType === 'cat'
-                                ? 'bg-primary-light border-primary text-primary'
-                                : 'border-gray-300 text-gray-700'
-                                }`}
-                        >
-                            <div className="flex items-center justify-center gap-2">
-                                <Image
-                                    src="/images/product-demo-rm-bg.png"
-                                    alt="O3vit สำหรับแมว"
-                                    width={30}
-                                    height={30}
-                                    className="w-auto object-contain"
-                                />
-                                <span>แมว</span>
+                {
+                    productDetail.typeSizeList.length > 0 ?
+                        <>
+                            {/* Type Selection */}
+                            <p className="text-sm mb-2">เลือกชนิด</p>
+                            <div className="flex items-center gap-x-2 mb-6">
+                                {
+                                    productDetail.typeSizeList?.map((typeSize, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={
+                                                () => {
+                                                    setSelectedType(typeSize.productItemId)
+                                                    setSelectedTypeIndex(index)
+                                                }
+                                            }
+                                            className={`flex py-2 px-3 rounded-full border ${selectedType === typeSize.productItemId
+                                                ? 'bg-primary-light border-primary text-primary'
+                                                : 'border-gray-300 text-gray-700'
+                                                }`}
+                                        >
+                                            <div className="flex items-center justify-center gap-2">
+                                                {typeSize.file.url &&
+                                                    <Image
+                                                        src={typeSize.file.url}
+                                                        alt={typeSize.productItemName}
+                                                        width={30}
+                                                        height={30}
+                                                        className="w-auto object-contain"
+                                                    />
+                                                }
+                                                <span>{typeSize.productItemName}</span>
+                                            </div>
+                                        </button>
+                                    ))
+                                }
                             </div>
-                        </button>
-                        <button
-                            onClick={() => setSelectedType('dog')}
-                            className={`flex py-2 px-3 rounded-full border ${selectedType === 'dog'
-                                ? 'bg-primary-light border-primary text-primary'
-                                : 'border-gray-300 text-gray-700'
-                                }`}
-                        >
-                            <div className="flex items-center justify-center gap-2">
-                                <Image
-                                    src="/images/product-demo-rm-bg.png"
-                                    alt="O3vit สำหรับแมว"
-                                    width={30}
-                                    height={30}
-                                    className="w-auto object-contain"
-                                />
-                                <span>สุนัข</span>
+
+                            <hr className='w-full my-4 border-gray-light' />
+
+                            {/* Package Selection */}
+                            {
+                                productDetail.typeSizeList[selectedTypeIndex].quantityList?.length > 0 &&
+                                <div className="mb-6">
+                                    <p className="text-sm mb-2">เลือกจำนวน</p>
+
+                                    <div className='flex gap-2'>
+                                        {
+                                            productDetail.typeSizeList[selectedTypeIndex].quantityList?.map((quantity, index) => (
+                                                <button
+                                                    key={index}
+                                                    onClick={() => setSelectedPackage(quantity.productQuantityId)}
+                                                    className={`flex py-2 px-3 rounded-full border ${selectedPackage === quantity.productQuantityId
+                                                        ? 'bg-primary-light border-primary text-primary'
+                                                        : 'border-gray-300 text-gray-700'
+                                                        }`}
+                                                >
+                                                    {quantity.productQuantityName}
+                                                </button>
+                                            ))
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </>
+                        :
+                        productDetail.quantityList?.length > 0 &&
+                        <div className="mb-6">
+                            <p className="text-sm mb-2">เลือกจำนวน</p>
+
+                            <div className='flex gap-2'>
+                                {
+                                    productDetail.quantityList?.map((quantity, index) => (
+                                        <button
+                                            key={index}
+                                            onClick={() => setSelectedPackage(quantity.productQuantityId)}
+                                            className={`flex py-2 px-3 rounded-full border ${selectedPackage === quantity.productQuantityId
+                                                ? 'bg-primary-light border-primary text-primary'
+                                                : 'border-gray-300 text-gray-700'
+                                                }`}
+                                        >
+                                            {quantity.productQuantityName}
+                                        </button>
+                                    ))
+                                }
                             </div>
-                        </button>
-                    </div>
-                </div>
-
-                <hr className='w-full my-4 border-gray-light' />
-
-
-                {/* Package Selection */}
-                <div className="mb-6">
-                    <p className="text-sm mb-2">เลือกจำนวน</p>
-                    <div className="flex gap-2">
-                        {
-                            productDetail.typeSizeList?.map((typeSize, index) => (
-                                <button
-                                    key={index}
-                                    onClick={() => setSelectedPackage(typeSize.productItemId)}
-                                    className={`flex py-2 px-3 rounded-full border ${selectedPackage === typeSize.productItemId
-                                        ? 'bg-primary-light border-primary text-primary'
-                                        : 'border-gray-300 text-gray-700'
-                                        }`}
-                                >
-                                    {typeSize.productItemName}
-                                </button>
-                            ))
-                        }
-                    </div>
-                </div>
+                        </div>
+                }
 
                 {/* Quantity Selection */}
                 <div className="mb-8 flex items-center justify-between">

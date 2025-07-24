@@ -1,34 +1,31 @@
 import React from 'react';
 import ProductCard from './ProductCard';
-import { MOCK_PRODUCTS } from '@/constants/mockData';
-import { useProducts } from '@/lib/react-query/product';
+import { useInfiniteRelatedProducts, useProducts } from '@/lib/react-query/product';
+import Loading from './common/Loading';
+import { Product } from '@/types/product';
 
 interface RelatedProductsProps {
-    currentProductId: number;
-    category?: string;
+    currentProductId: string;
     className?: string;
 }
 
 const RelatedProducts: React.FC<RelatedProductsProps> = ({
     currentProductId,
-    category,
     className = ''
 }) => {
-    const { data: productList, isLoading: productListLoading, refetch: productListRefetch } = useProducts({
-        keyword: "",
-        page: 0,
-        size: 10,
-        sortDirection: "BSP"
+
+    const {
+        data: productList,
+        isLoading: productsLoading,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage
+    } = useInfiniteRelatedProducts({
+        productId: currentProductId,
+        size: 8,
     });
 
-    // Get related products (excluding current product)
-    const relatedProducts = MOCK_PRODUCTS
-        .filter(product => product.id !== currentProductId)
-        .slice(0, 8); // Show only 8 related products
-
-    if (relatedProducts.length === 0) {
-        return null;
-    }
+    const allProducts: Product[] = productList?.pages.flatMap(page => page.content ?? []) ?? [];
 
     return (
         <div className={`bg-white rounded-lg ${className}`}>
@@ -38,13 +35,19 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
 
             {/* Products Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 md:gap-4">
-                {productList?.content?.map((product) => (
-                    <div key={product.id} className="h-full">
-                        <ProductCard
-                            product={product}
-                        />
-                    </div>
-                ))}
+                {
+                    productsLoading ? <Loading className='w-full col-span-4' /> :
+                        allProducts.length > 0 ? (
+                            allProducts.map((product) => (
+                                <ProductCard key={product.id} product={product} />
+                            ))
+                        ) : (
+                            <div className="col-span-full text-center py-8">
+                                <p className="text-gray-500 text-lg">ไม่พบสินค้าที่ค้นหา</p>
+                                <p className="text-gray-400 text-sm mt-2">ลองเปลี่ยนคำค้นหาหรือตัวกรองดู</p>
+                            </div>
+                        )
+                }
             </div>
         </div>
     );
