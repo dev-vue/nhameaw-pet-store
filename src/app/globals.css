@@ -122,11 +122,11 @@ input[type="date"].hide-date-icon:invalid {
 }
 
 input[type="date"].hide-date-icon:invalid:focus {
-  color: #374151;
+  color: transparent;
 }
 
 input[type="date"].hide-date-icon:valid {
-  color: #374151;
+  color: transparent;
 }
 
 input[type="date"].hide-date-icon {
@@ -279,4 +279,12 @@ input[type=number] {
 button:focus-visible {
   border: none !important;
   outline: none !important;
+}
+
+input[type=date]:required:invalid::-webkit-datetime-edit {
+  color: transparent;
+}
+
+input[type=date]:focus::-webkit-datetime-edit {
+  color: black !important;
 }

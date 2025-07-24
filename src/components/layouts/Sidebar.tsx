@@ -6,7 +6,7 @@ import Loading from "../common/Loading";
 import Image from "next/image";
 import { useState } from "react";
 import Modal from "../common/Modal";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { AccountModal } from "../form/modal-account";
 import { Button } from "../ui/Button";
 import { useLineProfile } from "@/lib/react-query/user";
@@ -21,9 +21,10 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void; })
     const { data: lineProfileData } = useLineProfile(session?.user?.id ?? "");
 
     const { push } = useRouter()
+    const pathname = usePathname()
 
     async function SignIn() {
-        await signIn("line");
+        await signIn("line", { callbackUrl: pathname });
     }
 
     if (status === "loading") {
@@ -50,7 +51,7 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void; })
             onClick: () => {
                 onClose();
                 if (session) myAccount()
-                else push('/auth/auto-signin')
+                else push(`/auth/auto-signin?callbackUrl=${encodeURIComponent(pathname)}`)
             }
         },
         {

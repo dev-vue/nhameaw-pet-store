@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter, usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import { ChevronLeft, Star, Heart, MessageCircle, ChevronRight, Share, Play } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
@@ -42,6 +42,7 @@ export default function ProductDetailPage() {
     const { mutate: addItemToCart } = useAddItemToCart();
 
     const { push } = useRouter();
+    const pathname = usePathname();
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
     const [modalAddtoCart, setModalAddtoCart] = useState(false);
     const [reviewsModalOpen, setReviewsModalOpen] = useState(false);
@@ -374,7 +375,10 @@ export default function ProductDetailPage() {
                         <Button
                             variant="default"
                             className="lg:flex-initial flex-1 bg-primary hover:bg-primary-hover border-primary lg:min-w-[360px]"
-                            onClick={() => setModalAddtoCart(true)}
+                            onClick={() => {
+                                if (session) setModalAddtoCart(true)
+                                else push(`/auth/auto-signin?callbackUrl=${encodeURIComponent(pathname)}`)
+                            }}
                         >
                             ดูตัวเลือกสินค้านี้
                         </Button>

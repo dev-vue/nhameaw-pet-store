@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Modal from "../common/Modal";
-import { CalendarIcon, User } from "lucide-react";
+import { CalendarIcon, CheckCircle, User, X } from "lucide-react";
 import Input from "@/components/ui/Input";
 import { Form, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/Form";
 import { cn, convertDateToThai } from "@/utils/helpers";
@@ -12,6 +12,7 @@ import { useLineProfile, useRegisterUpdateProfile } from "@/lib/react-query/user
 import { useSession } from "next-auth/react";
 import { GENDER_OPTIONS } from "@/constants";
 import { LineProfileData } from "@/types/user";
+import { toast, ToastContainer } from 'react-toastify';
 
 export type AccountModalProps = {
     open: boolean;
@@ -31,11 +32,27 @@ export function AccountModal({ open, onClose, profileData }: AccountModalProps) 
     const { data: session } = useSession();
     const { mutate: updateProfile, isPending: updatingProfilePending } = useRegisterUpdateProfile();
 
+    // Helper function to convert DD-MM-YYYY string to Date object
+    const parseApiDate = (dateString: string | undefined) => {
+        if (!dateString) return undefined;
+
+        // Check if it's in DD-MM-YYYY format
+        const parts = dateString.split('-');
+        if (parts.length === 3) {
+            const [day, month, year] = parts;
+            // Create date in YYYY-MM-DD format for proper parsing
+            return new Date(`${year}-${month}-${day}`);
+        }
+
+        // Fallback to regular Date parsing
+        return new Date(dateString);
+    };
+
     const form = useForm<FormData>({
         resolver: zodResolver(formSchema),
         defaultValues: {
             gender: profileData?.gender ?? "",
-            dob: profileData?.birthDate ? new Date(profileData?.birthDate) : undefined
+            dob: parseApiDate(profileData?.birthDate)
         },
     });
 
@@ -58,12 +75,28 @@ export function AccountModal({ open, onClose, profileData }: AccountModalProps) 
             birthDate: birthDate
         }, {
             onSuccess: (response) => {
-                console.log('Profile updated successfully:', response);
-                onClose(); // Close modal on success
+                toast.success('บันทึกสำเร็จ', {
+                    icon: <CheckCircle className='w-5 h-5 text-success' />,
+                    style: {
+                        background: "#F1F9EA",
+                        borderRadius: "14px",
+                        fontWeight: 600,
+                        color: 'black',
+                        fontFamily: "notoSansThai"
+                    }
+                });
             },
             onError: (error) => {
-                console.error('Failed to update profile:', error);
-                // You can add toast/alert notification here if needed
+                toast.error('พบข้อผิดพลาด', {
+                    icon: <X className='w-5 h-5 text-critical' />,
+                    style: {
+                        background: "#ffc7c7",
+                        borderRadius: "14px",
+                        fontWeight: 600,
+                        color: 'black',
+                        fontFamily: "notoSansThai"
+                    }
+                });
             }
         });
     }
@@ -133,7 +166,7 @@ export function AccountModal({ open, onClose, profileData }: AccountModalProps) 
                                                 <FormLabel isRequired>เพศ</FormLabel>
                                                 <div className="relative w-full">
                                                     <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none z-10">
-                                                        <User className="h-4 w-4 text-gray-400" />
+                                                        <User className="h-4 w-4 text-subdube" />
                                                     </span>
                                                     <select
                                                         value={field.value}
@@ -142,7 +175,7 @@ export function AccountModal({ open, onClose, profileData }: AccountModalProps) 
                                                             "w-full rounded-lg border border-gray-200 px-4 py-2 text-base focus:outline-none pl-10",
                                                             "flex items-center justify-start text-left",
                                                             // Error styles
-                                                            form.formState.errors.gender && "border-red-500 focus:ring-red-500 focus:border-red-500",
+                                                            form.formState.errors.gender && "border-critical focus:ring-criborder-critical focus:border-critical",
                                                             // Hide default calendar icon and use custom one
                                                             "hide-date-icon")}
                                                     >
@@ -168,10 +201,9 @@ export function AccountModal({ open, onClose, profileData }: AccountModalProps) 
                                                 <FormLabel isRequired>วันเกิด</FormLabel>
                                                 <div className="relative w-full">
                                                     <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none z-10">
-                                                        <CalendarIcon className="h-4 w-4 text-gray-400" />
+                                                        <CalendarIcon className="h-4 w-4 text-subdube" />
                                                     </span>
 
-                                                    {/* Mobile: Native Date Input styled like desktop button */}
                                                     <div className="relative">
                                                         <input
                                                             type="date"
@@ -181,13 +213,19 @@ export function AccountModal({ open, onClose, profileData }: AccountModalProps) 
                                                                 "w-full rounded-lg border border-gray-200 px-4 py-2 text-base focus:outline-none pl-10",
                                                                 "flex items-center justify-start text-left",
                                                                 // Error styles
-                                                                form.formState.errors.dob && "border-red-500 focus:ring-red-500 focus:border-red-500",
+                                                                form.formState.errors.dob && "border-critical focus:ring-criborder-critical focus:border-critical",
                                                                 // Hide default calendar icon and use custom one
                                                                 "hide-date-icon",
                                                                 // Text color based on selection
-                                                                field.value ? "text-gray-900" : "text-gray-500"
+                                                                field.value ? "!text-black" : "!text-transparent"
                                                             )}
                                                         />
+                                                        {/* Custom placeholder when no date is selected */}
+                                                        {!field.value && (
+                                                            <div className="absolute inset-0 flex items-center pl-10 pointer-events-none text-black text-base">
+                                                                เลือกวันเกิด
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </div>
                                                 <FormMessage />
@@ -247,6 +285,7 @@ export function AccountModal({ open, onClose, profileData }: AccountModalProps) 
                         </form>
                     </Form>
                 </div>
+                <ToastContainer position="top-center" autoClose={3000} hideProgressBar />
             </div>
         </Modal>
     );
