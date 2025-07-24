@@ -13,7 +13,9 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
 
     const [selectedType, setSelectedType] = useState<string>(productDetail.typeSizeList?.[0]?.productItemId ?? '');
     const [selectedTypeIndex, setSelectedTypeIndex] = useState<number>(0);
-    const [selectedPackage, setSelectedPackage] = useState<string>(productDetail.typeSizeList?.[0]?.quantityList[0]?.productQuantityId ?? productDetail.quantityList[0]?.productQuantityId);
+    const [selectedPackage, setSelectedPackage] = useState<string>(productDetail.typeSizeList?.[0]?.quantityList[0]?.productQuantityId ?? "");
+    const [selectedPackageQuantity, setSelectedPackageQuantity] = useState<string>(productDetail.quantityList?.[0]?.productQuantityId ?? "");
+
     const [quantity, setQuantity] = useState(1);
     const [viewerOpen, setViewerOpen] = useState(false);
 
@@ -35,7 +37,7 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
             lineUserId: session?.user?.id ?? "",
             productItemId: selectedType,
             productItemQuantityId: selectedPackage,
-            productQuantityId: "",
+            productQuantityId: selectedPackageQuantity,
             quantity: quantity,
         };
         if (onAddToCart) {
@@ -161,8 +163,8 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
                                     productDetail.quantityList?.map((quantity, index) => (
                                         <button
                                             key={index}
-                                            onClick={() => setSelectedPackage(quantity.productQuantityId)}
-                                            className={`flex py-2 px-3 rounded-full border ${selectedPackage === quantity.productQuantityId
+                                            onClick={() => setSelectedPackageQuantity(quantity.productQuantityId)}
+                                            className={`flex py-2 px-3 rounded-full border ${selectedPackageQuantity === quantity.productQuantityId
                                                 ? 'bg-primary-light border-primary text-primary'
                                                 : 'border-gray-300 text-gray-700'
                                                 }`}

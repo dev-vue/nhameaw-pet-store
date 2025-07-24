@@ -95,7 +95,12 @@ export function AccountModal({ open, onClose, profileData }: AccountModalProps) 
                             {/* Avatar */}
                             <div className="flex flex-col items-center w-full">
                                 <div className="relative w-24 h-24 rounded-full flex items-center justify-center mb-6 mt-2 shadow-sm">
-                                    <User className="w-12 h-12 " />
+                                    {
+                                        session ?
+                                            <img src={session?.user?.image ?? ""} alt="" className="w-full h-full object-cover rounded-full" />
+                                            :
+                                            <User className="w-12 h-12 " />
+                                    }
                                 </div>
                             </div>
 
