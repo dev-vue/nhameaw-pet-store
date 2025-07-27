@@ -158,7 +158,7 @@ export default function MyCartPage() {
                                     <div className="flex items-start">
                                         <img src="/icons/cart-pin.svg" alt="pin" className="w-5 h-5 lg:w-7 lg:h-7" />
                                         <div className="flex-grow">
-                                            <h3 className="font-bold text-base mb-2">ที่อยู่จัดส่ง</h3>
+                                            <h3 className="font-semibold text-base mb-2">ที่อยู่จัดส่ง</h3>
                                             <p className="text-black text-baese font-semibold">{shippingAddressData.recipientFullName}</p>
                                             <p className="text-subdube text-sm">{shippingAddressData.recipientPhoneNumber}</p>
                                             <p className="text-black text-sm">
@@ -220,7 +220,7 @@ export default function MyCartPage() {
                                             </div>
                                             {item.productItemName && <p className="text-sm text-gray-500">{item.productItemName} {item.productItemQuantityName}</p>}
                                             <div className="flex justify-between items-center mt-2">
-                                                <div className="text-primary font-bold text-base">฿{item.price ? item.price.toLocaleString() : 0}</div>
+                                                <div className="text-primary font-semibold text-base">฿{item.price ? item.price.toLocaleString() : 0}</div>
                                                 <div className="flex items-center justify-end gap-x-2">
                                                     <button
                                                         onClick={() => decreaseQuantity(item.id)}
@@ -259,7 +259,7 @@ export default function MyCartPage() {
                     <div className="sm:col-span-1 col-span-2">
                         {/* Order Summary */}
                         <div className="bg-white mb-4 p-4 rounded-lg">
-                            <h3 className="font-bold text-base mb-3">สรุปค่าสั่งซื้อ</h3>
+                            <h3 className="font-semibold text-base mb-3">สรุปค่าสั่งซื้อ</h3>
                             <div className="flex justify-between mb-2">
                                 <span className="text-gray-600">รวมค่าสั่งซื้อ</span>
                                 <span className="font-medium">฿{subtotal.toLocaleString()}</span>
@@ -269,7 +269,7 @@ export default function MyCartPage() {
                                 <span>-</span>
                             </div>
                             <div className="border-t border-gray-200 my-2 pt-2">
-                                <div className="flex justify-between font-bold">
+                                <div className="flex justify-between font-semibold">
                                     <span>ยอดรวมทั้งหมด</span>
                                     <span className="text-primary">฿{total.toLocaleString()}</span>
                                 </div>

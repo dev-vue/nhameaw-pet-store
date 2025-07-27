@@ -51,7 +51,11 @@ const Header = ({ onMenuClick, className }: { onMenuClick: () => void; className
                         <div className="container mx-auto px-3">
                             <div className="flex items-center justify-between mb-4">
                                 <span className="font-semibold text-lg">ค้นหาสินค้า</span>
-                                <button onClick={() => setShowSearch(false)} className="text-gray-500 text-sm flex items-center gap-1"><span className="text-xl">×</span> ปิด</button>
+                                <button onClick={() => setShowSearch(false)} className="text-gray-500 flex items-center gap-1 lg:text-xl text-sm">
+                                    <X className="h-6 w-6" />
+                                    <p className="hidden lg:block">ปิด</p>
+                                    <p className="lg:hidden">ย้อนกลับ</p>
+                                </button>
                             </div>
                             <div className="flex items-center gap-2">
                                 <form
@@ -67,7 +71,7 @@ const Header = ({ onMenuClick, className }: { onMenuClick: () => void; className
                                             placeholder="ค้นหาสินค้า"
                                             value={searchText}
                                             onChange={(e) => setSearchText(e.target.value)}
-                                            className="w-full placeholder:text-subdube text-subdube pl-10 pr-10 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-base"
+                                            className="w-full placeholder:text-subdube text-black pl-10 pr-10 px-4 py-2 border border-gray-light rounded-lg focus:outline-none text-base"
                                             autoFocus
                                         />
                                         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -125,7 +129,7 @@ const Header = ({ onMenuClick, className }: { onMenuClick: () => void; className
                                 </Button>
                                 {
                                     (cartItemCount && cartItemCount?.total > 0) &&
-                                    <div className="absolute -top-2 -right-2 bg-critical text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                                    <div className="absolute -top-2 -right-2 bg-critical text-white text-xs font-semibold rounded-full h-5 w-5 flex items-center justify-center">
                                         {cartItemCount.total > 99 ? '99+' : cartItemCount.total}
                                     </div>
                                 }
@@ -135,7 +139,7 @@ const Header = ({ onMenuClick, className }: { onMenuClick: () => void; className
                                     type="text"
                                     placeholder="ค้นหาสินค้า"
                                     value={searchTextLabel}
-                                    className="w-64 placeholder:text-subdube text-subdube pl-10 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm cursor-pointer bg-white"
+                                    className="w-64 placeholder:text-subdube text-subdube pl-10 px-4 py-2 border border-gray-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm cursor-pointer bg-white"
                                     readOnly
                                     onClick={() => setShowSearch(true)}
                                 />
@@ -172,7 +176,7 @@ const Header = ({ onMenuClick, className }: { onMenuClick: () => void; className
                             </Button>
                             {
                                 (cartItemCount && cartItemCount?.total > 0) &&
-                                <div className="absolute -top-2 -right-2 bg-critical text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">
+                                <div className="absolute -top-2 -right-2 bg-critical text-white text-xs font-semibold rounded-full h-5 w-5 flex items-center justify-center">
                                     {cartItemCount.total > 99 ? '99+' : cartItemCount.total}
                                 </div>
                             }
@@ -186,7 +190,7 @@ const Header = ({ onMenuClick, className }: { onMenuClick: () => void; className
                                     type="text"
                                     placeholder="ค้นหาสินค้า"
                                     value={searchTextLabel}
-                                    className="w-full placeholder:text-subdube text-subdube pl-10 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm cursor-pointer bg-white"
+                                    className="w-full placeholder:text-subdube text-subdube pl-10 px-4 py-2 border border-gray-light rounded-lg focus:outline-none focus:ring-2 focus:ring-primary text-sm cursor-pointer bg-white"
                                     readOnly
                                     onClick={() => setShowSearch(true)}
                                 />

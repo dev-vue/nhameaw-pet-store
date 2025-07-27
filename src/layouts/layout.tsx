@@ -136,7 +136,7 @@ export default function Layouts({ children }: LayoutsProps) {
                     {setLoadingPortal()}
                     {
                         !pathname.startsWith("/product") &&
-                        <Button size="md" className="z-50 fixed bottom-6 right-6 transition-colors" leftIcon={<MessageCircle className='w-5 h-5' />}>
+                        <Button size="md" className="z-40 fixed bottom-6 right-6 transition-colors" leftIcon={<MessageCircle className='w-5 h-5' />}>
                             <span className="inline">แชทกับแอดมิน</span>
                         </Button>
                     }

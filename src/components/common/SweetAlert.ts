@@ -11,7 +11,7 @@ export const swal = sweetalert.mixin({
 	denyButtonText: "ไม่ใช่",
 	customClass: {
 		popup: "!rounded-2xl !pb-10",
-		title: "!text-2xl font-bold",
+		title: "!text-2xl font-semibold",
 		htmlContainer: "!text-xl !text-subdude",
 		actions: "flex flex-col justify-center items-center gap-y-4",
 		cancelButton:

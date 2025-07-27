@@ -114,8 +114,9 @@ export default function Modal({ open, header, subHeader, children, size = "md", 
 													onClick={onClose}
 													className="flex gap-x-1 items-center rounded-full text-black hover:text-subdube"
 												>
-													<X className="size-5" />
-													ปิด
+													<X className="h-6 w-6" />
+													<span className="ml-1 hidden lg:block">ปิด</span>
+													<span className="ml-1 lg:hidden">ย้อนกลับ</span>
 												</button>
 											)}
 										</div>

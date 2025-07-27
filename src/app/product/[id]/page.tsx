@@ -242,7 +242,7 @@ export default function ProductDetailPage() {
                             {/* Price Section - Mobile First */}
                             <div className="mb-4 lg:mb-6 lg:order-2">
                                 <div className="flex items-center space-x-2 lg:space-x-3 mb-2 lg:mb-3">
-                                    <span className="text-2xl lg:text-3xl font-bold text-primary">฿{productDetail?.priceRange}</span>
+                                    <span className="text-2xl lg:text-3xl font-semibold text-primary">฿{productDetail?.priceRange}</span>
                                     {product.originalPrice && (
                                         <span className="text-lg lg:text-xl text-subdube line-through">฿{product.originalPrice.toLocaleString()}</span>
                                     )}

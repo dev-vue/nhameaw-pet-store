@@ -13,6 +13,7 @@ import { useBannersAndCategory } from '@/lib/react-query/banner';
 import Loading from '@/components/common/Loading';
 import { useInfiniteProducts } from '@/lib/react-query/product';
 import { Product } from '@/types/product';
+import { ChevronRight } from 'lucide-react';
 
 export default function HomePage() {
 
@@ -74,6 +75,7 @@ export default function HomePage() {
   return (
     <>
       <HeroSlider banners={data?.bannerList ?? []} />
+
       {/* Categories Section */}
       <section>
         <h3 className="text-2xl font-semibold mb-4">หมวดหมู่สินค้า</h3>
@@ -96,7 +98,7 @@ export default function HomePage() {
           >
             {data?.animalCategoryList?.map((category, index) => (
               <SwiperSlide key={index}>
-                <div className="relative rounded-lg overflow-hidden h-64"
+                <div className="relative rounded-lg overflow-hidden lg:h-[377px] md:h-[172px] h-[118px]"
                   onClick={() => SearchCategory(category.name, category.animalType)}
                 >
                   <Image
@@ -110,7 +112,7 @@ export default function HomePage() {
                   {/* <div className="absolute inset-0 bg-black bg-opacity-30"></div> */}
                   {/* Desktop & Tablet Button - Hidden on Mobile */}
                   <div className="absolute inset-0  items-end p-4 lg:flex hidden">
-                    <button className="bg-white text-black font-bold py-2 px-4 rounded-full"
+                    <button className="bg-white text-black font-semibold py-2 px-4 rounded-full"
                       onClick={() => SearchCategory(category.name, category.animalType)}
                     >
                       ดูสินค้า{category.name}
@@ -121,10 +123,10 @@ export default function HomePage() {
                 <div className="bg-opacity-30 items-end py-4 lg:hidden flex">
                   <button
                     type='button'
-                    className="bg-white text-black font-bold py-2 px-4 rounded-full"
+                    className=" text-black font-semibold py-2 px-4 rounded-full flex gap-x-2 items-center"
                     onClick={() => SearchCategory(category.name, category.animalType)}
                   >
-                    ดูสินค้า{category.name}
+                    ดูสินค้า{category.name} <ChevronRight className='w-4 h-4' />
                   </button>
                 </div>
               </SwiperSlide>

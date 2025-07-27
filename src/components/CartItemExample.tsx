@@ -38,7 +38,7 @@ export const CartItem: React.FC<CartItemProps> = ({ item, onDeleteSuccess }) => 
                         <p className="text-sm text-gray-500">{item.productItemQuantityName}</p>
                     )}
                     <div className="flex items-center space-x-2 mt-1">
-                        <span className="text-lg font-bold text-primary">฿{item.price.toLocaleString()}</span>
+                        <span className="text-lg font-semibold text-primary">฿{item.price.toLocaleString()}</span>
                         {item.originalPrice && item.originalPrice > item.price && (
                             <span className="text-sm text-gray-400 line-through">
                                 ฿{item.originalPrice.toLocaleString()}
@@ -109,7 +109,7 @@ export const CartList: React.FC<CartListProps> = ({ lineUserId }) => {
 
     return (
         <div className="space-y-4">
-            <h2 className="text-2xl font-bold">ตะกร้าสินค้า</h2>
+            <h2 className="text-2xl font-semibold">ตะกร้าสินค้า</h2>
 
             <div className="space-y-3">
                 {cartItems.map((item: MyCartData) => (
@@ -127,7 +127,7 @@ export const CartList: React.FC<CartListProps> = ({ lineUserId }) => {
             <div className="border-t pt-4">
                 <div className="flex justify-between items-center">
                     <span className="text-lg font-semibold">รวม:</span>
-                    <span className="text-xl font-bold text-primary">
+                    <span className="text-xl font-semibold text-primary">
                         ฿{cartItems.reduce((total: number, item: MyCartData) => total + (item.price * item.quantity), 0).toLocaleString()}
                     </span>
                 </div>

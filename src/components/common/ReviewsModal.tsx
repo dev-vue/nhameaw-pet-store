@@ -32,7 +32,7 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
         isFetchingNextPage,
     } = useInfiniteProductReviews({
         productId: productId,
-        size: 6,
+        size: 4,
     });
 
     const allReview: Review[] = reviewsData?.pages.flatMap(page => page.content ?? []) ?? [];
@@ -318,7 +318,7 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
                     <div className="flex items-center gap-2 mb-5">
                         <div className="flex items-center gap-1">
                             <Star className="w-5 h-5 fill-warning text-warning" />
-                            <span className="text-xl font-bold">{productRating.toFixed(1)}</span>
+                            <span className="text-xl font-semibold">{productRating.toFixed(1)}</span>
                         </div>
                         <span className="text-gray-600">คะแนนสินค้า</span>
                     </div>
@@ -327,7 +327,7 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
                     {/* Reviews List */}
                     <div className="space-y-4">
                         {allReview.map((review, index) => (
-                            <div key={review.review_id} className="bg-white p-4">
+                            <div key={review.review_id} className="bg-white">
                                 {/* Review Content */}
                                 <div className="mb-3">
                                     {/* Review Author */}

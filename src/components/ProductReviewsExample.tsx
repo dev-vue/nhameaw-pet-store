@@ -69,7 +69,7 @@ export const ProductReviews: React.FC<ProductReviewsProps> = ({
     return (
         <div className="space-y-4">
             <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold">Product Reviews</h2>
+                <h2 className="text-2xl font-semibold">Product Reviews</h2>
                 <span className="text-sm text-gray-500">
                     {totalElements} total reviews
                 </span>
@@ -168,7 +168,7 @@ export const InfiniteProductReviews: React.FC<ProductReviewsProps> = ({
     return (
         <div className="space-y-4">
             <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold">Product Reviews</h2>
+                <h2 className="text-2xl font-semibold">Product Reviews</h2>
                 <span className="text-sm text-gray-500">
                     {totalElements} total reviews
                 </span>
@@ -276,7 +276,7 @@ export const AutoLoadProductReviews: React.FC<ProductReviewsProps> = ({
     return (
         <div className="space-y-4">
             <div className="flex items-center justify-between">
-                <h2 className="text-2xl font-bold">Product Reviews</h2>
+                <h2 className="text-2xl font-semibold">Product Reviews</h2>
                 <span className="text-sm text-gray-500">
                     {totalElements} total reviews
                 </span>

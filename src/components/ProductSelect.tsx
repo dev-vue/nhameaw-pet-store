@@ -80,7 +80,7 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
 
 
                     {/* Price */}
-                    <span className="text-primary md:text-xl text-sm font-bold">฿{product.price}-{product.price + 950}</span>
+                    <span className="text-primary md:text-xl text-sm font-semibold">฿{product.price}-{product.price + 950}</span>
                     {product.originalPrice && (
                         <span className="text-disabled line-through md:text-xl text-sm">฿{product.originalPrice}</span>
                     )}
