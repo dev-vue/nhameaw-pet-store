@@ -4,15 +4,19 @@ import { Review } from '@/types/review';
 interface ReviewCardProps {
     review: Review;
     className?: string;
+    onClick?: () => void;
 }
 
-const ReviewCard = ({ review, className = '' }: ReviewCardProps) => {
+const ReviewCard = ({ review, className = '', onClick }: ReviewCardProps) => {
     const isVideo = (url: string) => {
         return url.includes('.mp4') || url.includes('.webm') || url.includes('.ogg') || url.includes('video');
     };
 
     return (
-        <div className={`bg-white p-3 lg:p-4 border-b border-gray-light last:border-b-0 ${className}`} >
+        <div
+            className={`bg-white p-3 lg:p-4 border-b border-gray-light last:border-b-0 ${onClick ? 'cursor-pointer hover:bg-gray-50 transition-colors' : ''} ${className}`}
+            onClick={onClick}
+        >
             {/* Review Content */}
             <div className="mb-3">
                 {/* Review Author */}
@@ -34,9 +38,12 @@ const ReviewCard = ({ review, className = '' }: ReviewCardProps) => {
                     </div>
                 </div>
 
-                <p className="text-sm text-subdube mb-2">
-                    <span className="font-medium">ตัวเลือกสินค้า : 25 ml</span>
-                </p>
+                {
+                    review.product_quantity_name &&
+                    <p className="text-sm text-subdube mb-2">
+                        <span className="font-medium">ตัวเลือกสินค้า : {review.product_quantity_name}</span>
+                    </p>
+                }
                 {/* Review Content */}
                 <p className="text-sm leading-relaxed whitespace-pre-line">
                     {review.review_desc}
@@ -44,12 +51,18 @@ const ReviewCard = ({ review, className = '' }: ReviewCardProps) => {
             </div>
 
             <div className='pb-3'>
-                <span className="text-sm flex gap-x-2">
-                    <p className='text-subdube'>คุณภาพ :</p><p>ดี</p>
-                </span>
-                <span className="text-sm flex gap-x-2">
-                    <p className='text-subdube'>ความคุ้มค่า :</p><p>ดี</p>
-                </span>
+                {
+                    review.review_quality &&
+                    <span className="text-sm flex gap-x-2">
+                        <p className='text-subdube'>คุณภาพ :</p><p>{review.review_quality}</p>
+                    </span>
+                }
+                {
+                    review.review_value &&
+                    <span className="text-sm flex gap-x-2">
+                        <p className='text-subdube'>ความคุ้มค่า :</p><p>{review.review_value}</p>
+                    </span>
+                }
             </div>
 
             {review.file_list && review.file_list.length > 0 && (

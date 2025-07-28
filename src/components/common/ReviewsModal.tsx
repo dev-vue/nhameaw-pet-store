@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Star, Play } from 'lucide-react';
 import Modal from './Modal';
 import ImageViewer from './ImageViewer';
@@ -13,6 +13,7 @@ interface ReviewsModalProps {
     productName: string;
     productId: string;
     reviewId?: string;
+    initialScrollIndex?: number;
 }
 
 const ReviewsModal: React.FC<ReviewsModalProps> = ({
@@ -20,10 +21,11 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
     onClose,
     productId,
     productRating,
-    reviewId
+    reviewId,
+    initialScrollIndex = 0
 }) => {
     const { push } = useRouter();
-
+    const reviewRefs = useRef<(HTMLDivElement | null)[]>([]);
     const {
         data: reviewsData,
         isLoading: reviewsLoading,
@@ -40,6 +42,68 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
     const [imageViewerOpen, setImageViewerOpen] = useState(false);
     const [currentMedia, setCurrentMedia] = useState<string[]>([]);
     const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
+
+    // Scroll to specific review when modal opens and data is loaded
+    useEffect(() => {
+        if (open && initialScrollIndex !== undefined && allReview.length > 0) {
+            // Add a delay to ensure the modal and refs are fully rendered
+            const timer = setTimeout(() => {
+                console.log('Attempting to scroll to index:', initialScrollIndex);
+                console.log('Total reviews:', allReview.length);
+                console.log('Refs array length:', reviewRefs.current.length);
+                console.log('Refs array:', reviewRefs.current);
+
+                // Check if the index is valid
+                if (initialScrollIndex >= allReview.length) {
+                    console.warn(`Invalid scroll index ${initialScrollIndex} for ${allReview.length} reviews`);
+                    return;
+                }
+
+                const reviewElement = reviewRefs.current[initialScrollIndex];
+
+                if (!reviewElement) {
+                    console.warn(`Review element at index ${initialScrollIndex} not found`);
+                    // Try to find any valid ref as fallback
+                    const firstValidRef = reviewRefs.current.find(ref => ref !== null);
+                    if (firstValidRef) {
+                        console.log('Using first valid ref as fallback');
+                        firstValidRef.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                    return;
+                }
+
+                console.log('Found review element, attempting to scroll');
+
+                // Find the modal's scrollable container (the one with overflow-y-auto)
+                const scrollContainer = reviewElement.closest('.overflow-y-auto') as HTMLElement;
+
+                if (scrollContainer) {
+                    console.log('Found scroll container, scrolling to top');
+                    // Calculate the position of the review relative to the scrollable container
+                    const containerRect = scrollContainer.getBoundingClientRect();
+                    const reviewRect = reviewElement.getBoundingClientRect();
+                    const relativeTop = reviewRect.top - containerRect.top + scrollContainer.scrollTop;
+
+                    // Scroll to position the review at the top of the container with a small offset
+                    scrollContainer.scrollTo({
+                        top: Math.max(0, relativeTop - 10), // 10px offset from top
+                        behavior: 'smooth'
+                    });
+                } else {
+                    console.log('No scroll container found, using scrollIntoView fallback');
+                    // Fallback: use scrollIntoView if closest() doesn't work
+                    reviewElement.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            }, 800); // Increased delay to ensure everything is rendered
+            return () => clearTimeout(timer);
+        }
+    }, [open, initialScrollIndex, allReview.length]);
 
     const isVideo = (url: string) => {
         return url.includes('.mp4') || url.includes('.webm') || url.includes('.ogg') || url.includes('video');
@@ -313,7 +377,9 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
                 subHeader='จากทุกช่องทางการจัดจำหน่าย'
                 size="md"
             >
-                <div className="space-y-4 pb-44 md:pb-0">
+                <div
+                    className="space-y-4 pb-44 md:pb-0"
+                >
                     {/* Product Rating Summary */}
                     <div className="flex items-center gap-2 mb-5">
                         <div className="flex items-center gap-1">
@@ -327,7 +393,19 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
                     {/* Reviews List */}
                     <div className="space-y-4">
                         {allReview.map((review, index) => (
-                            <div key={review.review_id} className="bg-white">
+                            <div
+                                key={review.review_id}
+                                className="bg-white"
+                                ref={(el) => {
+                                    if (el) {
+                                        // Ensure the array is large enough
+                                        if (reviewRefs.current.length <= index) {
+                                            reviewRefs.current = [...reviewRefs.current, ...new Array(index + 1 - reviewRefs.current.length).fill(null)];
+                                        }
+                                        reviewRefs.current[index] = el;
+                                    }
+                                }}
+                            >
                                 {/* Review Content */}
                                 <div className="mb-3">
                                     {/* Review Author */}
@@ -349,9 +427,13 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
                                         </div>
                                     </div>
 
-                                    <p className="text-sm text-subdube mb-2">
-                                        <span className="font-medium">ตัวเลือกสินค้า : 25 ml</span>
-                                    </p>
+                                    {
+                                        review.product_quantity_name &&
+                                        <p className="text-sm text-subdube mb-2">
+                                            <span className="font-medium">ตัวเลือกสินค้า : {review.product_quantity_name}</span>
+                                        </p>
+                                    }
+
                                     {/* Review Content */}
                                     <p className="text-sm leading-relaxed whitespace-pre-line">
                                         {review.review_desc}
@@ -359,12 +441,18 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
                                 </div>
 
                                 <div className='pb-3'>
-                                    <span className="text-sm flex gap-x-2">
-                                        <p className='text-subdube'>คุณภาพ :</p><p>ดี</p>
-                                    </span>
-                                    <span className="text-sm flex gap-x-2">
-                                        <p className='text-subdube'>ความคุ้มค่า :</p><p>ดี</p>
-                                    </span>
+                                    {
+                                        review.review_quality &&
+                                        <span className="text-sm flex gap-x-2">
+                                            <p className='text-subdube'>คุณภาพ :</p><p>{review.review_quality}</p>
+                                        </span>
+                                    }
+                                    {
+                                        review.review_value &&
+                                        <span className="text-sm flex gap-x-2">
+                                            <p className='text-subdube'>ความคุ้มค่า :</p><p>{review.review_value}</p>
+                                        </span>
+                                    }
                                 </div>
 
                                 {/* Review Images/Videos */}

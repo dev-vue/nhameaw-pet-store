@@ -35,7 +35,7 @@ export default function ProductDetailPage() {
     } = useProductReviews({
         productId: productDetail?.productId ?? "",
         page: 0,
-        size: 8
+        size: 2
     });
 
     const { mutate: updateFavourite } = useUpdateProductFavourite();
@@ -48,6 +48,7 @@ export default function ProductDetailPage() {
     const [reviewsModalOpen, setReviewsModalOpen] = useState(false);
     const [imageViewerOpen, setImageViewerOpen] = useState(false);
     const [imageViewerIndex, setImageViewerIndex] = useState(0);
+    const [reviewScrollIndex, setReviewScrollIndex] = useState<number | undefined>(undefined);
 
     // Mock product data - you can replace this with actual API call
     const product = getProductById(Number(id)) || {
@@ -138,6 +139,12 @@ export default function ProductDetailPage() {
     };
 
     const handleViewAllReviews = () => {
+        setReviewScrollIndex(undefined); // Reset scroll index when viewing all reviews
+        setReviewsModalOpen(true);
+    };
+
+    const handleReviewClick = (reviewIndex: number) => {
+        setReviewScrollIndex(reviewIndex);
         setReviewsModalOpen(true);
     };
 
@@ -342,6 +349,7 @@ export default function ProductDetailPage() {
                         productRating={productDetail?.averageReviewScore ?? 0}
                         reviews={reviewsData?.content ?? []}
                         onViewAllReviews={handleViewAllReviews}
+                        onReviewClick={handleReviewClick}
                         className="mt-2 lg:mt-6"
                     />
                 </div>
@@ -428,6 +436,7 @@ export default function ProductDetailPage() {
                 productRating={productDetail?.averageReviewScore ?? 0}
                 productId={productDetail?.productId ?? ""}
                 productName={productDetail?.productName ?? ""}
+                initialScrollIndex={reviewScrollIndex}
             />
 
             {/* Image Viewer */}

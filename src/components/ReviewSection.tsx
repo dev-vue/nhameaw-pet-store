@@ -7,6 +7,7 @@ interface ReviewSectionProps {
     productRating: number;
     reviews: Review[];
     onViewAllReviews?: () => void;
+    onReviewClick?: (reviewIndex: number) => void;
     className?: string;
 }
 
@@ -14,6 +15,7 @@ const ReviewSection = ({
     productRating,
     reviews,
     onViewAllReviews,
+    onReviewClick,
     className = ''
 }: ReviewSectionProps) => {
     return (
@@ -35,10 +37,11 @@ const ReviewSection = ({
 
             {/* Reviews List */}
             <div className="divide-y divide-gray-light">
-                {reviews.map((review) => (
+                {reviews.map((review, index) => (
                     <ReviewCard
                         key={review.review_id}
                         review={review}
+                        onClick={onReviewClick ? () => onReviewClick(index) : undefined}
                     />
                 ))}
             </div>
