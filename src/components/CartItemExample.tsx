@@ -40,7 +40,7 @@ export const CartItem: React.FC<CartItemProps> = ({ item, onDeleteSuccess }) => 
                     <div className="flex items-center space-x-2 mt-1">
                         <span className="text-lg font-semibold text-primary">฿{item.price.toLocaleString()}</span>
                         {item.originalPrice && item.originalPrice > item.price && (
-                            <span className="text-sm text-gray-400 line-through">
+                            <span className="text-sm text-disabled line-through">
                                 ฿{item.originalPrice.toLocaleString()}
                             </span>
                         )}

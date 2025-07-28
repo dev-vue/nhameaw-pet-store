@@ -39,7 +39,7 @@ const ProductCard = ({ product }: { product: Product }) => {
                 <div className="flex flex-wrap items-baseline gap-x-2 mb-2">
                     <span className="text-2xl lg:text-3xl font-semibold text-primary">฿{product?.price ?? "0"}</span>
                     {product?.originalPrice && (
-                        <span className="text-xs md:text-sm lg:text-xl text-disableds line-through">฿{product?.originalPrice}</span>
+                        <span className="text-xs md:text-sm lg:text-xl text-disabled line-through">฿{product?.originalPrice}</span>
                     )}
                 </div>
                 <hr className="border-gray-200 mb-2" />

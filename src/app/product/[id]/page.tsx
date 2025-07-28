@@ -241,7 +241,7 @@ export default function ProductDetailPage() {
                                 <div className="flex items-center space-x-2 lg:space-x-3 mb-2 lg:mb-3">
                                     <span className="text-2xl lg:text-3xl font-semibold text-primary">฿{productDetail?.price ?? "0"}</span>
                                     {productDetail?.originalPrice && (
-                                        <span className="text-xs md:text-sm lg:text-xl text-disableds line-through">฿{productDetail?.originalPrice}</span>
+                                        <span className="text-xs md:text-sm lg:text-xl text-disabled line-through">฿{productDetail?.originalPrice}</span>
                                     )}
                                 </div>
 
