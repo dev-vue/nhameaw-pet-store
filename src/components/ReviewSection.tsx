@@ -55,7 +55,7 @@ const ReviewSection = ({
                         rightIcon={<ChevronRight className="w-4 h-4 text-primary" />}
                         className="hover:text-primary-hover transition-colors text-sm lg:text-base"
                     >
-                        ดูรีวิวทั้งหมด
+                        ดูรีวิวอื่นๆ
                     </Button>
                 </div>
             )}

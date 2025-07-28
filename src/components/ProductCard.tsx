@@ -47,7 +47,7 @@ const ProductCard = ({ product }: { product: Product }) => {
                     <Star className="w-3 h-3 lg:w-4 lg:h-4 fill-yellow-400 text-yellow-400" />
                     <span className="text-xs lg:text-sm text-black ml-1">{product.rating}</span>
                     <span className="text-xs lg:text-sm text-gray-400 mx-1">|</span>
-                    <span className="text-xs lg:text-sm text-black">ขายแล้ว {product.sold} ชิ้น</span>
+                    <span className="text-xs lg:text-sm text-black">ขายแล้วกว่า {product.sold} ชิ้น</span>
                 </div>
             </div>
         </div>

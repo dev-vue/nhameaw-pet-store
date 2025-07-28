@@ -61,16 +61,6 @@ export default function ProductDetailPage() {
         imageUrl: '/images/product-demo-rm-bg.png',
     };
 
-    // Get reviews for this product
-    const reviews = getReviewsByProductId(Number(id));
-
-    // Mock multiple product images
-    const productImages = [
-        '/images/product-demo-rm-bg.png',
-        '/images/product-demo-rm-bg.png',
-        '/images/product-demo-rm-bg.png'
-    ];
-
     // Helper function to detect video files
     const isVideo = (file: { fileType?: string; mimeType?: string; url?: string }) => {
         if (file.mimeType && file.mimeType.startsWith('video/')) return true;
@@ -262,12 +252,12 @@ export default function ProductDetailPage() {
                                             <Star className="w-4 h-4 lg:w-5 lg:h-5 fill-warning text-warning" />
                                             <span className="text-sm lg:text-base text-black ml-1 lg:ml-2">{product.rating.toFixed(1)}</span>
                                             <span className="text-sm lg:text-base text-gray-light mx-1 lg:mx-2">|</span>
-                                            <span className="text-xs lg:text-base text-black">ขายแล้ว {product.reviews} ชิ้น</span>
+                                            <span className="text-xs lg:text-base text-black">ขายแล้วกว่า {product.reviews} ชิ้น</span>
                                         </div>
-                                        <span className="text-sm text-subdube">ยอดขายและรีวิวจากทุกช่องทางการจัดจำหน่าย</span>
+                                        <span className="text-xs md:text-sm text-subdube">ยอดขายและรีวิวจากทุกช่องทางการจัดจำหน่าย</span>
                                     </div>
                                     <button type='button' className='flex items-center space-x-2' onClick={handleViewAllReviews}>
-                                        <span className="text-base lg:text-lg text-secondary whitespace-nowrap">
+                                        <span className="text-sm md:text-base lg:text-lg text-secondary whitespace-nowrap">
                                             ดูรีวิว
                                         </span>
                                         <ChevronRight className="w-4 h-4 lg:w-5 lg:h-5 text-primary" />
