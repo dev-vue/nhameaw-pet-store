@@ -21,15 +21,6 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
 
     const { data: session } = useSession();
 
-    const product = {
-        id: Number(id),
-        name: 'O3vit 50 ml อาหารเสริมยันต์ไข่ สำหรับแมว/สุนัข กำจัดสวย แฮนเรง มิดแล้ว เสริมภูมิ ขนาด 50 ml.',
-        rating: 5.0,
-        reviews: '9.3พัน',
-        price: 1050,
-        originalPrice: 1250,
-        imageUrl: '/images/product-demo-rm-bg.png',
-    };
 
     // Add to cart function
     const handleAddToCart = () => {
@@ -80,9 +71,9 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
 
 
                     {/* Price */}
-                    <span className="text-primary md:text-xl text-sm font-semibold">฿{product.price}-{product.price + 950}</span>
-                    {product.originalPrice && (
-                        <span className="text-disabled line-through md:text-xl text-sm">฿{product.originalPrice}</span>
+                    <span className="text-2xl lg:text-3xl font-semibold text-primary">฿{productDetail?.price}</span>
+                    {productDetail?.originalPrice && (
+                        <span className="text-xs md:text-sm lg:text-xl text-disableds line-through">฿{productDetail?.originalPrice}</span>
                     )}
                 </div>
 

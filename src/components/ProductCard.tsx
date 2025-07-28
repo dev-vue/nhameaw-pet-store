@@ -37,9 +37,9 @@ const ProductCard = ({ product }: { product: Product }) => {
             <div className="p-3 lg:p-4 flex-1 flex flex-col">
                 <h4 className="font-semibold text-xs lg:text-sm line-clamp-2 mb-2 flex-1">{product.name}</h4>
                 <div className="flex flex-wrap items-baseline gap-x-2 mb-2">
-                    <p className="font-semibold text-sm lg:text-lg text-primary">฿{product.price ?? "0"}</p>
-                    {product.originalPrice && (
-                        <p className="text-xs text-subdube line-through">฿{product.originalPrice ?? "0"}</p>
+                    <span className="text-2xl lg:text-3xl font-semibold text-primary">฿{product?.price}</span>
+                    {product?.originalPrice && (
+                        <span className="text-xs md:text-sm lg:text-xl text-disableds line-through">฿{product?.originalPrice}</span>
                     )}
                 </div>
                 <hr className="border-gray-200 mb-2" />

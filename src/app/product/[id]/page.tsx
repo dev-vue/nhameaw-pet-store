@@ -239,9 +239,9 @@ export default function ProductDetailPage() {
                             {/* Price Section - Mobile First */}
                             <div className="mb-4 lg:mb-6 lg:order-2">
                                 <div className="flex items-center space-x-2 lg:space-x-3 mb-2 lg:mb-3">
-                                    <span className="text-2xl lg:text-3xl font-semibold text-primary">฿{productDetail?.priceRange}</span>
-                                    {product.originalPrice && (
-                                        <span className="text-lg lg:text-xl text-subdube line-through">฿{product.originalPrice.toLocaleString()}</span>
+                                    <span className="text-2xl lg:text-3xl font-semibold text-primary">฿{productDetail?.price}</span>
+                                    {productDetail?.originalPrice && (
+                                        <span className="text-xs md:text-sm lg:text-xl text-disableds line-through">฿{productDetail?.originalPrice}</span>
                                     )}
                                 </div>
 
@@ -250,9 +250,9 @@ export default function ProductDetailPage() {
                                     <div className="flex flex-col">
                                         <div className="flex items-center py-2">
                                             <Star className="w-4 h-4 lg:w-5 lg:h-5 fill-warning text-warning" />
-                                            <span className="text-sm lg:text-base text-black ml-1 lg:ml-2">{product.rating.toFixed(1)}</span>
+                                            <span className="text-sm lg:text-base text-black ml-1 lg:ml-2">{productDetail?.averageReviewScore}</span>
                                             <span className="text-sm lg:text-base text-gray-light mx-1 lg:mx-2">|</span>
-                                            <span className="text-xs lg:text-base text-black">ขายแล้วกว่า {product.reviews} ชิ้น</span>
+                                            <span className="text-xs lg:text-base text-black">ขายแล้วกว่า {productDetail?.sold} ชิ้น</span>
                                         </div>
                                         <span className="text-xs md:text-sm text-subdube">ยอดขายและรีวิวจากทุกช่องทางการจัดจำหน่าย</span>
                                     </div>

@@ -35,6 +35,8 @@ export interface ProductDetail {
     otherProductInfo?: string;
     frequentlyAskedQuestions?: string;
     sold?: string;
+    originalPrice?: string;
+    price?: string;
     productBalance?: string;
     averageReviewScore?: number;
     isFavorite: boolean;
