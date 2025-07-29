@@ -250,7 +250,7 @@ export default function MyCartPage() {
                                                         }
                                                     }}
                                                     onFocus={e => e.target.select()}
-                                                    className="w-10 text-center bg-white outline-none border border-gray-light rounded-[10px]"
+                                                    className="w-10 h-10  text-center bg-white outline-none border border-gray-light rounded-[10px]"
                                                 />
                                                 <button
                                                     onClick={() => increaseQuantity(item.id)}

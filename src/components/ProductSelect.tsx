@@ -42,7 +42,7 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
 
     return (
         <>
-            <div className="pt-4 px-0 md:px-3">
+            <div className="pt-2 px-0 md:px-3">
                 <div className="flex justify-start items-end gap-2 mb-4">
                     {/* Product Images */}
                     <div
@@ -83,7 +83,7 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
                     productDetail.typeSizeList.length > 0 ?
                         <>
                             {/* Type Selection */}
-                            <p className="text-sm mb-2">เลือกชนิด</p>
+                            <p className="mb-2 font-semibold">เลือกชนิด</p>
                             <div className="flex flex-wrap items-center gap-x-2 gap-y-2 mb-6">
                                 {
                                     productDetail.typeSizeList?.map((typeSize, index) => (
@@ -123,9 +123,9 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
                             {
                                 productDetail.typeSizeList[selectedTypeIndex].quantityList?.length > 0 &&
                                 <div className="mb-6">
-                                    <p className="text-sm mb-2">เลือกจำนวน</p>
+                                    <p className="mb-2 font-semibold">เลือกจำนวน</p>
 
-                                    <div className='flex gap-2'>
+                                    <div className='flex flex-wrap gap-2'>
                                         {
                                             productDetail.typeSizeList[selectedTypeIndex].quantityList?.map((quantity, index) => (
                                                 <button
@@ -171,10 +171,10 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
                 {/* Quantity Selection */}
                 <div className="mb-8 flex items-center justify-between">
                     <div className="flex flex-col">
-                        <p className="text-sm mb-2">จำนวน</p>
+                        <p className="font-semibold mb-2">จำนวน</p>
                         <p className="text-xs text-gray-500 mb-2">สามารถกรอกจำนวนที่ต้องการได้</p>
                     </div>
-                    <div className="flex items-center justify-end">
+                    <div className="flex items-center justify-end gap-x-2">
                         <button
                             onClick={() => quantity > 1 && setQuantity(quantity - 1)}
                             className="w-10 h-10 bg-secondary text-white rounded-full flex items-center justify-center hover:bg-gray-200"
@@ -186,7 +186,7 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
                             min="1"
                             value={quantity}
                             onChange={(e) => setQuantity(parseInt(e.target.value) || 1)}
-                            className="w-16 text-center border-none bg-white outline-none"
+                            className="w-10 h-10 text-center bg-white outline-none border border-gray-light rounded-[10px]"
                         />
                         <button
                             onClick={() => setQuantity(quantity + 1)}
@@ -205,7 +205,7 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
                 >
                     เพิ่มไปยังตะกร้า
                 </Button>
-            </div>
+            </div >
         </>
     )
 }

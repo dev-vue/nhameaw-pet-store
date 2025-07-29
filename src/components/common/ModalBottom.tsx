@@ -117,14 +117,17 @@ export default function ModalBottom({ open, header, children, size = "md", multi
 
 										{/* Header */}
 										<div
+											// className={cn(
+											// 	"px-4 md:px-6 flex items-center py-6 flex-shrink-0",
+											// 	onClose != null
+											// 		? "justify-between border-b border-gray-light"
+											// 		: "justify-start"
+											// )}
 											className={cn(
-												"px-4 md:px-6 flex items-center py-6 flex-shrink-0",
-												onClose != null
-													? "justify-between border-b border-gray-light"
-													: "justify-start"
+												"px-4 md:px-6 flex items-center pt-3 pb-0 flex-shrink-0 justify-end"
 											)}
 										>
-											<h1 className="text-xl font-semibold text-black">{header}</h1>
+											{/* <h1 className="text-xl font-semibold text-black">{header}</h1> */}
 											{onClose != null && (
 												<button
 													onClick={onClose}
