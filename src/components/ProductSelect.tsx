@@ -84,7 +84,7 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
                         <>
                             {/* Type Selection */}
                             <p className="text-sm mb-2">เลือกชนิด</p>
-                            <div className="flex items-center gap-x-2 mb-6">
+                            <div className="flex flex-wrap items-center gap-x-2 gap-y-2 mb-6">
                                 {
                                     productDetail.typeSizeList?.map((typeSize, index) => (
                                         <button

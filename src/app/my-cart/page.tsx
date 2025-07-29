@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { CheckCircle, Minus, Plus, X } from 'lucide-react';
+import { CheckCircle, Minus, Pencil, Plus, X } from 'lucide-react';
 import Image from 'next/image';
 import { AddressModal, ShippingAddressFormData } from '@/components/form/modal-address';
 import CartFooter from '@/components/CartFooter';
@@ -132,7 +132,6 @@ export default function MyCartPage() {
                 itemCount: totalItems
             }
         };
-        console.log('Sending cart to admin:', cartData);
         swal.fire({
             icon: "success",
             title: "สำเร็จ",
@@ -150,15 +149,14 @@ export default function MyCartPage() {
         <div className="bg-gray-100 min-h-screen">
             <div className="lg:container mx-auto space-y-8 py-5 md:px-5 px-3 pb-40">
                 {/* Address Section */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-x-4">
                     <div className="sm:col-span-1 col-span-2">
                         <div className="bg-white mb-4 p-4 rounded-lg">
                             {
                                 shippingAddressData && Object.keys(shippingAddressData).length > 0 ? (
                                     <div className="flex items-start">
-                                        <img src="/icons/cart-pin.svg" alt="pin" className="w-5 h-5 lg:w-7 lg:h-7" />
+                                        <img src="/icons/cart-pin.svg" alt="pin" className="w-7 h-7" />
                                         <div className="flex-grow">
-                                            <h3 className="font-semibold text-base mb-2">ที่อยู่จัดส่ง</h3>
                                             <p className="text-black text-baese font-semibold">{shippingAddressData.recipientFullName}</p>
                                             <p className="text-subdube text-sm">{shippingAddressData.recipientPhoneNumber}</p>
                                             <p className="text-black text-sm">
@@ -175,9 +173,10 @@ export default function MyCartPage() {
                                             </p>
                                         </div>
                                         <button
-                                            className="text-primary text-sm font-medium"
+                                            className="flex items-center gap-x-1 text-secondary text-sm font-medium"
                                             onClick={handleEditAddress}
                                         >
+                                            <Pencil className='w-4 h-4' />
                                             แก้ไข
                                         </button>
                                     </div>
@@ -198,8 +197,8 @@ export default function MyCartPage() {
                         {myCartData?.map((item) => (
                             <div key={item.id} className="bg-white mb-4 rounded-lg">
                                 <div className="p-4">
-                                    <div className="flex items-center mb-2">
-                                        <div className="mr-3 w-20 h-20 flex-shrink-0">
+                                    <div className="flex items-start mb-2">
+                                        <div className="mr-3 w-20 h-20 flex-shrink-0 border border-gray-light rounded-[14px]">
                                             <Image
                                                 src={item.imageUrl ? item.imageUrl : item.imageMainUrl}
                                                 alt={item.productName}
@@ -209,46 +208,56 @@ export default function MyCartPage() {
                                             />
                                         </div>
                                         <div className="flex-grow">
-                                            <div className="flex justify-between">
-                                                <h3 className="font-medium text-sm line-clamp-2 pr-4">{item.productName}</h3>
+                                            <div className="flex justify-between items-start">
+                                                <div className="flex flex-col">
+                                                    <h3 className="font-medium text-sm line-clamp-2 pr-4">{item.productName}</h3>
+                                                    <p className='text-sm text-subdube'>
+                                                        {item.productItemName ? item.productItemName : item.productQuantityName} {item.productItemQuantityName}
+                                                    </p>
+                                                </div>
                                                 <button
                                                     onClick={() => removeItem(item.id)}
                                                     aria-label="Remove item"
                                                 >
-                                                    <X size={18} className="text-gray-400" />
+                                                    <X size={18} className="text-primary" />
                                                 </button>
                                             </div>
-                                            {item.productItemName && <p className="text-sm text-gray-500">{item.productItemName} {item.productItemQuantityName}</p>}
-                                            <div className="flex justify-between items-center mt-2">
+                                        </div>
+                                    </div>
+                                    <div className="flex-grow">
+                                        <div className="flex justify-between items-center mt-2">
+                                            <div className='flex flex-col justify-center items-start gap-x-1'>
                                                 <div className="text-primary font-semibold text-base">฿{item.price ? item.price.toLocaleString() : 0}</div>
-                                                <div className="flex items-center justify-end gap-x-2">
-                                                    <button
-                                                        onClick={() => decreaseQuantity(item.id)}
-                                                        className="w-10 h-10 text-white bg-secondary rounded-full flex items-center justify-center hover:bg-gray-800"
-                                                    >
-                                                        <Minus className="w-4 h-4" />
-                                                    </button>
-                                                    <input
-                                                        type="number"
-                                                        min="1"
-                                                        value={item.quantity}
-                                                        onChange={(e) => {
-                                                            const value = parseInt(e.target.value) || 1;
-                                                            if (value > 0) {
-                                                                setCartItems(cartItems.map(cartItem =>
-                                                                    cartItem.id === item.id.toString() ? { ...cartItem, quantity: value } : cartItem
-                                                                ));
-                                                            }
-                                                        }}
-                                                        className="w-10 text-center border-none bg-white outline-none"
-                                                    />
-                                                    <button
-                                                        onClick={() => increaseQuantity(item.id)}
-                                                        className="w-10 h-10 text-white bg-secondary rounded-full flex items-center justify-center hover:bg-gray-800"
-                                                    >
-                                                        <Plus className="w-4 h-4" />
-                                                    </button>
-                                                </div>
+                                                <p className='text-xs text-subdube'>สามารถกรอกจำนวนที่ช่องกรอกได้</p>
+                                            </div>
+                                            <div className="flex items-center justify-end gap-x-2">
+                                                <button
+                                                    onClick={() => decreaseQuantity(item.id)}
+                                                    className="w-10 h-10 text-white bg-secondary rounded-full flex items-center justify-center hover:bg-gray-800"
+                                                >
+                                                    <Minus className="w-4 h-4" />
+                                                </button>
+                                                <input
+                                                    type="number"
+                                                    min="1"
+                                                    value={item.quantity}
+                                                    onChange={(e) => {
+                                                        const value = parseInt(e.target.value) || 1;
+                                                        if (value > 0) {
+                                                            setCartItems(cartItems.map(cartItem =>
+                                                                cartItem.id === item.id.toString() ? { ...cartItem, quantity: value } : cartItem
+                                                            ));
+                                                        }
+                                                    }}
+                                                    onFocus={e => e.target.select()}
+                                                    className="w-10 text-center bg-white outline-none border border-gray-light rounded-[10px]"
+                                                />
+                                                <button
+                                                    onClick={() => increaseQuantity(item.id)}
+                                                    className="w-10 h-10 text-white bg-secondary rounded-full flex items-center justify-center hover:bg-gray-800"
+                                                >
+                                                    <Plus className="w-4 h-4" />
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
@@ -268,7 +277,7 @@ export default function MyCartPage() {
                                 <span>ไม่รวมค่าจัดส่ง</span>
                                 <span>-</span>
                             </div>
-                            <div className="border-t border-gray-200 my-2 pt-2">
+                            <div className="border-t border-gray-light my-2 pt-2">
                                 <div className="flex justify-between font-semibold">
                                     <span>ยอดรวมทั้งหมด</span>
                                     <span className="text-primary">฿{total.toLocaleString()}</span>

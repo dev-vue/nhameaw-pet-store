@@ -125,7 +125,7 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
             return (
                 <div className="grid grid-cols-1 gap-2 max-w-full">
                     <div
-                        className="aspect-square bg-white rounded border border-gray-200 flex items-center justify-center overflow-hidden relative cursor-pointer"
+                        className="aspect-square bg-white rounded border border-gray-light flex items-center justify-center overflow-hidden relative cursor-pointer"
                         onClick={() => openImageViewer(media, 0)}
                     >
                         {isVideo(media[0]) ? (
@@ -158,7 +158,7 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
                     {media.slice(0, 2).map((item, index) => (
                         <div
                             key={index}
-                            className="aspect-square bg-white rounded border border-gray-200 flex items-center justify-center overflow-hidden relative cursor-pointer"
+                            className="aspect-square bg-white rounded border border-gray-light flex items-center justify-center overflow-hidden relative cursor-pointer"
                             onClick={() => openImageViewer(media, index)}
                         >
                             {isVideo(item) ? (
@@ -191,7 +191,7 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
                 <div className="grid grid-cols-3 grid-rows-2 gap-2 max-w-full h-auto">
                     {/* First image - spans 2 rows */}
                     <div
-                        className="col-span-2 row-span-2 bg-white rounded border border-gray-200 flex items-center justify-center overflow-hidden relative cursor-pointer"
+                        className="col-span-2 row-span-2 bg-white rounded border border-gray-light flex items-center justify-center overflow-hidden relative cursor-pointer"
                         onClick={() => openImageViewer(media, 0)}
                     >
                         {isVideo(media[0]) ? (
@@ -216,7 +216,7 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
                     </div>
                     {/* Second image */}
                     <div
-                        className="col-span-1 row-span-1 bg-white rounded border border-gray-200 flex items-center justify-center overflow-hidden relative cursor-pointer"
+                        className="col-span-1 row-span-1 bg-white rounded border border-gray-light flex items-center justify-center overflow-hidden relative cursor-pointer"
                         onClick={() => openImageViewer(media, 1)}
                     >
                         {isVideo(media[1]) ? (
@@ -241,7 +241,7 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
                     </div>
                     {/* Third image */}
                     <div
-                        className="col-span-1 row-span-1 bg-white rounded border border-gray-200 flex items-center justify-center overflow-hidden relative cursor-pointer"
+                        className="col-span-1 row-span-1 bg-white rounded border border-gray-light flex items-center justify-center overflow-hidden relative cursor-pointer"
                         onClick={() => openImageViewer(media, 2)}
                     >
                         {isVideo(media[2]) ? (
@@ -274,7 +274,7 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
                     {media.map((item, index) => (
                         <div
                             key={index}
-                            className="aspect-square bg-white rounded border border-gray-200 flex items-center justify-center overflow-hidden relative cursor-pointer"
+                            className="aspect-square bg-white rounded border border-gray-light flex items-center justify-center overflow-hidden relative cursor-pointer"
                             onClick={() => openImageViewer(media, index)}
                         >
                             {isVideo(item) ? (
@@ -309,7 +309,7 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
                 {media.slice(0, 3).map((item, index) => (
                     <div
                         key={index}
-                        className="aspect-square bg-white rounded border border-gray-200 flex items-center justify-center overflow-hidden relative cursor-pointer"
+                        className="aspect-square bg-white rounded border border-gray-light flex items-center justify-center overflow-hidden relative cursor-pointer"
                         onClick={() => openImageViewer(media, index)}
                     >
                         {isVideo(item) ? (
@@ -335,7 +335,7 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
                 ))}
                 {/* Fourth image with overlay */}
                 <div
-                    className="aspect-square bg-white rounded border border-gray-200 flex items-center justify-center overflow-hidden relative cursor-pointer"
+                    className="aspect-square bg-white rounded border border-gray-light flex items-center justify-center overflow-hidden relative cursor-pointer"
                     onClick={() => openImageViewer(media, 3)}
                 >
                     {isVideo(media[3]) ? (

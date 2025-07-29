@@ -172,7 +172,7 @@ export function AccountModal({ open, onClose, profileData }: AccountModalProps) 
                                                         value={field.value}
                                                         onChange={field.onChange}
                                                         className={cn(
-                                                            "w-full rounded-lg border border-gray-200 px-4 py-2 text-base focus:outline-none pl-10",
+                                                            "w-full rounded-lg border border-gray-light px-4 py-2 text-base focus:outline-none pl-10",
                                                             "flex items-center justify-start text-left",
                                                             // Error styles
                                                             form.formState.errors.gender && "border-critical focus:ring-criborder-critical focus:border-critical",
@@ -210,7 +210,7 @@ export function AccountModal({ open, onClose, profileData }: AccountModalProps) 
                                                             value={formatDateForInput(field.value ?? undefined)}
                                                             onChange={handleDateChange}
                                                             className={cn(
-                                                                "w-full rounded-lg border border-gray-200 px-4 py-2 text-base focus:outline-none pl-10",
+                                                                "w-full rounded-lg border border-gray-light px-4 py-2 text-base focus:outline-none pl-10",
                                                                 "flex items-center justify-start text-left",
                                                                 // Error styles
                                                                 form.formState.errors.dob && "border-critical focus:ring-criborder-critical focus:border-critical",

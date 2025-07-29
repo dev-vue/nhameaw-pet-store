@@ -14,7 +14,7 @@ const buttonVariants = cva(
 				secondary: "bg-secondary border border-secondary text-white",
 				ghost: "hover:bg-accent hover:text-accent-foreground",
 				link: "text-black hover:text-primary",
-				calendar: "w-full rounded-lg border border-gray-200 px-4 py-4 text-black text-base focus:outline-none",
+				calendar: "w-full rounded-lg border border-gray-light px-4 py-4 text-black text-base focus:outline-none",
 			},
 			size: {
 				default: "px-4 py-1",

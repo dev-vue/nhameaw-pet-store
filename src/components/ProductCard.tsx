@@ -42,7 +42,7 @@ const ProductCard = ({ product }: { product: Product }) => {
                         <span className="text-xs text-disabled line-through">฿{product?.originalPrice}</span>
                     )}
                 </div>
-                <hr className="border-gray-200 mb-2" />
+                <hr className="border-gray-light mb-2" />
                 <div className="flex items-center">
                     <Star className="w-3 h-3 lg:w-4 lg:h-4 fill-yellow-400 text-yellow-400" />
                     <span className="text-xs lg:text-sm text-black ml-1">{product.rating}</span>

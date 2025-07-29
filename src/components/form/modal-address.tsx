@@ -123,7 +123,7 @@ export function AddressModal({ open, onClose, onSave, shippingAddressData }: Add
                                                 <textarea
                                                     placeholder="ระบุ"
                                                     className={cn(
-                                                        "w-full rounded-lg border border-gray-200 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary resize-none",
+                                                        "w-full rounded-lg border border-gray-light px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary resize-none",
                                                         "min-h-[100px]",
                                                         form.formState.errors.shippingAddress && "border-red-500 focus:ring-red-500 focus:border-red-500"
                                                     )}
@@ -147,7 +147,7 @@ export function AddressModal({ open, onClose, onSave, shippingAddressData }: Add
                                                 <textarea
                                                     placeholder="ระบุ"
                                                     className={cn(
-                                                        "w-full rounded-lg border border-gray-200 px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary resize-none",
+                                                        "w-full rounded-lg border border-gray-light px-4 py-3 text-base focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary resize-none",
                                                         "min-h-[100px]"
                                                     )}
                                                     {...field}
@@ -164,13 +164,13 @@ export function AddressModal({ open, onClose, onSave, shippingAddressData }: Add
                             <div className={cn(
                                 "w-full flex gap-4 mt-8",
                                 // Mobile: Fixed at bottom of screen with shadow
-                                "fixed bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-200 shadow-lg z-50",
+                                "fixed bottom-0 left-0 right-0 p-4 bg-white  shadow-lg z-50",
                                 // Hide on desktop/tablet
                                 "md:hidden"
                             )}>
                                 <Button
                                     type="button"
-                                    className="flex-1 bg-gray-600 hover:bg-gray-700 text-white border-gray-600"
+                                    className="flex-1 bg-secondary hover:bg-gray-700 text-white"
                                     onClick={onClose}
                                 >
                                     ยกเลิก
@@ -178,7 +178,7 @@ export function AddressModal({ open, onClose, onSave, shippingAddressData }: Add
                                 <Button
                                     type="submit"
                                     size={'md'}
-                                    className="flex-1 bg-[#EF737B] hover:bg-[#E65A5A] text-white border-[#EF737B]"
+                                    className="flex-1 bg-primary hover:bg-[#E65A5A] text-white"
                                 >
                                     บันทึก
                                 </Button>

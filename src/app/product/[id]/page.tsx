@@ -275,7 +275,7 @@ export default function ProductDetailPage() {
                                     </h1>
 
                                     {/* Action Icons */}
-                                    <div className="flex items-center justify-between pb-3 lg:pb-6 mb-4 lg:mb-6 border-b border-gray-200 lg:order-3">
+                                    <div className="flex items-center justify-between pb-3 lg:pb-6 mb-4 lg:mb-6 border-b border-gray-light lg:order-3">
                                         <div className="flex items-center space-x-4 lg:space-x-6">
                                             <button
                                                 onClick={handleShare}
@@ -360,7 +360,7 @@ export default function ProductDetailPage() {
 
 
                     {/* Fixed Bottom Action Buttons */}
-                    <div className="z-[1000] fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4">
+                    <div className="z-[1000] fixed bottom-0 left-0 right-0 bg-white border-t border-gray-light p-4">
                         <div className="lg:container mx-auto">
                             <div className="flex justify-end space-x-3">
                                 <Button

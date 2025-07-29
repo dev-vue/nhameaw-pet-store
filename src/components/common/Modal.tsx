@@ -101,7 +101,7 @@ export default function Modal({ open, header, subHeader, children, size = "md", 
 											className={cn(
 												"px-4 md:px-6 flex items-center py-6",
 												onClose != null
-													? "justify-between border-b border-gray-200"
+													? "justify-between border-b border-gray-light"
 													: "justify-start"
 											)}
 										>

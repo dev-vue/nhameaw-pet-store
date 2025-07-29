@@ -54,7 +54,7 @@ export function Combobox(props: ComboBoxProps) {
 						disabled={disabled}
 						className={cn(
 							// Base styles matching Input component
-							"w-full rounded-lg border border-gray-200 px-4 py-2 text-base focus:outline-none",
+							"w-full rounded-lg border border-gray-light px-4 py-2 text-base focus:outline-none",
 							// Text alignment and display
 							"flex items-center justify-between text-left",
 							// Focus styles

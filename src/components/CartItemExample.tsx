@@ -24,7 +24,7 @@ export const CartItem: React.FC<CartItemProps> = ({ item, onDeleteSuccess }) => 
     };
 
     return (
-        <div className="flex items-center justify-between p-4 bg-white border border-gray-200 rounded-lg">
+        <div className="flex items-center justify-between p-4 bg-white border border-gray-light rounded-lg">
             <div className="flex items-center space-x-4">
                 <img
                     src={item.imageUrl || item.imageMainUrl}
