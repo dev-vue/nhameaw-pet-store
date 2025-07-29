@@ -42,7 +42,7 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
 
     return (
         <>
-            <div className="p-4">
+            <div className="pt-4 px-0 md:px-3">
                 <div className="flex justify-start items-end gap-2 mb-4">
                     {/* Product Images */}
                     <div

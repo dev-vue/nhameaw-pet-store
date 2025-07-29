@@ -99,7 +99,7 @@ export default function Modal({ open, header, subHeader, children, size = "md", 
 										<Dialog.Description />
 										<div
 											className={cn(
-												"mx-6 flex items-center py-6",
+												"px-4 md:px-6 flex items-center py-6",
 												onClose != null
 													? "justify-between border-b border-gray-200"
 													: "justify-start"
@@ -120,7 +120,7 @@ export default function Modal({ open, header, subHeader, children, size = "md", 
 												</button>
 											)}
 										</div>
-										<div className="md:max-h-[70vh] md:h-auto h-screen overflow-y-auto px-6 pt-6">{children}</div>
+										<div className="md:max-h-[70vh] md:h-auto h-screen overflow-y-auto px-4 md:px-6 pt-6">{children}</div>
 									</motion.div>
 								</motion.div>
 							</Dialog.Content>

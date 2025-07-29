@@ -118,7 +118,7 @@ export default function ModalBottom({ open, header, children, size = "md", multi
 										{/* Header */}
 										<div
 											className={cn(
-												"mx-6 flex items-center py-6 flex-shrink-0",
+												"px-4 md:px-6 flex items-center py-6 flex-shrink-0",
 												onClose != null
 													? "justify-between border-b border-gray-200"
 													: "justify-start"
@@ -137,7 +137,7 @@ export default function ModalBottom({ open, header, children, size = "md", multi
 										</div>
 
 										{/* Content */}
-										<div className="flex-1 overflow-y-auto px-6 pb-6">
+										<div className="flex-1 overflow-y-auto px-4 md:px-6 pb-6">
 											{children}
 										</div>
 									</motion.div>

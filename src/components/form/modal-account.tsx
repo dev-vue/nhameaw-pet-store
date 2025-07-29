@@ -239,7 +239,7 @@ export function AccountModal({ open, onClose, profileData }: AccountModalProps) 
                             {/* Mobile: Fixed at bottom of screen */}
                             <div className={cn(
                                 "md:hidden",
-                                "fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 px-6 py-4 z-50"
+                                "fixed bottom-0 left-0 right-0 bg-white px-3 md:px-6 py-4 z-50"
                             )}>
                                 <div className="flex w-full gap-4">
                                     <Button
