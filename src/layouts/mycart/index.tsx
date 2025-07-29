@@ -8,7 +8,7 @@ export type LayoutsProps = {
 export default function MyCartLayout({ children }: LayoutsProps) {
     return (
         <>
-            <div className="bg-gray-100 min-h-screen font-sans">
+            <div className="bg-gray-light min-h-screen font-sans">
                 {children}
             </div>
         </>

@@ -148,7 +148,7 @@ export default function MyCartPage() {
 
     return (
         <div className="bg-gray-100 min-h-screen">
-            <div className="container mx-auto space-y-8 py-5 md:px-5 px-3 pb-40">
+            <div className="lg:container mx-auto space-y-8 py-5 md:px-5 px-3 pb-40">
                 {/* Address Section */}
                 <div className="grid grid-cols-2 gap-4">
                     <div className="sm:col-span-1 col-span-2">

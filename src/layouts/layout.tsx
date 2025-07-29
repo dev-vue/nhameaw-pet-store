@@ -106,7 +106,7 @@ export default function Layouts({ children }: LayoutsProps) {
                     {
                         title &&
                         <div className="bg-white">
-                            <div className="container mx-auto w-full bg-white px-5 py-3">
+                            <div className="lg:container mx-auto w-full bg-white px-5 py-3">
                                 <h3 className="text-2xl text-black font-semibold">{title}</h3>
                             </div>
                         </div>
@@ -126,7 +126,7 @@ export default function Layouts({ children }: LayoutsProps) {
                 {
                     title &&
                     <div className="bg-white">
-                        <div className="container mx-auto w-full bg-white px-5 py-3">
+                        <div className="lg:container mx-auto w-full bg-white px-5 py-3">
                             <h3 className="text-2xl text-black font-semibold">{title}</h3>
                         </div>
                     </div>

@@ -48,7 +48,7 @@ const Header = ({ onMenuClick, className }: { onMenuClick: () => void; className
             {showSearch && (
                 <div className="fixed inset-0 z-[1000] bg-black/60 flex flex-col" style={{ backdropFilter: 'blur(2px)' }}>
                     <div className="bg-white w-full py-6 px-3 shadow-lg relative">
-                        <div className="container mx-auto px-3">
+                        <div className="lg:container mx-auto px-3">
                             <div className="flex items-center justify-between mb-4">
                                 <span className="font-semibold text-lg">ค้นหาสินค้า</span>
                                 <button onClick={() => setShowSearch(false)} className="text-gray-500 flex items-center gap-1 lg:text-xl text-sm">
@@ -98,7 +98,7 @@ const Header = ({ onMenuClick, className }: { onMenuClick: () => void; className
             )}
 
             <header className="bg-white sticky top-0 z-30">
-                <div className="container mx-auto">
+                <div className="lg:container mx-auto">
                     {/* Desktop Header */}
                     <div className="hidden lg:flex justify-between items-center py-3 px-4">
                         <div className="flex items-center gap-x-4">
@@ -203,10 +203,10 @@ const Header = ({ onMenuClick, className }: { onMenuClick: () => void; className
                 </div>
                 {
                     (pathname !== "/") &&
-                    <div className="flex bg-secondary items-center">
-                        <div className="container mx-auto space-y-8 py-3">
+                    <div className="flex bg-secondary justify-start items-center">
+                        <div className="lg:container mx-auto space-y-8 py-3 w-full">
                             <div className="px-4">
-                                <button type="button" className="cursor-pointer flex items-center gap-x-2 text-white hover:text-primary-hover" onClick={() => back()}>
+                                <button type="button" className="cursor-pointer flex juss items-center gap-x-2 text-white hover:text-primary-hover" onClick={() => back()}>
                                     <ChevronLeft className="w-4 h-4" />
                                     <span>ย้อนกลับ</span>
                                 </button>
