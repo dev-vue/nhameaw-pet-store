@@ -86,7 +86,7 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void; })
             label: 'ช่องทางติดต่อหน้าแมว',
             onClick: () => {
                 onClose();
-                window.open("https://www.facebook.com/nhamaew", "_blank", "noopener,noreferrer");
+                window.open("https://instabio.cc/nhamaew", "_blank", "noopener,noreferrer");
             }
         },
     ]
