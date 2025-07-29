@@ -55,7 +55,7 @@ export function AddressModal({ open, onClose, onSave, shippingAddressData }: Add
             <div className="flex flex-col h-full">
                 {/* Info Text */}
                 <div className="mb-6">
-                    <p className="text-sm text-subdube">รายละเอียดเกี่ยวกับที่อยู่จัดส่ง</p>
+                    <p className="text-sm text-subdube">กรอกรายละเอียดที่อยู่จัดส่ง</p>
                 </div>
 
                 {/* Form Content */}
@@ -77,7 +77,7 @@ export function AddressModal({ open, onClose, onSave, shippingAddressData }: Add
                                         name="recipientFullName"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel isRequired>
+                                                <FormLabel className="font-semibold" isRequired>
                                                     ชื่อ-นามสกุลผู้รับ
                                                 </FormLabel>
                                                 <Input
@@ -97,7 +97,7 @@ export function AddressModal({ open, onClose, onSave, shippingAddressData }: Add
                                         name="recipientPhoneNumber"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel isRequired>
+                                                <FormLabel className="font-semibold" isRequired>
                                                     หมายเลขโทรศัพท์
                                                 </FormLabel>
                                                 <Input
@@ -117,7 +117,7 @@ export function AddressModal({ open, onClose, onSave, shippingAddressData }: Add
                                         name="shippingAddress"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel isRequired>
+                                                <FormLabel className="font-semibold" isRequired>
                                                     ที่อยู่สำหรับจัดส่ง
                                                 </FormLabel>
                                                 <textarea
@@ -141,7 +141,7 @@ export function AddressModal({ open, onClose, onSave, shippingAddressData }: Add
                                         name="additionalAddress"
                                         render={({ field }) => (
                                             <FormItem>
-                                                <FormLabel>
+                                                <FormLabel className="font-semibold" >
                                                     ข้อมูลที่อยู่เพิ่มเติม (ถ้ามี)
                                                 </FormLabel>
                                                 <textarea

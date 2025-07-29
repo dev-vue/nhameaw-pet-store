@@ -34,7 +34,7 @@ const OrderAccordion: React.FC<{ order: Order }> = ({ order }) => {
                 <div className="flex justify-between items-start mb-2">
                     <div>
                         <p className="text-sm text-black">
-                            เลขที่สั่งซื้อ : <span className="text-primary font-medium">{order.orderNumber}</span>
+                            เลขที่สั่งซื้อ : <span className="text-primary font-semibold">{order.orderNumber}</span>
                         </p>
                         <p className="text-sm text-subdube mt-1">
                             วันที่ทำรายการ {order.date}
@@ -94,7 +94,7 @@ const OrderAccordion: React.FC<{ order: Order }> = ({ order }) => {
                 <div className="border-t border-gray-100 pt-4 mt-4">
                     <div className="flex justify-end items-center gap-x-2">
                         <span className="text-sm text-gray-600">
-                            สินค้าทั้งหมด {order.items.length} รายการ :
+                            สินค้ารวม {order.items.length} รายการ :
                         </span>
                         <span className="text-lg font-semibold">
                             ฿{order.total.toLocaleString()}
@@ -162,8 +162,8 @@ export default function HistoryPage() {
     ]);
 
     return (
-        <div className="bg-gray-100 min-h-screen">
-            <div className="max-w-5xl mx-auto md:p-4">
+        <div className="bg-gray-light min-h-screen">
+            <div className="max-w-5xl mx-auto p-4">
 
                 <div className="space-y-4">
                     {orders.map((order) => (
