@@ -85,12 +85,8 @@ export default function SearchPage() {
     };
 
     return (
-        <section>
-            {/* Search Results Title */}
-            {/* <h3 className="text-2xl font-semibold mb-4">{getSearchTitle()}</h3> */}
-
-            {/* Filter Buttons */}
-            <div className="flex space-x-2 mb-6 overflow-x-auto pb-2">
+        <>
+            <div className="flex space-x-2 mb-6 overflow-x-auto pb-2 bg-white lg:container mx-auto px-4">
                 {filters.map((filter, index) => (
                     <button
                         key={index}
@@ -108,45 +104,48 @@ export default function SearchPage() {
                 ))}
             </div>
 
-            {/* Product Search Results */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                {
-                    productsLoading ? <Loading className='w-full col-span-4' /> :
-                        allProducts.length > 0 ? (
-                            allProducts.map((product) => (
-                                <ProductCard key={product.id} product={product} />
-                            ))
-                        ) : (
-                            <div className="col-span-full text-center py-8">
-                                <div className="flex flex-col items-center">
-                                    <img
-                                        src="/images/204-no-data.png"
-                                        alt="No favorite items"
-                                        className="w-48 h-48 object-contain"
-                                    />
-                                    <p className="mt-4 text-subdube text-base">ยังไม่มีรายการ</p>
-                                </div>
-                            </div>
-                        )
-                }
-            </div>
+            <section className='bg-gray-light min-h-screen '>
+                <div className='lg:container mx-auto px-4 py-5'>
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        {
+                            productsLoading ? <Loading className='w-full col-span-4' /> :
+                                allProducts.length > 0 ? (
+                                    allProducts.map((product) => (
+                                        <ProductCard key={product.id} product={product} />
+                                    ))
+                                ) : (
+                                    <div className="col-span-full text-center py-8">
+                                        <div className="flex flex-col items-center">
+                                            <img
+                                                src="/images/204-no-data.png"
+                                                alt="No favorite items"
+                                                className="w-48 h-48 object-contain"
+                                            />
+                                            <p className="mt-4 text-subdube text-base">ยังไม่มีรายการ</p>
+                                        </div>
+                                    </div>
+                                )
+                        }
+                    </div>
 
-            {/* Intersection Observer Target */}
-            <div ref={loadMoreRef} className="h-10 w-full" />
+                    {/* Intersection Observer Target */}
+                    <div ref={loadMoreRef} className="h-10 w-full" />
 
-            {/* Load More Indicator */}
-            {isFetchingNextPage && (
-                <div className="flex justify-center mt-6 w-full">
-                    <Loading className='w-full' />
+                    {/* Load More Indicator */}
+                    {isFetchingNextPage && (
+                        <div className="flex justify-center mt-6 w-full">
+                            <Loading className='w-full' />
+                        </div>
+                    )}
+
+                    {/* Results Count */}
+                    {!productsLoading && allProducts.length > 0 && (
+                        <div className="text-center mt-6 text-gray-500">
+                            <p>แสดง {allProducts.length} รายการ {hasNextPage && "ของสินค้าทั้งหมด"}</p>
+                        </div>
+                    )}
                 </div>
-            )}
-
-            {/* Results Count */}
-            {!productsLoading && allProducts.length > 0 && (
-                <div className="text-center mt-6 text-gray-500">
-                    <p>แสดง {allProducts.length} รายการ {hasNextPage && "ของสินค้าทั้งหมด"}</p>
-                </div>
-            )}
-        </section>
+            </section>
+        </>
     )
 }

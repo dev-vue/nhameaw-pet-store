@@ -117,6 +117,29 @@ export default function Layouts({ children }: LayoutsProps) {
         )
     }
 
+    if (pathname.startsWith("/search")) {
+        return (
+            <QueryClientProvider client={queryClient}>
+                <Suspense fallback={<Loading fullscreen />}>
+                    <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+                    <Header onMenuClick={() => setSidebarOpen(true)} />
+                    {
+                        title &&
+                        <div className="bg-white">
+                            <div className="lg:container mx-auto w-full bg-white px-5 py-3">
+                                <h3 className="text-2xl text-black font-semibold">{title}</h3>
+                            </div>
+                        </div>
+                    }
+                    <div className="min-h-screen font-sans">
+                        {children}
+                        {setLoadingPortal()}
+                    </div>
+                </Suspense>
+            </QueryClientProvider>
+        )
+    }
+
 
     return (
         <QueryClientProvider client={queryClient}>
