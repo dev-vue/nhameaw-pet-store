@@ -231,7 +231,9 @@ export default function ProductDetailPage() {
                                     )}
                                 </div>
                                 {/* Custom Pagination */}
-                                <div className="swiper-custom-pagination !hidden lg:!flex justify-center mt-4"></div>
+                                <div className="swiper-custom-pagination !hidden lg:!flex justify-start mt-4 overflow-x-auto pb-2"
+                                    style={{ scrollbarWidth: 'thin', scrollbarColor: '#d1d5db transparent' }}>
+                                </div>
                             </div>
 
                             {/* Product Information Section */}

@@ -93,7 +93,7 @@ export function SearchCategoryModal({ animalType, name, open, onClose }: SearchC
             <div className="flex flex-col h-screen">
                 {/* Back Navigation - Moved to Top */}
                 {navigationStack.length > 0 && (
-                    <div className="flex items-center justify-between p-4 border-b border-gray-100 mb-4">
+                    <div className="flex items-center justify-between px-0 pb-2 mb-4">
                         <button
                             onClick={handleBackClick}
                             className="flex items-center space-x-3 text-primary hover:text-primary-dark transition-colors"
@@ -134,7 +134,7 @@ export function SearchCategoryModal({ animalType, name, open, onClose }: SearchC
                                     <button
                                         key={`${subcategory.id}-${index}`}
                                         onClick={() => handleSubcategoryClick(subcategory)}
-                                        className="w-full grid grid-cols-[1fr_auto] items-center gap-4 p-4 text-left hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0"
+                                        className="w-full grid grid-cols-[1fr_auto] items-center gap-4 py-4 px-0 md:px-4 text-left hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0"
                                     >
                                         <span className="text-black text-md font-semibold">
                                             {subcategory.detail || 'ไม่มีชื่อ'}

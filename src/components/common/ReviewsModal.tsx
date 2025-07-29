@@ -103,7 +103,7 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
             }, 800); // Increased delay to ensure everything is rendered
             return () => clearTimeout(timer);
         }
-    }, [open, initialScrollIndex, allReview.length]);
+    }, [open, initialScrollIndex]);
 
     const isVideo = (url: string) => {
         return url.includes('.mp4') || url.includes('.webm') || url.includes('.ogg') || url.includes('video');
