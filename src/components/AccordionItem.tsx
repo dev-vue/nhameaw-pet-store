@@ -17,7 +17,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
     return (
         <div className="border-b border-gray-200">
             <button
-                className="flex justify-between items-center w-full py-4 px-2 text-left"
+                className="flex justify-between items-center w-full p-4 text-left"
                 onClick={() => setIsOpen(!isOpen)}
             >
                 <h3 className="text-base font-medium text-gray-900">{title}</h3>

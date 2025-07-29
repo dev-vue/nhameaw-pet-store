@@ -28,13 +28,13 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
     const allProducts: Product[] = productList?.pages.flatMap(page => page.content ?? []) ?? [];
 
     return (
-        <div className={`bg-white rounded-lg ${className}`}>
-            <h2 className="text-lg lg:text-xl font-semibold text-black mb-4 lg:mb-6">
-                สินค้าอื่นๆในหมวดเดียวกัน
+        <div className={`bg-gray-light lg:bg-white rounded-lg ${className}`}>
+            <h2 className="text-lg lg:text-xl font-semibold text-black lg:mb-6 mb-4 px-4">
+                สินค้าอื่นๆที่คุณอาจสนใจ
             </h2>
 
             {/* Products Grid */}
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 md:gap-4">
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 md:gap-4 px-3">
                 {
                     productsLoading ? <Loading className='w-full col-span-4' /> :
                         allProducts.length > 0 ? (

@@ -14,7 +14,7 @@ const ReviewCard = ({ review, className = '', onClick }: ReviewCardProps) => {
 
     return (
         <div
-            className={`bg-white p-3 lg:p-4 border-b border-gray-light last:border-b-0 ${onClick ? 'cursor-pointer hover:bg-gray-50 transition-colors' : ''} ${className}`}
+            className={`bg-white p-4 border-b border-gray-light last:border-b-0 ${onClick ? 'cursor-pointer hover:bg-gray-50 transition-colors' : ''} ${className}`}
             onClick={onClick}
         >
             {/* Review Content */}
@@ -45,7 +45,7 @@ const ReviewCard = ({ review, className = '', onClick }: ReviewCardProps) => {
                     </p>
                 }
                 {/* Review Content */}
-                <p className="text-sm leading-relaxed whitespace-pre-line">
+                <p className="text-sm leading-relaxed whitespace-pre-line line-clamp-2">
                     {review.review_desc}
                 </p>
             </div>

@@ -12,6 +12,7 @@ export default function SearchPage() {
     const searchParams = useSearchParams();
     const [activeFilter, setActiveFilter] = useState("BSP");
     const [searchKeyword, setSearchKeyword] = useState("");
+    const [searchproductCategoryId, setSearchproductCategoryId] = useState<number | null>(null);
 
     const {
         data: productList,
@@ -22,6 +23,7 @@ export default function SearchPage() {
         refetch
     } = useInfiniteProducts({
         keyword: searchKeyword,
+        productCategoryId: searchproductCategoryId ?? null,
         size: 8,
         sortDirection: activeFilter
     });
@@ -55,23 +57,20 @@ export default function SearchPage() {
         const category = searchParams.get('category');
         const searchtext = searchParams.get('searchtext');
 
-        console.log('Query Params:', {
-            category,
-            searchtext,
-            allParams: Object.fromEntries(searchParams.entries())
-        });
-
         // Set search keyword from URL params
-        const keyword = searchtext || category || "";
+        const keyword = searchtext || "";
+        const categoryId = Number(category) || null;
+
         setSearchKeyword(keyword);
+        setSearchproductCategoryId(categoryId);
     }, [searchParams]);
 
     // Refetch when search keyword or filter changes
     useEffect(() => {
-        if (searchKeyword !== undefined) {
+        if (searchKeyword !== undefined || searchproductCategoryId !== null) {
             refetch();
         }
-    }, [searchKeyword, activeFilter, refetch]);
+    }, [searchKeyword, activeFilter, refetch, searchproductCategoryId]);
 
     const getSearchTitle = () => {
         const searchtext = searchParams.get('searchtext');

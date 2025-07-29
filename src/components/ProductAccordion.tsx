@@ -26,7 +26,7 @@ const ProductAccordion: React.FC<ProductAccordionProps> = ({ productDetails }) =
 
     return (
         <div className="bg-white divide-y divide-gray-200">
-            <h3 className="text-xl font-semibold border-b border-gray-light py-3">เกี่ยวกับสินค้า</h3>
+            <h3 className="text-xl font-semibold border-b border-gray-light py-3 px-4">เกี่ยวกับสินค้า</h3>
 
             <AccordionItem title="รายละเอียดสินค้า">
                 <p className="space-y-2 text-sm text-gray-700 whitespace-pre-line">

@@ -6,12 +6,13 @@ import { useQuery, useInfiniteQuery } from "@tanstack/react-query";
  * API function to fetch product list (no hooks)
  * @returns Promise with product list
  */
-export const getProducts = async (params: { keyword: string; page: number; size: number; sortDirection?: string }) => {
+export const getProducts = async (params: { keyword: string; page: number; size: number; sortDirection?: string, productCategoryId?: number | null }) => {
     try {
         const { data } = await api.post<ProductsData>(`/api/pet-store/v1/search-products`, {
             keyword: params.keyword ?? "",
             page: params.page ?? 0,
             size: params.size ?? 10,
+            productCategoryId: params.productCategoryId ?? null,
             sortDirection: params.sortDirection ?? "BSP"
         });
 
@@ -47,17 +48,25 @@ export const useProducts = (params: { keyword: string; page: number; size: numbe
  * Custom hook to fetch infinite product list using React Query
  * @returns useInfiniteQuery result with product list
  */
-export const useInfiniteProducts = (params: { keyword: string; size: number; sortDirection?: string }) => {
+export const useInfiniteProducts = (params: { keyword: string; size: number; sortDirection?: string, productCategoryId?: number | null }) => {
 
     const defaultParams = {
         keyword: params.keyword ?? "",
+        productCategoryId: params.productCategoryId ?? null,
         size: params.size ?? 10,
         sortDirection: params.sortDirection ?? "BSP"
     };
 
     return useInfiniteQuery({
         queryKey: ["getInfiniteProducts", defaultParams],
-        queryFn: ({ pageParam = 0 }) => getProducts({ ...defaultParams, page: pageParam as number }),
+        queryFn: ({ pageParam = 0 }) => {
+            const params = {
+                ...defaultParams,
+                page: pageParam as number,
+                productCategoryId: defaultParams.productCategoryId === null ? undefined : defaultParams.productCategoryId,
+            };
+            return getProducts(params);
+        },
         getNextPageParam: (lastPage, allPages) => {
             // If it's the last page, return undefined to stop fetching
             if (lastPage.last) {
