@@ -22,7 +22,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
         isFetchingNextPage
     } = useInfiniteRelatedProducts({
         productId: currentProductId,
-        size: 8,
+        size: 6,
     });
 
     const allProducts: Product[] = productList?.pages.flatMap(page => page.content ?? []) ?? [];
