@@ -39,11 +39,12 @@ const ReviewCard = ({ review, className = '', onClick }: ReviewCardProps) => {
                 </div>
 
                 {
-                    review.product_quantity_name &&
+                    !review.product_item_name || !review.product_quantity_name &&
                     <p className="text-sm text-subdube mb-2">
-                        <span className="font-medium">ตัวเลือกสินค้า : {review.product_quantity_name}</span>
+                        <span className="font-medium">ตัวเลือกสินค้า : {review.product_item_name ? review.product_item_name : review.product_quantity_name} {review.product_item_quantity_name}</span>
                     </p>
                 }
+
                 {/* Review Content */}
                 <p className="text-sm leading-relaxed whitespace-pre-line line-clamp-2">
                     {review.review_desc}

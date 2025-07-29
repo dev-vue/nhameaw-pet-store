@@ -427,12 +427,12 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
                                         </div>
                                     </div>
 
-                                    {/* {
-                                        review.product_quantity_name && */}
-                                    <p className="text-sm text-subdube mb-2">
-                                        <span className="font-medium">ตัวเลือกสินค้า : {review.product_item_name ? review.product_item_name : review.product_quantity_name} {review.product_item_quantity_name}</span>
-                                    </p>
-                                    {/* } */}
+                                    {
+                                        !review.product_item_name || !review.product_quantity_name &&
+                                        <p className="text-sm text-subdube mb-2">
+                                            <span className="font-medium">ตัวเลือกสินค้า : {review.product_item_name ? review.product_item_name : review.product_quantity_name} {review.product_item_quantity_name}</span>
+                                        </p>
+                                    }
 
                                     {/* Review Content */}
                                     <p className="text-sm leading-relaxed whitespace-pre-line">
