@@ -183,7 +183,7 @@ const Header = ({ onMenuClick, className }: { onMenuClick: () => void; className
                         </div>
                     </div>
 
-                    {!pathname.startsWith("/product") && !pathname.startsWith("/my-cart") && !pathname.startsWith("/favourite") && !pathname.startsWith("/history") &&
+                    {(!pathname.startsWith("/product") && !pathname.startsWith("/my-cart") && !pathname.startsWith("/favourite") && !pathname.startsWith("/history") && !pathname.startsWith("/how-to-order")) &&
                         <div className="lg:hidden px-4 pb-4">
                             <div className="relative">
                                 <input
