@@ -29,56 +29,56 @@ const ProductAccordion: React.FC<ProductAccordionProps> = ({ productDetails }) =
             <h3 className="text-xl font-semibold border-b border-gray-light py-3 px-4">เกี่ยวกับสินค้า</h3>
 
             <AccordionItem title="รายละเอียดสินค้า">
-                <p className="space-y-2 text-sm text-gray-700 whitespace-pre-line">
+                <p className="text-base text-black whitespace-pre-line px-2">
                     {description}
                 </p>
             </AccordionItem>
 
             {productSuitableFor && (
                 <AccordionItem title="สินค้าเหมาะสำหรับ">
-                    <p className="text-sm text-gray-700 whitespace-pre-line">{productSuitableFor}</p>
+                    <p className="text-base text-black whitespace-pre-line px-2">{productSuitableFor}</p>
                 </AccordionItem>
             )}
 
             {ingredients && (
                 <AccordionItem title="ส่วนประกอบ/ส่วนผสม">
-                    <p className="text-sm text-gray-700 whitespace-pre-line">{ingredients}</p>
+                    <p className="text-base text-black whitespace-pre-line px-2">{ingredients}</p>
                 </AccordionItem>
             )}
 
             {nutritionalInfo && (
                 <AccordionItem title="ข้อมูลทางโภชนาการ">
-                    <p className="text-sm text-gray-700 whitespace-pre-line">{nutritionalInfo}</p>
+                    <p className="text-base text-black whitespace-pre-line px-2">{nutritionalInfo}</p>
                 </AccordionItem>
             )}
 
             {recommend && (
                 <AccordionItem title="วิธีใช้และคำแนะนำในการใช้ / การทาน">
-                    <p className="text-sm text-gray-700 whitespace-pre-line">{recommend}</p>
+                    <p className="text-base text-black whitespace-pre-line px-2">{recommend}</p>
                 </AccordionItem>
             )}
 
             {otherRecommend && (
                 <AccordionItem title="คำแนะนำอื่นๆ">
-                    <p className="text-sm text-gray-700 whitespace-pre-line">{otherRecommend}</p>
+                    <p className="text-base text-black whitespace-pre-line px-2">{otherRecommend}</p>
                 </AccordionItem>
             )}
 
             {cautions && (
                 <AccordionItem title="ข้อควรระวัง และข้อห้ามในการทาน / การใช้">
-                    <p className="text-sm text-gray-700 whitespace-pre-line">{cautions}</p>
+                    <p className="text-base text-black whitespace-pre-line px-2">{cautions}</p>
                 </AccordionItem>
             )}
 
             {otherProductInfo && (
                 <AccordionItem title="ข้อมูลอื่นๆของสินค้า">
-                    <p className="text-sm text-gray-700 whitespace-pre-line">{otherProductInfo}</p>
+                    <p className="text-base text-black whitespace-pre-line px-2">{otherProductInfo}</p>
                 </AccordionItem>
             )}
 
             {frequentlyAskedQuestions && (
                 <AccordionItem title="คำถามที่พบบ่อย (FAQ)">
-                    <p className="text-sm text-gray-700 whitespace-pre-line">{frequentlyAskedQuestions}</p>
+                    <p className="text-base text-black whitespace-pre-line px-2">{frequentlyAskedQuestions}</p>
                 </AccordionItem>
             )}
 

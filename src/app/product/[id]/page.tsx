@@ -29,7 +29,7 @@ export default function ProductDetailPage() {
     const { data: productDetail, isLoading: productDetailLoading, refetch: productDetailRefetch } = useProductDetail({ productid: id as string, lineUserId: session?.user?.id ?? "" });
     const {
         data: reviewsData,
-        isLoading,
+        isLoading: reviewsLoading,
         isError,
         error
     } = useProductReviews({
@@ -339,13 +339,16 @@ export default function ProductDetailPage() {
 
                         {/* Reviews Section */}
                         <div className="w-full">
-                            <ReviewSection
-                                productRating={productDetail?.averageReviewScore ?? 0}
-                                reviews={reviewsData?.content ?? []}
-                                onViewAllReviews={handleViewAllReviews}
-                                onReviewClick={handleReviewClick}
-                                className="mt-2 lg:mt-6"
-                            />
+                            {
+                                reviewsLoading ? <Loading /> :
+                                    <ReviewSection
+                                        productRating={productDetail?.averageReviewScore ?? 0}
+                                        reviews={reviewsData?.content ?? []}
+                                        onViewAllReviews={handleViewAllReviews}
+                                        onReviewClick={handleReviewClick}
+                                        className="mt-2 lg:mt-6"
+                                    />
+                            }
                         </div>
 
                         {/* Product Accordion */}

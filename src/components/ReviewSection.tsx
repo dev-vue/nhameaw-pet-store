@@ -48,10 +48,9 @@ const ReviewSection = ({
 
             {/* View All Reviews Button */}
             {reviews.length > 0 && (
-                <div className="flex justify-center p-4 border-t border-gray-light">
+                <div className="flex justify-center p-4 border-t border-gray-light cursor-pointer" onClick={onViewAllReviews}>
                     <Button
                         variant="link"
-                        onClick={onViewAllReviews}
                         rightIcon={<ChevronRight className="w-4 h-4 text-primary" />}
                         className="hover:text-primary-hover transition-colors text-sm lg:text-base"
                     >
