@@ -27,3 +27,9 @@ export interface AddItemToCart {
 export interface DeleteCartItem {
     id: number;
 }
+
+export interface UpdateCartItemQuantity {
+    id: number;
+    lineUserId: string;
+    quantity: number;
+}

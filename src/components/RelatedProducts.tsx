@@ -1,6 +1,6 @@
 import React from 'react';
 import ProductCard from './ProductCard';
-import { useInfiniteRelatedProducts, useProducts } from '@/lib/react-query/product';
+import { useInfiniteInterestingProducts, useProducts } from '@/lib/react-query/product';
 import Loading from './common/Loading';
 import { Product } from '@/types/product';
 
@@ -20,7 +20,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
         fetchNextPage,
         hasNextPage,
         isFetchingNextPage
-    } = useInfiniteRelatedProducts({
+    } = useInfiniteInterestingProducts({
         productId: currentProductId,
         size: 6,
     });

@@ -114,12 +114,12 @@ export const useProductDetail = (params: { productid: string, lineUserId?: strin
 };
 
 /**
- * API function to fetch related products by category (no hooks)
- * @returns Promise with related products list
+ * API function to fetch interesting products by category (no hooks)
+ * @returns Promise with interesting products list
  */
-export const getRelatedProducts = async (params: { productId: string; page: number; size: number }) => {
+export const getInterestingProducts = async (params: { productId: string; page: number; size: number }) => {
     try {
-        const { data } = await api.post<ProductsData>(`/api/pet-store/v1/same-product-category`, {
+        const { data } = await api.post<ProductsData>(`/api/pet-store/v1/interesting-products`, {
             productId: params.productId,
             page: params.page ?? 0,
             size: params.size ?? 10
@@ -133,18 +133,18 @@ export const getRelatedProducts = async (params: { productId: string; page: numb
 };
 
 /**
- * Custom hook to fetch infinite related products using React Query
- * @returns useInfiniteQuery result with related products list
+ * Custom hook to fetch infinite Interesting products using React Query
+ * @returns useInfiniteQuery result with Interesting products list
  */
-export const useInfiniteRelatedProducts = (params: { productId: string; size: number }) => {
+export const useInfiniteInterestingProducts = (params: { productId: string; size: number }) => {
     const defaultParams = {
         productId: params.productId,
         size: params.size ?? 10
     };
 
     return useInfiniteQuery({
-        queryKey: ["getInfiniteRelatedProducts", defaultParams],
-        queryFn: ({ pageParam = 0 }) => getRelatedProducts({ ...defaultParams, page: pageParam as number }),
+        queryKey: ["getInfiniteInterestingProducts", defaultParams],
+        queryFn: ({ pageParam = 0 }) => getInterestingProducts({ ...defaultParams, page: pageParam as number }),
         getNextPageParam: (lastPage, allPages) => {
             // If it's the last page, return undefined to stop fetching
             if (lastPage.last) {

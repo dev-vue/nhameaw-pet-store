@@ -1,4 +1,4 @@
-import { AddItemToCart, MyCartCountResponse, MyCartData, DeleteCartItem } from "@/types/cart";
+import { AddItemToCart, MyCartCountResponse, MyCartData, DeleteCartItem, UpdateCartItemQuantity } from "@/types/cart";
 import api from "@/utils/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 /**
@@ -158,3 +158,43 @@ export const useDeleteCartItem = () => {
         },
     });
 };
+
+/**
+ * API function to update cart item quantity (no hooks)
+ * @returns Promise with updated cart item quantity response
+ */
+export const updateCartItemQuantity = async (params: UpdateCartItemQuantity) => {
+    try {
+        const { data } = await api.patch<any>(`/api/pet-store/v1/items-my-cart-patch-quantity`, params);
+
+        return data;
+    } catch (error) {
+        console.error('Error updating cart item quantity:', error);
+        throw error;
+    }
+};
+
+/**
+ * Custom hook to update cart item quantity using React Query mutation
+ * @returns useMutation result for updating cart item quantity
+ */
+export const useUpdateCartItemQuantity = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation<any, Error, UpdateCartItemQuantity>({
+        mutationFn: updateCartItemQuantity,
+        onSuccess: (data, variables) => {
+            // Invalidate cart queries to refresh the data
+            queryClient.invalidateQueries({
+                queryKey: ["getMyCartData"],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["getMyCartCount"],
+            });
+        },
+        onError: (error) => {
+            console.error('Failed to update cart item quantity:', error);
+        },
+    });
+};
+

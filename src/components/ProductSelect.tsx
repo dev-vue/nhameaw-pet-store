@@ -149,7 +149,7 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
                         <div className="mb-6">
                             <p className="text-sm mb-2">เลือกจำนวน</p>
 
-                            <div className='flex gap-2'>
+                            <div className='flex flex-wrap gap-2'>
                                 {
                                     productDetail.quantityList?.map((quantity, index) => (
                                         <button

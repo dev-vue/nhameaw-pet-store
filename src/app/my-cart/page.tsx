@@ -7,21 +7,12 @@ import { AddressModal, ShippingAddressFormData } from '@/components/form/modal-a
 import CartFooter from '@/components/CartFooter';
 import { swal } from '@/components/common/SweetAlert';
 import { useRouter } from 'next/navigation';
-import { useDeleteCartItem, useMyCart } from '@/lib/react-query/cart';
+import { useDeleteCartItem, useMyCart, useUpdateCartItemQuantity } from '@/lib/react-query/cart';
 import { useShippingAddress, useUpdateShippingAddress } from '@/lib/react-query/address';
 import { toast, ToastContainer } from 'react-toastify';
 import { useSession } from 'next-auth/react';
 
-interface CartItemProps {
-    id: string;
-    name: string;
-    price: number;
-    originalPrice: number;
-    image: string;
-    quantity: number;
-    color?: string;
-    size?: string;
-}
+
 
 export default function MyCartPage() {
 
@@ -34,54 +25,53 @@ export default function MyCartPage() {
     const { data: shippingAddressData } = useShippingAddress({ lineUserId: lineUserId ?? "" });
     const { mutate: updateShippingAddress, isPending: isUpdatingShippingAddress } = useUpdateShippingAddress();
     const { mutate: deleteCartItem } = useDeleteCartItem();
-
-    // Demo cart data
-    const [cartItems, setCartItems] = useState<CartItemProps[]>([
-        {
-            id: '1',
-            name: 'O3vet 50 ml ยาทาแผลสุนัข/ยาหยอดหู/ยาทาผิวหนัง/สมุนไพร',
-            price: 1050,
-            originalPrice: 1250,
-            image: '/images/product-demo.png',
-            quantity: 1,
-            color: 'ม่วง',
-        },
-        {
-            id: '2',
-            name: 'O3vet 50 ml ยาทาแผลสุนัข/ยาหยอดหู/ยาทาผิวหนัง/สมุนไพร',
-            price: 1050,
-            originalPrice: 1250,
-            image: '/images/product-demo.png',
-            quantity: 1,
-            color: 'ส้ม',
-        }
-    ]);
+    const { mutate: updateCartItemQuantity } = useUpdateCartItemQuantity();
 
     // Address modal state
     const [showAddressModal, setShowAddressModal] = useState(false);
-    // Calculate totals
-    const subtotal = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
-    const originalTotal = cartItems.reduce((total, item) => total + (item.originalPrice * item.quantity), 0);
+
+    // Calculate totals from real cart data
+    const subtotal = myCartData?.reduce((total, item) => total + (item.price * item.quantity), 0) || 0;
+    const originalTotal = myCartData?.reduce((total, item) => total + ((item.originalPrice || item.price) * item.quantity), 0) || 0;
     const totalSavings = originalTotal - subtotal;
-    const totalItems = cartItems.reduce((total, item) => total + item.quantity, 0);
+    const totalItems = myCartData?.reduce((total, item) => total + item.quantity, 0) || 0;
     const total = subtotal;
 
     // Handlers
     const increaseQuantity = (id: number) => {
-        setCartItems(cartItems.map(item =>
-            item.id === id.toString() ? { ...item, quantity: item.quantity + 1 } : item
-        ));
+        const item = myCartData?.find(item => item.id === id);
+        if (item && lineUserId) {
+            updateCartItemQuantity({
+                id: id,
+                lineUserId: lineUserId,
+                quantity: item.quantity + 1
+            });
+        }
     };
 
     const decreaseQuantity = (id: number) => {
-        setCartItems(cartItems.map(item =>
-            item.id === id.toString() && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
-        ));
+        const item = myCartData?.find(item => item.id === id);
+        if (item && item.quantity > 1 && lineUserId) {
+            updateCartItemQuantity({
+                id: id,
+                lineUserId: lineUserId,
+                quantity: item.quantity - 1
+            });
+        }
+    };
+
+    const updateQuantity = (id: number, newQuantity: number) => {
+        if (newQuantity > 0 && lineUserId) {
+            updateCartItemQuantity({
+                id: id,
+                lineUserId: lineUserId,
+                quantity: newQuantity
+            });
+        }
     };
 
     const removeItem = (id: number) => {
-        setCartItems(cartItems.filter(item => item.id !== id.toString()));
-        deleteCartItem({ id: id })
+        deleteCartItem({ id: id });
     };
 
     const handleEditAddress = () => {
@@ -124,7 +114,7 @@ export default function MyCartPage() {
     const handleSendToAdmin = () => {
         // Handle sending cart to admin
         const cartData = {
-            items: cartItems,
+            items: myCartData || [],
             totals: {
                 subtotal,
                 total,
@@ -243,11 +233,7 @@ export default function MyCartPage() {
                                                     value={item.quantity}
                                                     onChange={(e) => {
                                                         const value = parseInt(e.target.value) || 1;
-                                                        if (value > 0) {
-                                                            setCartItems(cartItems.map(cartItem =>
-                                                                cartItem.id === item.id.toString() ? { ...cartItem, quantity: value } : cartItem
-                                                            ));
-                                                        }
+                                                        updateQuantity(item.id, value);
                                                     }}
                                                     onFocus={e => e.target.select()}
                                                     className="w-10 h-10  text-center bg-white outline-none border border-gray-light rounded-[10px]"
