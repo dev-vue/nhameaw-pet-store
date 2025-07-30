@@ -256,7 +256,7 @@ export default function ProductDetailPage() {
                                                     <Star className="w-4 h-4 lg:w-5 lg:h-5 fill-warning text-warning" />
                                                     <span className="text-sm lg:text-base text-black ml-1 lg:ml-2">{productDetail?.averageReviewScore?.toFixed(1)}</span>
                                                     <span className="text-sm lg:text-base text-gray-light mx-1 lg:mx-2">|</span>
-                                                    <span className="text-xs lg:text-base text-black">ขายแล้วกว่า {productDetail?.sold} ชิ้น</span>
+                                                    <span className="text-xs lg:text-base text-black">ขายแล้ว {productDetail?.sold} ชิ้น</span>
                                                 </div>
                                                 <span className="text-xs md:text-sm text-subdube">ยอดขายและรีวิวจากทุกช่องทางการจัดจำหน่าย</span>
                                             </div>
