@@ -1,7 +1,7 @@
 import React, { JSX, useEffect } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { AnimatePresence, motion } from "framer-motion";
-import { X } from "lucide-react";
+import { ArrowLeft, ChevronLeft, X } from "lucide-react";
 
 import { cn } from "@/utils/helpers";
 
@@ -114,7 +114,8 @@ export default function Modal({ open, header, subHeader, children, size = "md", 
 													onClick={onClose}
 													className="flex gap-x-1 items-center rounded-full text-black hover:text-subdube"
 												>
-													<X className="h-6 w-6" />
+													<X className="h-6 w-6 hidden lg:block" />
+													<ChevronLeft className="h-6 w-6 lg:hidden" />
 													<span className="ml-1 hidden lg:block">ปิด</span>
 													<span className="ml-1 lg:hidden">ย้อนกลับ</span>
 												</button>

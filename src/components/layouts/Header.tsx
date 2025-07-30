@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { ChevronLeft, Menu, Search, ShoppingCart, X } from "lucide-react";
+import { ArrowLeft, ChevronLeft, Menu, Search, ShoppingCart, X } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMyCartCount } from "@/lib/react-query/cart";
@@ -52,7 +52,8 @@ const Header = ({ onMenuClick, className }: { onMenuClick: () => void; className
                             <div className="flex items-center justify-between mb-4">
                                 <span className="font-semibold text-lg">ค้นหาสินค้า</span>
                                 <button onClick={() => setShowSearch(false)} className="text-gray-500 flex items-center gap-1 lg:text-xl text-sm">
-                                    <X className="h-6 w-6" />
+                                    <X className="h-6 w-6 hidden lg:block" />
+                                    <ChevronLeft className="h-6 w-6 lg:hidden" />
                                     <p className="hidden lg:block">ปิด</p>
                                     <p className="lg:hidden">ย้อนกลับ</p>
                                 </button>

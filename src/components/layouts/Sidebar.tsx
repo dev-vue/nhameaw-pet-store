@@ -1,6 +1,6 @@
 'use client';
 
-import { Heart, Home, Info, X, LogOut, PackageCheck, UserCircle } from "lucide-react";
+import { Heart, Home, Info, X, LogOut, PackageCheck, UserCircle, ChevronLeft } from "lucide-react";
 import { signIn, signOut, useSession } from "next-auth/react";
 import Loading from "../common/Loading";
 import Image from "next/image";
@@ -103,7 +103,8 @@ const Sidebar = ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void; })
             >
                 <div className="flex justify-end items-center p-4">
                     <button onClick={onClose} className="text-gray-500 hover:text-gray-800 flex items-center">
-                        <X className="h-6 w-6" />
+                        <X className="h-6 w-6 hidden lg:block" />
+                        <ChevronLeft className="h-6 w-6 lg:hidden" />
                         <span className="ml-1 hidden lg:block">ปิด</span>
                         <span className="ml-1 lg:hidden">ย้อนกลับ</span>
                     </button>
