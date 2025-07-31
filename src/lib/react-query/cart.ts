@@ -1,4 +1,4 @@
-import { AddItemToCart, MyCartCountResponse, MyCartData, DeleteCartItem, UpdateCartItemQuantity } from "@/types/cart";
+import { AddItemToCart, MyCartCountResponse, MyCartData, DeleteCartItem, UpdateCartItemQuantity, CreateOrderRequest, CreateOrderResponse, GetOrderRequest, GetOrderResponse } from "@/types/cart";
 import api from "@/utils/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 /**
@@ -197,4 +197,83 @@ export const useUpdateCartItemQuantity = () => {
         },
     });
 };
+
+/**
+ * API function to create order (no hooks)
+ * @returns Promise with create order response
+ */
+export const createOrder = async (params: CreateOrderRequest) => {
+    try {
+        const { data } = await api.post<CreateOrderResponse>(`/api/pet-store/v1/create-order`, params);
+
+        return data;
+    } catch (error) {
+        console.error('Error creating order:', error);
+        throw error;
+    }
+};
+
+/**
+ * Custom hook to create order using React Query mutation
+ * @returns useMutation result for creating order
+ */
+export const useCreateOrder = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation<CreateOrderResponse, Error, CreateOrderRequest>({
+        mutationFn: createOrder,
+        onSuccess: (data, variables) => {
+            // Invalidate cart queries after successful order creation
+            queryClient.invalidateQueries({
+                queryKey: ["getMyCartData"],
+            });
+            queryClient.invalidateQueries({
+                queryKey: ["getMyCartCount"],
+            });
+            // Invalidate order queries to refresh order history
+            queryClient.invalidateQueries({
+                queryKey: ["getOrderHistory"],
+            });
+            console.log('Order created successfully:', data);
+        },
+        onError: (error) => {
+            console.error('Failed to create order:', error);
+        },
+    });
+};
+
+/**
+ * API function to get order history (no hooks)
+ * @returns Promise with order history response
+ */
+export const getOrderHistory = async (params: GetOrderRequest) => {
+    try {
+        const { data } = await api.post<GetOrderResponse>(`/api/pet-store/v1/get-order`, params);
+
+        return data;
+    } catch (error) {
+        console.error('Error fetching order history:', error);
+        throw error;
+    }
+};
+
+/**
+ * Custom hook to fetch order history using React Query
+ * @returns useQuery result with order history
+ */
+export const useOrderHistory = (params: { lineUserId: string }) => {
+    const defaultParams = {
+        lineUserId: params.lineUserId,
+    };
+
+    return useQuery<GetOrderResponse>({
+        queryKey: ["getOrderHistory", defaultParams],
+        queryFn: () => getOrderHistory(defaultParams),
+        enabled: !!params.lineUserId && params.lineUserId !== "",
+        gcTime: 5 * 60 * 1000, // 5 minutes
+        staleTime: 2 * 60 * 1000, // 2 minutes
+    });
+};
+
+
 

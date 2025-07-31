@@ -3,6 +3,9 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronUp } from 'lucide-react';
 import Image from 'next/image';
+import { useOrderHistory } from '@/lib/react-query/cart';
+import { useSession } from 'next-auth/react';
+import Loading from '@/components/common/Loading';
 
 interface OrderItem {
     id: string;
@@ -10,8 +13,9 @@ interface OrderItem {
     price: number;
     image: string;
     quantity: number;
-    color?: string;
-    size?: string;
+    productItemName: string;
+    productItemQuantityName: string;
+    productQuantityName: string;
 }
 
 interface Order {
@@ -62,7 +66,7 @@ const OrderAccordion: React.FC<{ order: Order }> = ({ order }) => {
                                     {item.name}
                                 </h3>
                                 <p className="text-xs text-subdube">
-                                    {item.color}, {item.quantity} กล่อง(บรรจุภัณฑ์)
+                                    {item.productItemName} {item.productItemQuantityName} {item.productQuantityName}
                                 </p>
                             </div>
                         </div>
@@ -108,59 +112,73 @@ const OrderAccordion: React.FC<{ order: Order }> = ({ order }) => {
 };
 
 export default function HistoryPage() {
-    // Demo history data
-    const [orders] = useState<Order[]>([
-        {
-            id: '1',
-            orderNumber: '#250615000005',
-            date: '15 มิ.ย. 68',
-            status: 'รอนัน',
-            items: [
-                {
-                    id: '1',
-                    name: 'O3vit 50 ml อาหารเสริมต่อต้าน สำหรับแมว/สุนัขที่ให้นมลูก...',
-                    price: 1050,
-                    image: '/images/product-demo.png',
-                    quantity: 1,
-                    color: 'แมว',
-                },
-                {
-                    id: '2',
-                    name: 'O3vit 50 ml อาหารเสริมต่อต้าน สำหรับแมว/สุนัขที่ให้นมลูก...',
-                    price: 1050,
-                    image: '/images/product-demo.png',
-                    quantity: 1,
-                    color: 'สุนัข',
-                }
-            ],
-            total: 2100
-        },
-        {
-            id: '2',
-            orderNumber: '#250315004135',
-            date: '15 มิ.ย. 68',
-            status: 'รอนัน',
-            items: [
-                {
-                    id: '3',
-                    name: 'O3vit 50 ml อาหารเสริมต่อต้าน สำหรับแมว/สุนัขที่ให้นมลูก...',
-                    price: 1050,
-                    image: '/images/product-demo.png',
-                    quantity: 1,
-                    color: 'แมว',
-                },
-                {
-                    id: '4',
-                    name: 'O3vit 50 ml อาหารเสริมต่อต้าน สำหรับแมว/สุนัขที่ให้นมลูก...',
-                    price: 1050,
-                    image: '/images/product-demo.png',
-                    quantity: 1,
-                    color: 'สุนัข',
-                }
-            ],
-            total: 2100
-        }
-    ]);
+    const { data: session } = useSession();
+    const {
+        data: orderHistoryData,
+        isLoading,
+        isError,
+        error
+    } = useOrderHistory({
+        lineUserId: session?.user?.id || ""
+    });
+
+    // Transform API data to component format
+    const transformOrderData = (): Order[] => {
+        if (!orderHistoryData || orderHistoryData.length === 0) return [];
+
+        return orderHistoryData.map((apiOrder) => ({
+            id: apiOrder.id,
+            orderNumber: apiOrder.orderCode,
+            date: new Date(apiOrder.transactionDate).toLocaleDateString('th-TH', {
+                day: 'numeric',
+                month: 'short',
+                year: '2-digit'
+            }),
+            status: apiOrder.status,
+            items: apiOrder.orderItemList.map((item) => ({
+                id: item.id.toString(),
+                name: item.productName,
+                price: item.price,
+                image: item.imageUrl,
+                quantity: item.quantity,
+                productItemName: item.productItemName ?? "",
+                productItemQuantityName: item.productItemQuantityName ?? "",
+                productQuantityName: item.productQuantityName ?? ""
+            })),
+            total: apiOrder.orderItemList.reduce((sum, item) => sum + (item.price * item.quantity), 0)
+        }));
+    };
+
+    const orders = transformOrderData();
+
+    if (isLoading) {
+        return (
+            <section className='md:pt-24 pt-12'>
+                <div className='lg:container mx-auto space-y-8 py-5 md:px-5 px-3'>
+                    <Loading className='w-full' />
+                </div>
+            </section>
+        );
+    }
+
+    if (isError) {
+        return (
+            <section className='md:pt-24 pt-12'>
+                <div className='lg:container mx-auto space-y-8 py-5 md:px-5 px-3'>
+                    <div className="flex flex-col items-center py-20">
+                        <img
+                            src="/images/204-no-data.png"
+                            alt="Error loading orders"
+                            className="w-48 h-48 object-contain"
+                        />
+                        <p className="mt-4 text-subdube text-base">
+                            เกิดข้อผิดพลาดในการโหลดข้อมูล: {error?.message}
+                        </p>
+                    </div>
+                </div>
+            </section>
+        );
+    }
 
     if (!orders || orders.length === 0) {
         return (

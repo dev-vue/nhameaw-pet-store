@@ -7,7 +7,7 @@ import { AddressModal, ShippingAddressFormData } from '@/components/form/modal-a
 import CartFooter from '@/components/CartFooter';
 import { swal } from '@/components/common/SweetAlert';
 import { useRouter } from 'next/navigation';
-import { useDeleteCartItem, useMyCart, useUpdateCartItemQuantity } from '@/lib/react-query/cart';
+import { useCreateOrder, useDeleteCartItem, useMyCart, useUpdateCartItemQuantity } from '@/lib/react-query/cart';
 import { useShippingAddress, useUpdateShippingAddress } from '@/lib/react-query/address';
 import { toast, ToastContainer } from 'react-toastify';
 import { useSession } from 'next-auth/react';
@@ -26,6 +26,7 @@ export default function MyCartPage() {
     const { mutate: updateShippingAddress, isPending: isUpdatingShippingAddress } = useUpdateShippingAddress();
     const { mutate: deleteCartItem } = useDeleteCartItem();
     const { mutate: updateCartItemQuantity } = useUpdateCartItemQuantity();
+    const { mutate: createOrder, isPending: isCreatingOrder } = useCreateOrder();
 
     // Address modal state
     const [showAddressModal, setShowAddressModal] = useState(false);
@@ -111,27 +112,70 @@ export default function MyCartPage() {
         });
     };
 
-    const handleSendToAdmin = () => {
-        const cartData = {
-            items: myCartData || [],
-            totals: {
-                subtotal,
-                total,
-                savings: totalSavings,
-                itemCount: totalItems
-            }
-        };
-        swal.fire({
-            icon: "success",
-            title: "สำเร็จ",
-            text: "ส่งรายการสินค้าให้แอดมินเรียบร้อยหน้านี้จะถูกปิดลงและพาคุณกลับไปที่ไลน์เพื่อแชทกับแอดมิน",
-            confirmButtonText: "ตกลง",
+    const handleSendToAdmin = async () => {
+        // Validate required data
+        if (!lineUserId) {
+            toast.error('กรุณาเข้าสู่ระบบก่อนทำการสั่งซื้อ');
+            return;
+        }
 
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                push('/history')
-            }
-        });
+        if (!myCartData || myCartData.length === 0) {
+            toast.error('ไม่มีสินค้าในตะกร้า');
+            return;
+        }
+        console.log("🔍 ~ MyCartPage ~ src/app/my-cart/page.tsx:122 ~ myCartData:", myCartData);
+
+        if (!shippingAddressData || Object.keys(shippingAddressData).length === 0) {
+            toast.error('กรุณาเพิ่มที่อยู่จัดส่งก่อนทำการสั่งซื้อ');
+            return;
+        }
+
+        try {
+            // Transform cart data to order format
+            // Note: We need to check if MyCartData has productItemId field
+            // If not, we need to update the type or get it from elsewhere
+            const orderItemList = myCartData.map(item => ({
+                productItemId: item.productItemId || "", // This field might be missing from MyCartData type
+                productItemQuantityId: item.productItemQuantityId || "",
+                productQuantityId: item.productQuantityId || "",
+                quantity: item.quantity
+            }));
+
+            const orderData = {
+                lineUserId: lineUserId,
+                orderItemList: orderItemList
+            };
+
+
+            // Create the order
+            createOrder(orderData, {
+                onSuccess: (result) => {
+                    swal.fire({
+                        icon: "success",
+                        title: "สำเร็จ",
+                        text: "ส่งรายการสินค้าให้แอดมินเรียบร้อยแล้ว หน้านี้จะถูกปิดลงและพาคุณกลับไปที่ไลน์เพื่อแชทกับแอดมิน",
+                        confirmButtonText: "ตกลง",
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            push('/history');
+                        }
+                    });
+                },
+                onError: (error) => {
+                    console.error('Order creation failed:', error);
+                    swal.fire({
+                        icon: "error",
+                        title: "เกิดข้อผิดพลาด",
+                        text: "ไม่สามารถสร้างคำสั่งซื้อได้ กรุณาลองใหม่อีกครั้ง",
+                        confirmButtonText: "ตกลง",
+                    });
+                }
+            });
+
+        } catch (error) {
+            console.error('Error preparing order:', error);
+            toast.error('เกิดข้อผิดพลาดในการเตรียมข้อมูลคำสั่งซื้อ');
+        }
     };
 
     return (
@@ -189,7 +233,7 @@ export default function MyCartPage() {
                                     <div className="flex items-start mb-2">
                                         <div className="mr-3 w-20 h-20 flex-shrink-0 border border-gray-light rounded-[14px]">
                                             <Image
-                                                src={item.imageUrl ? item.imageUrl : item.imageMainUrl}
+                                                src={item.imageUrl}
                                                 alt={item.productName}
                                                 width={80}
                                                 height={80}
@@ -253,19 +297,19 @@ export default function MyCartPage() {
                     <div className="sm:col-span-1 col-span-2">
                         {/* Order Summary */}
                         <div className="bg-white mb-4 p-4 rounded-lg">
-                            <h3 className="font-semibold text-base mb-3">สรุปค่าสั่งซื้อ</h3>
+                            <h3 className="font-semibold text-base mb-3">สรุปคำสั่งซื้อ</h3>
                             <div className="flex justify-between mb-2">
-                                <span className="text-gray-600">รวมค่าสั่งซื้อ</span>
-                                <span className="font-medium">฿{subtotal.toLocaleString()}</span>
+                                <span className='text-sm text-black'>รวมการสั่งซื้อ</span>
+                                <span className="text-sm text-black">฿{subtotal.toLocaleString()}</span>
                             </div>
                             <div className="flex justify-between mb-2 text-gray-500">
-                                <span>ไม่รวมค่าจัดส่ง</span>
-                                <span>-</span>
+                                <span className='text-sm text-black'>ไม่รวมค่าจัดส่ง</span>
+                                <span> </span>
                             </div>
                             <div className="border-t border-gray-light my-2 pt-2">
                                 <div className="flex justify-between font-semibold">
-                                    <span>ยอดรวมทั้งหมด</span>
-                                    <span className="text-primary">฿{total.toLocaleString()}</span>
+                                    <span className='text-sm text-black'>ยอดชำระเงินทั้งหมด</span>
+                                    <span className="text-black font-semibold">฿{total.toLocaleString()}</span>
                                 </div>
                             </div>
                         </div>
@@ -288,6 +332,7 @@ export default function MyCartPage() {
                 onSendToAdmin={handleSendToAdmin}
                 totalItems={totalItems}
                 totalAmount={total}
+                isLoading={isCreatingOrder}
             />
             <ToastContainer position="top-center" autoClose={3000} hideProgressBar />
         </section>

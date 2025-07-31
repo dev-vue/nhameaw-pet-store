@@ -96,22 +96,6 @@ export default function Layouts({ children }: LayoutsProps) {
         )
     }
 
-
-    // if (pathname.startsWith("/search")) {
-    //     return (
-    //         <QueryClientProvider client={queryClient}>
-    //             <Suspense fallback={<Loading fullscreen />}>
-    //                 <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-    //                 <Header onMenuClick={() => setSidebarOpen(true)} title={title} />
-    //                 <MainGreyLayout>
-    //                     {children}
-    //                     {setLoadingPortal()}
-    //                 </MainGreyLayout>
-    //             </Suspense>
-    //         </QueryClientProvider>
-    //     )
-    // }
-
     if (pathname.startsWith("/favourite") || pathname.startsWith("/history") || pathname.startsWith("/my-cart") || pathname.startsWith("/search")) {
         return (
             <QueryClientProvider client={queryClient}>

@@ -7,13 +7,15 @@ interface CartFooterProps {
     onSendToAdmin: () => void;
     totalItems: number;
     totalAmount: number;
+    isLoading?: boolean;
 }
 
 const CartFooter: React.FC<CartFooterProps> = ({
     totalSavings,
     onSendToAdmin,
     totalItems,
-    totalAmount
+    totalAmount,
+    isLoading = false
 }) => {
     return (
         <div className="fixed bottom-0 left-0 right-0 z-40 ">
@@ -49,8 +51,9 @@ const CartFooter: React.FC<CartFooterProps> = ({
                         <Button
                             onClick={onSendToAdmin}
                             variant={'default'}
+                            disabled={isLoading}
                         >
-                            ส่งรายการสินค้าให้แอดมิน
+                            {isLoading ? 'กำลังส่ง...' : 'ส่งรายการสินค้าให้แอดมิน'}
                         </Button>
                     </div>
                 </div>
