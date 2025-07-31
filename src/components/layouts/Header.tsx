@@ -7,8 +7,9 @@ import { Button } from "@/components/ui/Button";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMyCartCount } from "@/lib/react-query/cart";
 import { useSession } from "next-auth/react";
+import { filters } from "@/constants";
 
-const Header = ({ onMenuClick, className }: { onMenuClick: () => void; className?: string }) => {
+const Header = ({ onMenuClick, className, title }: { onMenuClick: () => void; className?: string; title?: string }) => {
 
     const { data: session } = useSession();
 
@@ -23,11 +24,20 @@ const Header = ({ onMenuClick, className }: { onMenuClick: () => void; className
 
     const { push, back } = useRouter();
 
+    // Get active filter from URL params
+    const activeFilter = searchParams.get('filter') || 'BSP';
+
     function onSearch() {
-        console.log('onSearch')
         setShowSearch(false)
         push(`/search?searchtext=${searchText}`)
         setSearchTextLabel(searchText)
+    }
+
+    // Handle filter change
+    function onFilterChange(filterValue: string) {
+        const params = new URLSearchParams(searchParams.toString());
+        params.set('filter', filterValue);
+        push(`${pathname}?${params.toString()}`);
     }
 
     useEffect(() => {
@@ -98,7 +108,7 @@ const Header = ({ onMenuClick, className }: { onMenuClick: () => void; className
                 </div>
             )}
 
-            <header className="bg-white sticky top-0 z-30">
+            <header className="bg-white fixed top-0 left-0 right-0 z-30 w-full">
                 <div className="lg:container mx-auto">
                     {/* Desktop Header */}
                     <div className="hidden lg:flex justify-between items-center py-3 px-4">
@@ -152,37 +162,40 @@ const Header = ({ onMenuClick, className }: { onMenuClick: () => void; className
                     </div>
 
                     {/* Mobile & Tablet Header */}
-                    <div className={`lg:hidden grid grid-cols-3 items-center py-4 px-4 ${className ? className : ''}`}>
-                        <button onClick={onMenuClick} className={`cursor-pointer flex items-center space-x-2 text-primary pr-3 py-2 text-sm`}>
-                            <Menu className="h-5 w-5" />
-                            <span>เมนู</span>
-                        </button>
-                        <div className="flex flex-col items-center justify-center">
-                            <Image
-                                src={'/images/nhamaew-icon.png'}
-                                width={40}
-                                height={40}
-                                alt="nhamaew-icon"
-                                className="w-12 h-12 md:w-[60px] md:h-[60px]"
-                                onClick={() => push('/')}
-                            />
-                            <div className="hidden sm:flex flex-col items-center">
-                                <h1 className="text-xs font-semibold text-primary text-center">nhamaew pet store</h1>
-                                <p className="text-[10px] text-subdube text-center">สินค้าสัตว์เลี้ยงโดยทีมสัตวแพทย์</p>
+                    {
+                        !pathname.startsWith("/my-cart") &&
+                        <div className={`lg:hidden grid grid-cols-3 items-center py-4 px-4 ${className ? className : ''}`}>
+                            <button onClick={onMenuClick} className={`cursor-pointer flex items-center space-x-2 text-primary pr-3 py-2 text-sm`}>
+                                <Menu className="h-5 w-5" />
+                                <span>เมนู</span>
+                            </button>
+                            <div className="flex flex-col items-center justify-center">
+                                <Image
+                                    src={'/images/nhamaew-icon.png'}
+                                    width={40}
+                                    height={40}
+                                    alt="nhamaew-icon"
+                                    className="w-12 h-12 md:w-[60px] md:h-[60px]"
+                                    onClick={() => push('/')}
+                                />
+                                <div className="hidden sm:flex flex-col items-center">
+                                    <h1 className="text-xs font-semibold text-primary text-center">nhamaew pet store</h1>
+                                    <p className="text-[10px] text-subdube text-center">สินค้าสัตว์เลี้ยงโดยทีมสัตวแพทย์</p>
+                                </div>
+                            </div>
+                            <div className="relative justify-self-end">
+                                <Button size="sm" className="w-fit justify-self-end" leftIcon={<ShoppingCart className="h-5 w-5" />} onClick={() => push('/my-cart')}>
+                                    ตะกร้า
+                                </Button>
+                                {
+                                    (cartItemCount && cartItemCount?.total > 0) &&
+                                    <div className="absolute -top-2 -right-2 bg-critical text-white text-xs font-semibold rounded-full h-5 w-5 flex items-center justify-center">
+                                        {cartItemCount.total > 99 ? '99+' : cartItemCount.total}
+                                    </div>
+                                }
                             </div>
                         </div>
-                        <div className="relative justify-self-end">
-                            <Button size="sm" className="w-fit justify-self-end" leftIcon={<ShoppingCart className="h-5 w-5" />} onClick={() => push('/my-cart')}>
-                                ตะกร้า
-                            </Button>
-                            {
-                                (cartItemCount && cartItemCount?.total > 0) &&
-                                <div className="absolute -top-2 -right-2 bg-critical text-white text-xs font-semibold rounded-full h-5 w-5 flex items-center justify-center">
-                                    {cartItemCount.total > 99 ? '99+' : cartItemCount.total}
-                                </div>
-                            }
-                        </div>
-                    </div>
+                    }
 
                     {(!pathname.startsWith("/product") && !pathname.startsWith("/my-cart") && !pathname.startsWith("/favourite") && !pathname.startsWith("/history") && !pathname.startsWith("/how-to-order")) &&
                         <div className="lg:hidden px-4 pb-4">
@@ -215,7 +228,38 @@ const Header = ({ onMenuClick, className }: { onMenuClick: () => void; className
                         </div>
                     </div>
                 }
-            </header>
+                {
+                    title &&
+                    <div className="bg-white">
+                        <div className="lg:container mx-auto w-full bg-white px-5 py-3">
+                            <h3 className="text-2xl text-black font-semibold">{title}</h3>
+                        </div>
+                    </div>
+                }
+
+                {/* Filter buttons for search page */}
+                {pathname.startsWith("/search") && (
+                    <div className="bg-white">
+                        <div className="flex space-x-2 mb-6 overflow-x-auto pb-2 bg-white lg:container mx-auto px-4 py-2">
+                            {filters.map((filter, index) => (
+                                <button
+                                    key={index}
+                                    className={
+                                        "cursor-pointer px-4 py-2 rounded-full whitespace-nowrap border " +
+                                        (activeFilter === filter.value
+                                            ? "bg-primary-light text-primary border-primary"
+                                            : "bg-white border-gray-300 hover:bg-gray-200")
+                                    }
+                                    onClick={() => onFilterChange(filter.value)}
+                                    type="button"
+                                >
+                                    {filter.label}
+                                </button>
+                            ))}
+                        </div>
+                    </div >
+                )}
+            </header >
         </>
     )
 }

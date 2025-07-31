@@ -29,13 +29,15 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
 
     return (
         <>
-            <div className='lg:container mx-auto space-y-8 lg:pt-8 py-5 lg:px-5 px-0'>
-                <h2 className="text-lg lg:text-xl font-semibold text-black lg:mb-6 mb-4 px-4 lg:bg-white bg-gray-light">
-                    สินค้าอื่นๆที่คุณอาจสนใจ
-                </h2>
+            <div className='md:bg-white bg-gray-light'>
+                <div className='lg:container mx-auto space-y-8 lg:pt-8 lg:px-5 px-0'>
+                    <h2 className="py-4 text-lg lg:text-xl font-semibold text-black lg:mb-6 mb-4 px-4 lg:bg-white bg-gray-light">
+                        สินค้าอื่นๆที่คุณอาจสนใจ
+                    </h2>
+                </div>
             </div>
 
-            <div className={`bg-gray-light rounded-lg  ${className}`}>
+            <div className={`bg-gray-light h-full rounded-lg  ${className}`}>
                 <div className='lg:container mx-auto space-y-8 lg:pt-8 pb-5 lg:px-5 px-0'>
 
                     {/* Products Grid */}

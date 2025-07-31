@@ -73,10 +73,9 @@ export default function HomePage() {
   if (isLoading) return <Loading fullscreen />
 
   return (
-    <main className=''>
-      {/* lg:container mx-auto space-y-8 py-5 md:px-5 px-3 */}
+    <section>
       <div className='bg-white'>
-        <div className='lg:container mx-auto space-y-8 py-5 md:px-5 px-3 '>
+        <div className='lg:container mx-auto space-y-8 py-3 md:px-5 px-3'>
           <HeroSlider banners={data?.bannerList ?? []} />
 
           {/* Categories Section */}
@@ -137,31 +136,31 @@ export default function HomePage() {
               </Swiper>
             </div>
           </section>
+
+          <h3 className="text-2xl font-semibold mb-4">รายการสินค้าทั้งหมด</h3>
+          <div className="flex space-x-2 mb-6 overflow-x-auto pb-2">
+            {filters.map((filter, index) => (
+              <button
+                key={index}
+                className={
+                  "cursor-pointer px-4 py-2 rounded-full whitespace-nowrap border " +
+                  (activeFilter === filter.value
+                    ? "bg-primary-light text-primary border-primary"
+                    : "bg-white border-gray-300 hover:bg-gray-200")
+                }
+                onClick={() => setActiveFilter(filter.value)}
+                type="button"
+              >
+                {filter.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
       <div className='bg-gray-light'>
         <div className='lg:container mx-auto space-y-8 py-5 md:px-5 px-3 '>
           <section>
-            <h3 className="text-2xl font-semibold mb-4">รายการสินค้าทั้งหมด</h3>
-            <div className="flex space-x-2 mb-6 overflow-x-auto pb-2">
-              {filters.map((filter, index) => (
-                <button
-                  key={index}
-                  className={
-                    "cursor-pointer px-4 py-2 rounded-full whitespace-nowrap border " +
-                    (activeFilter === filter.value
-                      ? "bg-primary-light text-primary border-primary"
-                      : "bg-white border-gray-300 hover:bg-gray-200")
-                  }
-                  onClick={() => setActiveFilter(filter.value)}
-                  type="button"
-                >
-                  {filter.label}
-                </button>
-              ))}
-            </div>
-
             {/* Section Product List */}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {
@@ -192,6 +191,6 @@ export default function HomePage() {
         name={categoryFilter.name}
         onClose={() => setCategorySearchModal(false)}
       />
-    </main>
+    </section>
   );
 }

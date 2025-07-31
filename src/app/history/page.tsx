@@ -30,7 +30,7 @@ const OrderAccordion: React.FC<{ order: Order }> = ({ order }) => {
 
     return (
         <div className="bg-white rounded-lg mb-4 overflow-hidden">
-            <div className="p-4 border-b border-gray-100">
+            <div className="p-4">
                 <div className="flex justify-between items-start mb-2">
                     <div>
                         <p className="text-sm text-black">
@@ -43,26 +43,28 @@ const OrderAccordion: React.FC<{ order: Order }> = ({ order }) => {
                 </div>
             </div>
 
-            <div className="p-4">
+            <div className="px-4 pb-4 pt-2 flex flex-col gap-y-2">
                 {/* Display Items */}
                 {displayItems.map((item) => (
-                    <div key={item.id} className="flex items-center gap-4 mb-4">
-                        <div className="w-12 h-12 flex-shrink-0">
-                            <Image
-                                src={item.image}
-                                alt={item.name}
-                                width={48}
-                                height={48}
-                                className="object-contain w-full h-full"
-                            />
-                        </div>
-                        <div className="flex-grow">
-                            <h3 className="text-sm font-medium text-gray-900 line-clamp-2 mb-1">
-                                {item.name}
-                            </h3>
-                            <p className="text-xs text-subdube">
-                                {item.color}, {item.quantity} กล่อง(บรรจุภัณฑ์)
-                            </p>
+                    <div key={item.id} className='mb-4'>
+                        <div className="flex items-center gap-1">
+                            <div className="mr-3 w-20 h-20 flex-shrink-0 border border-gray-light rounded-[14px]">
+                                <Image
+                                    src={item.image}
+                                    alt={item.name}
+                                    width={80}
+                                    height={80}
+                                    className="object-contain w-full h-full rounded-[14px]"
+                                />
+                            </div>
+                            <div className="flex-grow">
+                                <h3 className="text-sm font-medium text-gray-900 line-clamp-2 mb-1">
+                                    {item.name}
+                                </h3>
+                                <p className="text-xs text-subdube">
+                                    {item.color}, {item.quantity} กล่อง(บรรจุภัณฑ์)
+                                </p>
+                            </div>
                         </div>
                         <div className="text-right">
                             <p className="text-sm font-medium text-black">
@@ -76,11 +78,10 @@ const OrderAccordion: React.FC<{ order: Order }> = ({ order }) => {
                 {order.items.length > 1 && (
                     <button
                         onClick={() => setShowAllItems(!showAllItems)}
-                        className="flex items-center justify-center w-full py-2 text-sm text-gray-600 hover:text-gray-800 transition-colors"
+                        className="flex items-center justify-center w-full py-2 text-sm text-black hover:text-gray-800 transition-colors"
                     >
                         <span className="mr-2">
                             {showAllItems ? 'ดูน้อยลง' : `ดูเพิ่มเติม`}
-                            {/* {showAllItems ? 'ดูน้อยลง' : `ดูเพิ่มเติม${remainingItemsCount > 0 ? ` (${remainingItemsCount})` : ''}`} */}
                         </span>
                         {showAllItems ? (
                             <ChevronUp className="w-4 h-4 text-primary" />
@@ -91,12 +92,12 @@ const OrderAccordion: React.FC<{ order: Order }> = ({ order }) => {
                 )}
 
                 {/* Order Total */}
-                <div className="border-t border-gray-100 pt-4 mt-4">
+                <div className="pt-2">
                     <div className="flex justify-end items-center gap-x-2">
-                        <span className="text-sm text-gray-600">
-                            สินค้ารวม {order.items.length} รายการ :
+                        <span className="text-sm text-black">
+                            สินค้าทั้งหมด {order.items.length} รายการ :
                         </span>
-                        <span className="text-lg font-semibold">
+                        <span className="text-base text-black font-semibold">
                             ฿{order.total.toLocaleString()}
                         </span>
                     </div>
@@ -161,16 +162,32 @@ export default function HistoryPage() {
         }
     ]);
 
-    return (
-        <div className="bg-gray-light min-h-screen">
-            <div className="max-w-5xl mx-auto p-4">
+    if (!orders || orders.length === 0) {
+        return (
+            <section className='md:pt-24 pt-12'>
+                <div className='lg:container mx-auto space-y-8 py-5 md:px-5 px-3'>
+                    <div className="flex flex-col items-center py-20">
+                        <img
+                            src="/images/204-no-data.png"
+                            alt="No favorite items"
+                            className="w-48 h-48 object-contain"
+                        />
+                        <p className="mt-4 text-subdube text-base">ยังไม่มีรายการ</p>
+                    </div>
+                </div>
+            </section>
+        )
+    }
 
+    return (
+        <section className='md:pt-24 pt-12'>
+            <div className='lg:container mx-auto space-y-8 py-5 md:px-5 px-3'>
                 <div className="space-y-4">
                     {orders.map((order) => (
                         <OrderAccordion key={order.id} order={order} />
                     ))}
                 </div>
             </div>
-        </div>
+        </section>
     );
 }

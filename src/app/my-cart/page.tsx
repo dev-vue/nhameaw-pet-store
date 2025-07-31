@@ -112,7 +112,6 @@ export default function MyCartPage() {
     };
 
     const handleSendToAdmin = () => {
-        // Handle sending cart to admin
         const cartData = {
             items: myCartData || [],
             totals: {
@@ -136,8 +135,8 @@ export default function MyCartPage() {
     };
 
     return (
-        <div className="bg-gray-100 min-h-screen">
-            <div className="lg:container mx-auto space-y-8 py-5 md:px-5 px-3 pb-40">
+        <section className='md:py-24'>
+            <div className="lg:container mx-auto space-y-8 md:py-5 py-1 md:px-5 px-3 pb-40">
                 {/* Address Section */}
                 <div className="grid grid-cols-2 gap-x-4">
                     <div className="sm:col-span-1 col-span-2">
@@ -194,7 +193,7 @@ export default function MyCartPage() {
                                                 alt={item.productName}
                                                 width={80}
                                                 height={80}
-                                                className="object-contain w-full h-full"
+                                                className="object-contain w-full h-full rounded-[14px]"
                                             />
                                         </div>
                                         <div className="flex-grow">
@@ -291,6 +290,6 @@ export default function MyCartPage() {
                 totalAmount={total}
             />
             <ToastContainer position="top-center" autoClose={3000} hideProgressBar />
-        </div>
+        </section>
     );
 }

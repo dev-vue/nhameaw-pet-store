@@ -2,17 +2,15 @@
 import Loading from "@/components/common/Loading";
 import Header from "@/components/layouts/Header";
 import Sidebar from "@/components/layouts/Sidebar";
-import { Button } from "@/components/ui/Button";
 import { useLoadingStore } from "@/providers/loading-store-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { MessageCircle } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { JSX, Suspense, useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import MainLayout from "./main";
 import ProductLayout from "./product";
-import MyCartLayout from "./mycart";
 import 'react-toastify/dist/ReactToastify.css';
+import MainGreyLayout from "./main-grey";
 
 export type LayoutsProps = {
     children: JSX.Element | React.ReactNode;
@@ -82,12 +80,13 @@ export default function Layouts({ children }: LayoutsProps) {
         return children;
     }
 
+
     if (pathname.startsWith("/product")) {
         return (
             <QueryClientProvider client={queryClient}>
                 <Suspense fallback={<Loading fullscreen />}>
                     <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-                    <Header onMenuClick={() => setSidebarOpen(true)} />
+                    <Header onMenuClick={() => setSidebarOpen(true)} title={title} />
                     <ProductLayout>
                         {children}
                         {setLoadingPortal()}
@@ -97,44 +96,32 @@ export default function Layouts({ children }: LayoutsProps) {
         )
     }
 
-    if (pathname.startsWith("/my-cart")) {
-        return (
-            <QueryClientProvider client={queryClient}>
-                <Suspense fallback={<Loading fullscreen />}>
-                    <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-                    <Header onMenuClick={() => setSidebarOpen(true)} className="!hidden" />
-                    {
-                        title &&
-                        <div className="bg-white">
-                            <div className="lg:container mx-auto w-full bg-white px-5 py-3">
-                                <h3 className="text-2xl text-black font-semibold">{title}</h3>
-                            </div>
-                        </div>
-                    }
-                    <MyCartLayout>{children}</MyCartLayout>
-                </Suspense>
-            </QueryClientProvider>
-        )
-    }
 
-    if (pathname.startsWith("/search")) {
+    // if (pathname.startsWith("/search")) {
+    //     return (
+    //         <QueryClientProvider client={queryClient}>
+    //             <Suspense fallback={<Loading fullscreen />}>
+    //                 <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+    //                 <Header onMenuClick={() => setSidebarOpen(true)} title={title} />
+    //                 <MainGreyLayout>
+    //                     {children}
+    //                     {setLoadingPortal()}
+    //                 </MainGreyLayout>
+    //             </Suspense>
+    //         </QueryClientProvider>
+    //     )
+    // }
+
+    if (pathname.startsWith("/favourite") || pathname.startsWith("/history") || pathname.startsWith("/my-cart") || pathname.startsWith("/search")) {
         return (
             <QueryClientProvider client={queryClient}>
                 <Suspense fallback={<Loading fullscreen />}>
                     <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-                    <Header onMenuClick={() => setSidebarOpen(true)} />
-                    {
-                        title &&
-                        <div className="bg-white">
-                            <div className="lg:container mx-auto w-full bg-white px-5 py-3">
-                                <h3 className="text-2xl text-black font-semibold">{title}</h3>
-                            </div>
-                        </div>
-                    }
-                    <div className="min-h-screen font-sans">
+                    <Header onMenuClick={() => setSidebarOpen(true)} title={title} />
+                    <MainGreyLayout>
                         {children}
                         {setLoadingPortal()}
-                    </div>
+                    </MainGreyLayout>
                 </Suspense>
             </QueryClientProvider>
         )
@@ -145,24 +132,10 @@ export default function Layouts({ children }: LayoutsProps) {
         <QueryClientProvider client={queryClient}>
             <Suspense fallback={<Loading fullscreen />}>
                 <Sidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
-                <Header onMenuClick={() => setSidebarOpen(true)} />
-                {
-                    title &&
-                    <div className="bg-white">
-                        <div className="lg:container mx-auto w-full bg-white px-5 py-3">
-                            <h3 className="text-2xl text-black font-semibold">{title}</h3>
-                        </div>
-                    </div>
-                }
+                <Header onMenuClick={() => setSidebarOpen(true)} title={title} />
                 <MainLayout>
                     {children}
                     {setLoadingPortal()}
-                    {
-                        !pathname.startsWith("/product") &&
-                        <Button size="md" className="z-40 fixed bottom-6 right-6 transition-colors" leftIcon={<MessageCircle className='w-5 h-5' />}>
-                            <span className="inline">แชทกับแอดมิน</span>
-                        </Button>
-                    }
                 </MainLayout>
             </Suspense>
         </QueryClientProvider>

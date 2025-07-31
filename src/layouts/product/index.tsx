@@ -8,7 +8,7 @@ export type LayoutsProps = {
 export default function ProductLayout({ children }: LayoutsProps) {
     return (
         <>
-            <div className="min-h-screen font-sans lg:bg-white bg-gray-light">
+            <div className="min-h-screen font-sans pt-32 bg-gray-light">
                 {children}
             </div>
         </>

@@ -3,8 +3,8 @@ import Image from 'next/image';
 
 export default function HowToOrderPage() {
     return (
-        <section className="max-w-4xl mx-auto md:px-4 md:py-8">
-            <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+        <section className='md:py-24 py-12 max-w-5xl mx-auto'>
+            <div className='lg:container mx-auto space-y-8 py-5 md:px-5 px-3 max-w-4xlmd:py-8'>
                 <div className="relative w-full">
                     <Image
                         src="/images/how-to-buy.jpg"

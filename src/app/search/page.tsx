@@ -1,7 +1,6 @@
 'use client'
 
 import ProductCard from '@/components/ProductCard';
-import { filters } from '@/constants';
 import React, { useState, useEffect, useRef } from 'react'
 import { useSearchParams } from 'next/navigation';
 import { useInfiniteProducts } from '@/lib/react-query/product';
@@ -10,9 +9,11 @@ import Loading from '@/components/common/Loading';
 
 export default function SearchPage() {
     const searchParams = useSearchParams();
-    const [activeFilter, setActiveFilter] = useState("BSP");
     const [searchKeyword, setSearchKeyword] = useState("");
     const [searchproductCategoryId, setSearchproductCategoryId] = useState<number | null>(null);
+
+    // Get active filter from URL params
+    const activeFilter = searchParams.get('filter') || 'BSP';
 
     const {
         data: productList,
@@ -85,27 +86,9 @@ export default function SearchPage() {
     };
 
     return (
-        <>
-            <div className="flex space-x-2 mb-6 overflow-x-auto pb-2 bg-white lg:container mx-auto px-4">
-                {filters.map((filter, index) => (
-                    <button
-                        key={index}
-                        className={
-                            "cursor-pointer px-4 py-2 rounded-full whitespace-nowrap border " +
-                            (activeFilter === filter.value
-                                ? "bg-primary-light text-primary border-primary"
-                                : "bg-white border-gray-300 hover:bg-gray-200")
-                        }
-                        onClick={() => setActiveFilter(filter.value)}
-                        type="button"
-                    >
-                        {filter.label}
-                    </button>
-                ))}
-            </div>
-
-            <section className='bg-gray-light min-h-screen '>
-                <div className='lg:container mx-auto px-4 py-5'>
+        <section className='pt-52'>
+            <div className='bg-gray-light min-h-full'>
+                <div className='lg:container mx-auto px-4 py-2'>
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         {
                             productsLoading ? <Loading className='w-full col-span-4' /> :
@@ -145,7 +128,7 @@ export default function SearchPage() {
                         </div>
                     )}
                 </div>
-            </section>
-        </>
+            </div>
+        </section>
     )
 }
