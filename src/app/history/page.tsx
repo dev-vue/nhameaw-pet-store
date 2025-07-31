@@ -62,7 +62,7 @@ const OrderAccordion: React.FC<{ order: Order }> = ({ order }) => {
                                 />
                             </div>
                             <div className="flex-grow">
-                                <h3 className="text-sm font-medium text-gray-900 line-clamp-2 mb-1">
+                                <h3 className="text-sm font-semibold text-black line-clamp-2 mb-1">
                                     {item.name}
                                 </h3>
                                 <p className="text-xs text-subdube">
@@ -71,7 +71,7 @@ const OrderAccordion: React.FC<{ order: Order }> = ({ order }) => {
                             </div>
                         </div>
                         <div className="text-right">
-                            <p className="text-sm font-medium text-black">
+                            <p className="text-sm font-semibold text-black">
                                 ฿{item.price.toLocaleString()} <span className="text-xs text-subdube">x{item.quantity}</span>
                             </p>
                         </div>

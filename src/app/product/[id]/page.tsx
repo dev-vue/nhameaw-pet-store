@@ -270,7 +270,7 @@ export default function ProductDetailPage() {
                                 </div>
 
                                 {/* Product Name - Mobile After Price */}
-                                <h1 className="text-lg lg:text-xl font-medium lg:font-semibold text-black mb-4 lg:mb-6 leading-6 lg:leading-7 lg:order-1">
+                                <h1 className="text-lg lg:text-xl font-semibold lg:font-semibold text-black mb-4 lg:mb-6 leading-6 lg:leading-7 lg:order-1">
                                     {productDetail?.productName}
                                 </h1>
 

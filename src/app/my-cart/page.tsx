@@ -206,7 +206,7 @@ export default function MyCartPage() {
                                             </p>
                                         </div>
                                         <button
-                                            className="flex items-center gap-x-1 text-secondary text-sm font-medium"
+                                            className="flex items-center gap-x-1 text-secondary text-sm font-semibold"
                                             onClick={handleEditAddress}
                                         >
                                             <Pencil className='w-4 h-4' />
@@ -243,7 +243,7 @@ export default function MyCartPage() {
                                         <div className="flex-grow">
                                             <div className="flex justify-between items-start">
                                                 <div className="flex flex-col">
-                                                    <h3 className="font-medium text-sm line-clamp-2 pr-4">{item.productName}</h3>
+                                                    <h3 className="font-semibold text-sm line-clamp-2 pr-4">{item.productName}</h3>
                                                     <p className='text-sm text-subdube'>
                                                         {item.productItemName ? item.productItemName : item.productQuantityName} {item.productItemQuantityName}
                                                     </p>
