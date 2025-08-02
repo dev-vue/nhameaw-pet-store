@@ -80,7 +80,7 @@ export default function ProductDetailPage() {
         setImageViewerOpen(true);
     };
 
-    // Add event listeners for pagination thumbnail clicks
+    // Add event listeners for pagination thumbnail clicks and reset scroll position
     useEffect(() => {
         const handlePaginationClick = (event: Event) => {
             const target = event.target as HTMLElement;
@@ -94,6 +94,8 @@ export default function ProductDetailPage() {
         const paginationElement = document.querySelector('.swiper-custom-pagination');
         if (paginationElement) {
             paginationElement.addEventListener('click', handlePaginationClick);
+            // Reset scroll position to show index 0 first
+            paginationElement.scrollLeft = 0;
         }
 
         return () => {
@@ -102,6 +104,38 @@ export default function ProductDetailPage() {
             }
         };
     }, [productDetail?.fileList]);
+
+    // Sync pagination scroll with current image index
+    useEffect(() => {
+        const paginationElement = document.querySelector('.swiper-custom-pagination');
+        const activeItem = paginationElement?.querySelector(`[data-index="${currentImageIndex}"]`) as HTMLElement;
+
+        if (paginationElement && activeItem) {
+            const containerRect = paginationElement.getBoundingClientRect();
+            const itemRect = activeItem.getBoundingClientRect();
+
+            // Check if item is visible in the container
+            const itemLeft = itemRect.left - containerRect.left + paginationElement.scrollLeft;
+            const itemRight = itemLeft + itemRect.width;
+            const containerScrollLeft = paginationElement.scrollLeft;
+            const containerScrollRight = containerScrollLeft + containerRect.width;
+
+            // If item is not fully visible, scroll to make it visible
+            if (itemLeft < containerScrollLeft) {
+                // Item is hidden on the left, scroll left
+                paginationElement.scrollTo({
+                    left: itemLeft - 8, // Add some margin
+                    behavior: 'smooth'
+                });
+            } else if (itemRight > containerScrollRight) {
+                // Item is hidden on the right, scroll right
+                paginationElement.scrollTo({
+                    left: itemRight - containerRect.width + 8, // Add some margin
+                    behavior: 'smooth'
+                });
+            }
+        }
+    }, [currentImageIndex, productDetail?.fileList]);
 
     // const handleBackClick = () => {
     //     router.back();
@@ -148,7 +182,7 @@ export default function ProductDetailPage() {
                 '<div class="absolute inset-0 flex items-center justify-center"><div class="bg-black/60 rounded-full p-1"><svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>' :
                 '';
 
-            return `<span class="${className} !w-14 !h-14 !rounded-[14px] mx-1 !bg-white border !border-gray-light cursor-pointer relative group" data-index="${index}">
+            return `<span class="${className} !w-14 !h-14 !rounded-[14px] !bg-white border !border-gray-light cursor-pointer relative group flex-shrink-0" data-index="${index}">
                 ${isVideoFile ?
                     `<video src="${file?.url}" class="!rounded-[14px] w-full h-full object-cover" />`
                     :
@@ -231,7 +265,7 @@ export default function ProductDetailPage() {
                                 )}
                             </div>
                             {/* Custom Pagination */}
-                            <div className="swiper-custom-pagination !hidden lg:!flex justify-start mt-4 overflow-x-auto pb-2"
+                            <div className="swiper-custom-pagination !hidden lg:!flex justify-start mt-4 overflow-x-auto pb-2 flex-nowrap gap-2 max-w-full"
                                 style={{ scrollbarWidth: 'thin', scrollbarColor: '#d1d5db transparent' }}>
                             </div>
                         </div>
