@@ -51,13 +51,11 @@ export const authOptions: NextAuthOptions = {
             timeout: 10000, // 10 seconds
           });
 
-          console.log('Profile registered/updated successfully:', response.data);
           // Optionally store additional data in user object
           user.profileUpdated = true;
           user.profileData = response.data; // Store API response if needed
 
         } catch (error) {
-          console.error('Error calling profile API:', error);
           user.profileUpdated = false;
         }
       }

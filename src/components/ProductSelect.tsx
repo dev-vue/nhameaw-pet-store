@@ -35,7 +35,6 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
             onAddToCart(cartItem);
         } else {
             // fallback: log to console
-            console.log('Added to cart:', cartItem);
         }
         onClose();
     };

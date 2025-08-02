@@ -123,7 +123,6 @@ export default function MyCartPage() {
             toast.error('ไม่มีสินค้าในตะกร้า');
             return;
         }
-        console.log("🔍 ~ MyCartPage ~ src/app/my-cart/page.tsx:122 ~ myCartData:", myCartData);
 
         if (!shippingAddressData || Object.keys(shippingAddressData).length === 0) {
             toast.error('กรุณาเพิ่มที่อยู่จัดส่งก่อนทำการสั่งซื้อ');
@@ -162,7 +161,6 @@ export default function MyCartPage() {
                     });
                 },
                 onError: (error) => {
-                    console.error('Order creation failed:', error);
                     swal.fire({
                         icon: "error",
                         title: "เกิดข้อผิดพลาด",
@@ -173,7 +171,6 @@ export default function MyCartPage() {
             });
 
         } catch (error) {
-            console.error('Error preparing order:', error);
             toast.error('เกิดข้อผิดพลาดในการเตรียมข้อมูลคำสั่งซื้อ');
         }
     };

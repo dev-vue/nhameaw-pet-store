@@ -21,10 +21,11 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
     onClose,
     productId,
     productRating,
-    reviewId,
     initialScrollIndex = 0
 }) => {
-    const { push } = useRouter();
+
+    console.log("🔍 ~  ~ src/components/common/ReviewsModal.tsx:20 ~ open:", open);
+
     const reviewRefs = useRef<(HTMLDivElement | null)[]>([]);
     const {
         data: reviewsData,
@@ -48,25 +49,17 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
         if (open && initialScrollIndex !== undefined && allReview.length > 0) {
             // Add a delay to ensure the modal and refs are fully rendered
             const timer = setTimeout(() => {
-                console.log('Attempting to scroll to index:', initialScrollIndex);
-                console.log('Total reviews:', allReview.length);
-                console.log('Refs array length:', reviewRefs.current.length);
-                console.log('Refs array:', reviewRefs.current);
-
                 // Check if the index is valid
                 if (initialScrollIndex >= allReview.length) {
-                    console.warn(`Invalid scroll index ${initialScrollIndex} for ${allReview.length} reviews`);
                     return;
                 }
 
                 const reviewElement = reviewRefs.current[initialScrollIndex];
 
                 if (!reviewElement) {
-                    console.warn(`Review element at index ${initialScrollIndex} not found`);
                     // Try to find any valid ref as fallback
                     const firstValidRef = reviewRefs.current.find(ref => ref !== null);
                     if (firstValidRef) {
-                        console.log('Using first valid ref as fallback');
                         firstValidRef.scrollIntoView({
                             behavior: 'smooth',
                             block: 'start'
@@ -74,8 +67,6 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
                     }
                     return;
                 }
-
-                console.log('Found review element, attempting to scroll');
 
                 // Find the modal's scrollable container (the one with overflow-y-auto)
                 const scrollContainer = reviewElement.closest('.overflow-y-auto') as HTMLElement;
@@ -376,6 +367,7 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
                 header="รีวิวจากผู้ใช้จริง"
                 subHeader='จากทุกช่องทางการจัดจำหน่าย'
                 size="md"
+                canClickOutside={!imageViewerOpen ? true : false}
             >
                 <div
                     className="space-y-4 pb-44 md:pb-0"

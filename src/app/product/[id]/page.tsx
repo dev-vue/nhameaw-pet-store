@@ -435,13 +435,13 @@ export default function ProductDetailPage() {
             />
 
             {/* Image Viewer */}
-            <ImageViewer
+            {/* <ImageViewer
                 isOpen={imageViewerOpen}
                 onClose={() => setImageViewerOpen(false)}
                 media={mediaUrls}
                 currentIndex={imageViewerIndex}
                 onIndexChange={setImageViewerIndex}
-            />
+            /> */}
         </div>
     );
 }
