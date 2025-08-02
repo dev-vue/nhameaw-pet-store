@@ -83,7 +83,7 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
                         <>
                             {/* Type Selection */}
                             <p className="mb-2 font-semibold">เลือกชนิด</p>
-                            <div className="flex flex-wrap items-center gap-x-2 gap-y-2 mb-6">
+                            <div className="flex flex-wrap items-center gap-x-2 gap-y-2 mb-6 overflow-y-auto max-h-32">
                                 {
                                     productDetail.typeSizeList?.map((typeSize, index) => (
                                         <button
@@ -96,7 +96,7 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
                                             }
                                             className={`flex py-2 px-3 rounded-full border ${selectedType === typeSize.productItemId
                                                 ? 'bg-primary-light border-primary text-primary'
-                                                : 'border-gray-300 text-gray-700'
+                                                : 'border-gray-light text-black'
                                                 }`}
                                         >
                                             <div className="flex items-center justify-center gap-2">
@@ -124,7 +124,7 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
                                 <div className="mb-6">
                                     <p className="mb-2 font-semibold">เลือกจำนวน</p>
 
-                                    <div className='flex flex-wrap gap-2'>
+                                    <div className='flex flex-wrap items-center gap-x-2 gap-y-2 mb-6 overflow-y-auto max-h-32'>
                                         {
                                             productDetail.typeSizeList[selectedTypeIndex].quantityList?.map((quantity, index) => (
                                                 <button
@@ -132,7 +132,7 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
                                                     onClick={() => setSelectedPackage(quantity.productQuantityId)}
                                                     className={`flex py-2 px-3 rounded-full border ${selectedPackage === quantity.productQuantityId
                                                         ? 'bg-primary-light border-primary text-primary'
-                                                        : 'border-gray-300 text-gray-700'
+                                                        : 'border-gray-light text-black'
                                                         }`}
                                                 >
                                                     {quantity.productQuantityName}
@@ -148,7 +148,7 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
                         <div className="mb-6">
                             <p className="text-sm mb-2">เลือกจำนวน</p>
 
-                            <div className='flex flex-wrap gap-2'>
+                            <div className='flex flex-wrap items-center gap-x-2 gap-y-2 mb-6 overflow-y-auto max-h-32'>
                                 {
                                     productDetail.quantityList?.map((quantity, index) => (
                                         <button
@@ -156,7 +156,7 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
                                             onClick={() => setSelectedPackageQuantity(quantity.productQuantityId)}
                                             className={`flex py-2 px-3 rounded-full border ${selectedPackageQuantity === quantity.productQuantityId
                                                 ? 'bg-primary-light border-primary text-primary'
-                                                : 'border-gray-300 text-gray-700'
+                                                : 'border-gray-light text-black'
                                                 }`}
                                         >
                                             {quantity.productQuantityName}

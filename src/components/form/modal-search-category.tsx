@@ -115,7 +115,7 @@ export function SearchCategoryModal({ animalType, name, open, onClose }: SearchC
                 </div>
 
                 {/* Subcategories List */}
-                <div className="flex-1 overflow-y-auto">
+                <div className="flex-1 h-full">
                     {categoriesLoading && (
                         <div className="text-center py-8">
                             <Loading />
