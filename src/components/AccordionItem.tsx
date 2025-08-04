@@ -35,7 +35,7 @@ const AccordionItem: React.FC<AccordionItemProps> = ({
                 )}
             </button>
             <div
-                className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-[1000px] pb-4 px-2' : 'max-h-0'
+                className={`overflow-hidden transition-all duration-300 ${isOpen ? 'max-h-full pb-4 px-2' : 'max-h-0'
                     }`}
             >
                 {children}
