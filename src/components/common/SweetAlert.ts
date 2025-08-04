@@ -15,7 +15,7 @@ export const swal = sweetalert.mixin({
 		htmlContainer: "!text-sm !text-subdude",
 		actions: "flex flex-col justify-center items-center gap-y-4 !w-full",
 		cancelButton:
-			"flex justify-center !font-semibold items-center rounded-[10px] px-4 py-2 min-w-[75px] gap-x-1 text-foreground border bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary-hover hover:cursor-pointer",
+			"px-4 py-2 !text-base !font-semibold w-full bg-secondary border border-secondary text-white inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0-pointer",
 		confirmButton:
 			"px-4 py-2 !text-base !font-semibold w-full bg-primary border border-primary text-white inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-lg font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
 		denyButton:

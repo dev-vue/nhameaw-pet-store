@@ -90,7 +90,7 @@ export function SearchCategoryModal({ animalType, name, open, onClose }: SearchC
 
     return (
         <Modal open={open} onClose={onClose} header="หมวดหมู่สินค้า" size="md">
-            <div className="flex flex-col h-screen">
+            <div className="flex flex-col h-screen  md:mb-0 sm:mb-20 mb-80">
                 {/* Back Navigation - Moved to Top */}
                 {navigationStack.length > 0 && (
                     <div className="flex items-center justify-between px-0 pb-2 mb-4">

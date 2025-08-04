@@ -21,10 +21,9 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
     onClose,
     productId,
     productRating,
-    initialScrollIndex = 0
+    initialScrollIndex
 }) => {
 
-    console.log("🔍 ~  ~ src/components/common/ReviewsModal.tsx:20 ~ open:", open);
 
     const reviewRefs = useRef<(HTMLDivElement | null)[]>([]);
     const {
@@ -367,7 +366,7 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
                 header="รีวิวจากผู้ใช้จริง"
                 subHeader='จากทุกช่องทางการจัดจำหน่าย'
                 size="md"
-                canClickOutside={!imageViewerOpen ? true : false}
+                canClickOutside={imageViewerOpen ? true : false}
             >
                 <div
                     className="space-y-4 pb-44 md:pb-0"

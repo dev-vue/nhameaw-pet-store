@@ -22,6 +22,7 @@ import { useUpdateProductFavourite } from '@/lib/react-query/favourite';
 import { useAddItemToCart } from '@/lib/react-query/cart';
 import { useSession } from 'next-auth/react';
 import { useProductReviews } from '@/lib/react-query/review';
+import { useChatWithAdmin } from '@/lib/react-query/chat';
 
 export default function ProductDetailPage() {
     const { id } = useParams();
@@ -40,6 +41,7 @@ export default function ProductDetailPage() {
 
     const { mutate: updateFavourite } = useUpdateProductFavourite();
     const { mutate: addItemToCart } = useAddItemToCart();
+    const { mutate: initiateChatWithAdmin, isPending: chatLoading } = useChatWithAdmin();
 
     const { push } = useRouter();
     const pathname = usePathname();
@@ -170,6 +172,45 @@ export default function ProductDetailPage() {
     const handleReviewClick = (reviewIndex: number) => {
         setReviewScrollIndex(reviewIndex);
         setReviewsModalOpen(true);
+    };
+
+    const handleChatWithAdmin = () => {
+        if (!session?.user?.id || !productDetail?.productId) {
+            // Redirect to login if not authenticated
+            push(`/auth/auto-signin?callbackUrl=${encodeURIComponent(pathname)}`);
+            return;
+        }
+        swal.fire({
+            icon: "warning",
+            title: "หน้านี้จะถูกปิดลงและพาคุณกลับไปที่ไลน์เพื่อแชทกับแอดมิน",
+            confirmButtonText: "ตกลง",
+            showDenyButton: true,
+            denyButtonText: "ยกเลิก"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Open chat URL after user confirms
+                initiateChatWithAdmin({
+                    lineUserId: session.user.id,
+                    productId: productDetail.productId
+                }, {
+                    onSuccess: (response) => {
+                        // Close LIFF window and return to LINE
+                        if (typeof window !== 'undefined' && (window as any).liff) {
+                            (window as any).liff.closeWindow();
+                        } else {
+                            window.close();
+                        }
+                    },
+                    onError: (error) => {
+                        swal.fire({
+                            icon: "error",
+                            title: "เกิดข้อผิดพลาด",
+                            text: "ไม่สามารถเชื่อมต่อแชทได้ กรุณาลองใหม่อีกครั้ง",
+                        });
+                    }
+                });
+            }
+        });
     };
 
     const pagination = {
@@ -406,6 +447,8 @@ export default function ProductDetailPage() {
                             variant="secondary"
                             className="flex lg:flex-initial flex-1 bg-gray-600 hover:bg-gray-700 border-gray-600 lg:min-w-[140px]"
                             leftIcon={<MessageCircle className="w-4 h-4" />}
+                            onClick={handleChatWithAdmin}
+                            disabled={chatLoading}
                         >
                             แชทสอบถาม
                         </Button>
@@ -468,14 +511,6 @@ export default function ProductDetailPage() {
                 initialScrollIndex={reviewScrollIndex}
             />
 
-            {/* Image Viewer */}
-            {/* <ImageViewer
-                isOpen={imageViewerOpen}
-                onClose={() => setImageViewerOpen(false)}
-                media={mediaUrls}
-                currentIndex={imageViewerIndex}
-                onIndexChange={setImageViewerIndex}
-            /> */}
         </div>
     );
 }
