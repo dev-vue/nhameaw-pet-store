@@ -75,7 +75,7 @@ export default function HomePage() {
   return (
     <section>
       <div className='bg-white'>
-        <div className='lg:container mx-auto space-y-8 py-3 md:px-5 px-3'>
+        <div className='lg:container mx-auto space-y-4 md:space-y-8 py-3 md:px-5 px-3'>
           <HeroSlider banners={data?.bannerList ?? []} />
 
           {/* Categories Section */}
@@ -122,10 +122,10 @@ export default function HomePage() {
                       </div>
                     </div>
                     {/* Mobile- Hidden on Desktop & Tablet Button */}
-                    <div className="bg-opacity-30 items-end py-4 lg:hidden flex">
+                    <div className="bg-opacity-30 items-end pt-4 pb-2 lg:hidden flex">
                       <button
                         type='button'
-                        className=" text-black font-semibold py-2 px-4 rounded-full flex gap-x-2 items-center"
+                        className=" text-black font-semibold py-2 pr-4 rounded-full flex gap-x-2 items-center"
                         onClick={() => SearchCategory(category.name, category.animalType)}
                       >
                         ดูสินค้า{category.name} <ChevronRight className='w-4 h-4' />
@@ -136,6 +136,9 @@ export default function HomePage() {
               </Swiper>
             </div>
           </section>
+
+          <hr className='border-gray-light w-full' />
+
 
           <h3 className="text-2xl font-semibold mb-4">รายการสินค้าทั้งหมด</h3>
           <div className="flex space-x-2 mb-6 overflow-x-auto pb-2">
