@@ -121,7 +121,7 @@ export default function Modal({ open, header, subHeader, children, size = "md", 
 												</button>
 											)}
 										</div>
-										<div className="md:max-h-[70vh] md:h-full h-screen overflow-y-auto px-4 md:px-6 pt-6 md:pb-0 pb-80">{children}</div>
+										<div className="md:max-h-[70vh] md:h-full h-screen overflow-y-auto px-4 md:px-6 pt-6 md:pb-0 pb-4">{children}</div>
 									</motion.div>
 								</motion.div>
 							</Dialog.Content>

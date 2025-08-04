@@ -114,7 +114,7 @@ const ImageViewer: React.FC<ImageViewerProps> = ({
                             className="flex items-center gap-2 text-white hover:text-gray-300 transition-colors"
                         >
                             <ChevronLeft className="w-6 h-6" />
-                            <span className="text-sm">ย้อนกลับ</span>
+                            <span className="text-base">ย้อนกลับ</span>
                         </button>
 
                         {/* ImageCounter */}

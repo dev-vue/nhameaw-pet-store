@@ -170,15 +170,16 @@ export function AddressModal({ open, onClose, onSave, shippingAddressData }: Add
                             )}>
                                 <Button
                                     type="button"
-                                    className="flex-1 bg-secondary hover:bg-gray-700 text-white"
+                                    variant={"secondary"}
                                     onClick={onClose}
+                                    className="w-full"
                                 >
                                     ยกเลิก
                                 </Button>
                                 <Button
                                     type="submit"
                                     size={'md'}
-                                    className="flex-1 bg-primary hover:bg-[#E65A5A] text-white"
+                                    className="w-full"
                                 >
                                     บันทึก
                                 </Button>
