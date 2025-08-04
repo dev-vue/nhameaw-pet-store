@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import ProductCard from './ProductCard';
 import { useInfiniteInterestingProducts, useProducts } from '@/lib/react-query/product';
 import Loading from './common/Loading';
@@ -26,6 +26,27 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
     });
 
     const allProducts: Product[] = productList?.pages.flatMap(page => page.content ?? []) ?? [];
+
+    // Intersection Observer for infinite loading
+    const loadMoreRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        if (!loadMoreRef.current) return;
+
+        const observer = new IntersectionObserver(
+            (entries) => {
+                const [entry] = entries;
+                if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+                    fetchNextPage();
+                }
+            },
+            { threshold: 0.1 }
+        );
+
+        observer.observe(loadMoreRef.current);
+
+        return () => observer.disconnect();
+    }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
     return (
         <>
@@ -56,6 +77,16 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
                                 )
                         }
                     </div>
+
+                    {/* Intersection Observer Target */}
+                    <div ref={loadMoreRef} className="h-10 w-full" />
+
+                    {/* Load More Indicator */}
+                    {isFetchingNextPage && (
+                        <div className="flex justify-center mt-6 w-full px-3">
+                            <Loading className='w-full' />
+                        </div>
+                    )}
                 </div>
             </div>
         </>
