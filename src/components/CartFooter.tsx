@@ -19,7 +19,7 @@ const CartFooter: React.FC<CartFooterProps> = ({
 }) => {
     return (
         <div className="fixed bottom-0 left-0 right-0 z-40 ">
-            <div className='bg-primary text-white '>
+            <div className='bg-secondary text-white '>
                 <div className="lg:container mx-auto py-2">
                     <div className="flex items-center justify-center">
                         {/* Left side - Savings info */}
