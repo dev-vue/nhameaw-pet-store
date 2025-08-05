@@ -194,12 +194,7 @@ export default function ProductDetailPage() {
                     productId: productDetail.productId
                 }, {
                     onSuccess: (response) => {
-                        // Close LIFF window and return to LINE
-                        if (typeof window !== 'undefined' && (window as any).liff) {
-                            (window as any).liff.closeWindow();
-                        } else {
-                            window.close();
-                        }
+                        window.close();
                     },
                     onError: (error) => {
                         swal.fire({

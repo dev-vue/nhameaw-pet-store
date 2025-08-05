@@ -27,6 +27,8 @@ export default function MainLayout({ children }: LayoutsProps) {
             push(`/auth/auto-signin?callbackUrl=${encodeURIComponent(pathname)}`);
             return;
         }
+
+
         swal.fire({
             icon: "warning",
             title: "หน้านี้จะถูกปิดลงและพาคุณกลับไปที่ไลน์เพื่อแชทกับแอดมิน",
@@ -39,11 +41,7 @@ export default function MainLayout({ children }: LayoutsProps) {
                     lineUserId: session.user.id
                 }, {
                     onSuccess: (response) => {
-                        if (typeof window !== 'undefined' && (window as any).liff) {
-                            (window as any).liff.closeWindow();
-                        } else {
-                            window.close();
-                        }
+                        window.close();
                     },
                     onError: (error) => {
                         swal.fire({
