@@ -136,7 +136,7 @@ export function SearchCategoryModal({ animalType, name, open, onClose }: SearchC
                                         onClick={() => handleSubcategoryClick(subcategory)}
                                         className="w-full grid grid-cols-[1fr_auto] items-center gap-4 py-4 px-0 md:px-4 text-left hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0"
                                     >
-                                        <span className="text-black text-md font-semibold">
+                                        <span className="text-black text-base font-semibold">
                                             {subcategory.detail || 'ไม่มีชื่อ'}
                                         </span>
                                         <div className="flex items-center space-x-2 flex-shrink-0">
