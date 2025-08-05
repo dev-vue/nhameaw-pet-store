@@ -2,6 +2,7 @@
 
 import { SessionProvider } from "next-auth/react";
 import { Session } from "next-auth";
+import { LiffProvider } from "@/contexts/LiffContext";
 
 interface ProviderProps {
   children: React.ReactNode;
@@ -9,5 +10,11 @@ interface ProviderProps {
 }
 
 export function Providers({ children, session }: ProviderProps) {
-  return <SessionProvider session={session}>{children}</SessionProvider>;
+  return (
+    <SessionProvider session={session}>
+      <LiffProvider>
+        {children}
+      </LiffProvider>
+    </SessionProvider>
+  );
 }

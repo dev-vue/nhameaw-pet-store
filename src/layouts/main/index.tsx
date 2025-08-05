@@ -1,6 +1,7 @@
 "use client";
 import { swal } from "@/components/common/SweetAlert";
 import { Button } from "@/components/ui/Button";
+import useLiff from "@/hooks/useLiff";
 import { useChatWithAdmin } from "@/lib/react-query/chat";
 import { useProductDetail } from "@/lib/react-query/product";
 import { MessageCircle } from "lucide-react";
@@ -19,6 +20,7 @@ export default function MainLayout({ children }: LayoutsProps) {
 
     const { mutate: initiateChatWithAdmin, isPending: chatLoading } = useChatWithAdmin();
     const { push } = useRouter();
+    const { closeWindow } = useLiff();
 
 
     const handleChatWithAdmin = () => {
@@ -41,11 +43,7 @@ export default function MainLayout({ children }: LayoutsProps) {
                     lineUserId: session.user.id
                 }, {
                     onSuccess: (response) => {
-                        if (typeof window !== 'undefined' && (window as any).liff) {
-                            (window as any).liff.closeWindow();
-                        } else {
-                            window.close();
-                        }
+                        closeWindow();
                     },
                     onError: (error) => {
                         swal.fire({
@@ -58,7 +56,6 @@ export default function MainLayout({ children }: LayoutsProps) {
             }
         });
     };
-
 
     return (
         <div className="min-h-screen font-sans py-32 md:py-28">

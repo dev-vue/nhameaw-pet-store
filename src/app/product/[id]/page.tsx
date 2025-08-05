@@ -23,9 +23,13 @@ import { useAddItemToCart } from '@/lib/react-query/cart';
 import { useSession } from 'next-auth/react';
 import { useProductReviews } from '@/lib/react-query/review';
 import { useChatWithAdmin } from '@/lib/react-query/chat';
+import useLiff from '@/hooks/useLiff';
 
 export default function ProductDetailPage() {
+
+
     const { id } = useParams();
+    const { closeWindow } = useLiff();
     const { data: session } = useSession();
     const { data: productDetail, isLoading: productDetailLoading, refetch: productDetailRefetch } = useProductDetail({ productid: id as string, lineUserId: session?.user?.id ?? "" });
     const {
@@ -52,16 +56,6 @@ export default function ProductDetailPage() {
     const [imageViewerIndex, setImageViewerIndex] = useState(0);
     const [reviewScrollIndex, setReviewScrollIndex] = useState<number | undefined>(undefined);
 
-    // Mock product data - you can replace this with actual API call
-    const product = getProductById(Number(id)) || {
-        id: Number(id),
-        name: 'O3vit 50 ml อาหารเสริมยันต์ไข่ สำหรับแมว/สุนัข กำจัดสวย แฮนเรง มิดแล้ว เสริมภูมิ ขนาด 50 ml.',
-        rating: 5.0,
-        reviews: '9.3พัน',
-        price: 1050,
-        originalPrice: 1250,
-        imageUrl: '/images/product-demo-rm-bg.png',
-    };
 
     // Helper function to detect video files
     const isVideo = (file: { fileType?: string; mimeType?: string; url?: string }) => {
@@ -75,8 +69,6 @@ export default function ProductDetailPage() {
     };
 
     // Get media URLs for ImageViewer
-    const mediaUrls = productDetail?.fileList?.map(file => file.url) || [];
-
     const handleImageClick = (index: number) => {
         setImageViewerIndex(index);
         setImageViewerOpen(true);
@@ -195,12 +187,7 @@ export default function ProductDetailPage() {
                     productId: productDetail.productId
                 }, {
                     onSuccess: (response) => {
-                        // Close LIFF window and return to LINE
-                        if (typeof window !== 'undefined' && (window as any).liff) {
-                            (window as any).liff.closeWindow();
-                        } else {
-                            window.close();
-                        }
+                        closeWindow();
                     },
                     onError: (error) => {
                         swal.fire({
