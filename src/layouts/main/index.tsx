@@ -22,12 +22,12 @@ export default function MainLayout({ children }: LayoutsProps) {
 
 
     const handleChatWithAdmin = () => {
+
         if (!session?.user?.id) {
             // Redirect to login if not authenticated
             push(`/auth/auto-signin?callbackUrl=${encodeURIComponent(pathname)}`);
             return;
         }
-
 
         swal.fire({
             icon: "warning",
@@ -41,7 +41,11 @@ export default function MainLayout({ children }: LayoutsProps) {
                     lineUserId: session.user.id
                 }, {
                     onSuccess: (response) => {
-                        window.close();
+                        if (typeof window !== 'undefined' && (window as any).liff) {
+                            (window as any).liff.closeWindow();
+                        } else {
+                            window.close();
+                        }
                     },
                     onError: (error) => {
                         swal.fire({

@@ -146,8 +146,8 @@ export default function ProductDetailPage() {
     const handleShare = () => {
         // Implement share functionality
         navigator.share?.({
-            title: product.name,
-            text: `ดูสินค้านี้ ${product.name}`,
+            title: productDetail?.productName ?? "",
+            text: `ดูสินค้านี้ ${productDetail?.productName ?? ""}`,
             url: window.location.href,
         });
     };
@@ -175,6 +175,7 @@ export default function ProductDetailPage() {
     };
 
     const handleChatWithAdmin = () => {
+
         if (!session?.user?.id || !productDetail?.productId) {
             // Redirect to login if not authenticated
             push(`/auth/auto-signin?callbackUrl=${encodeURIComponent(pathname)}`);
@@ -194,7 +195,12 @@ export default function ProductDetailPage() {
                     productId: productDetail.productId
                 }, {
                     onSuccess: (response) => {
-                        window.close();
+                        // Close LIFF window and return to LINE
+                        if (typeof window !== 'undefined' && (window as any).liff) {
+                            (window as any).liff.closeWindow();
+                        } else {
+                            window.close();
+                        }
                     },
                     onError: (error) => {
                         swal.fire({
