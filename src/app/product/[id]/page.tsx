@@ -137,10 +137,11 @@ export default function ProductDetailPage() {
 
     const handleShare = () => {
         // Implement share functionality
+        const liffId = process.env.NEXT_PUBLIC_LIFF_ID;
         navigator.share?.({
             title: productDetail?.productName ?? "",
             text: `ดูสินค้านี้ ${productDetail?.productName ?? ""}`,
-            url: window.location.href,
+            url: "https://liff.line.me/" + liffId + "/product/" + id,
         });
     };
 
