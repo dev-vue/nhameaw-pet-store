@@ -8,6 +8,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useMyCartCount } from "@/lib/react-query/cart";
 import { useSession } from "next-auth/react";
 import { filters } from "@/constants";
+import { useScrollHeader } from "@/hooks/useScrollHeader";
 
 const Header = ({ onMenuClick, className, title }: { onMenuClick: () => void; className?: string; title?: string }) => {
 
@@ -23,6 +24,12 @@ const Header = ({ onMenuClick, className, title }: { onMenuClick: () => void; cl
     const { data: cartItemCount } = useMyCartCount({ lineUserId: session?.user?.id ?? "" });
 
     const { push, back } = useRouter();
+
+    // Scroll-based header visibility for mobile
+    const { isVisible, isScrolled } = useScrollHeader({
+        enabled: true, // Enable scroll behavior
+        threshold: 10 // Minimum scroll distance to trigger hide/show
+    });
 
     // Get active filter from URL params
     const activeFilter = searchParams.get('filter') || 'BSP';
@@ -239,8 +246,8 @@ const Header = ({ onMenuClick, className, title }: { onMenuClick: () => void; cl
 
                 {/* Filter buttons for search page */}
                 {pathname.startsWith("/search") && (
-                    <div className="bg-white">
-                        <div className="flex space-x-2 mb-6 overflow-x-auto pb-2 bg-white lg:container mx-auto px-4 py-2">
+                    <div className={`bg-white transition-transform duration-300 ease-in-out ${isVisible ? 'flex' : 'hidden'} md:flex`}>
+                        <div className={` space-x-2 mb-6 overflow-x-auto pb-2 bg-white lg:container mx-auto px-4 py-2 ${isVisible ? 'flex' : 'hidden'} md:flex`}>
                             {filters.map((filter, index) => (
                                 <button
                                     key={index}
@@ -257,7 +264,7 @@ const Header = ({ onMenuClick, className, title }: { onMenuClick: () => void; cl
                                 </button>
                             ))}
                         </div>
-                    </div >
+                    </div>
                 )}
             </header >
         </>
