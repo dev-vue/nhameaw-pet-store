@@ -20,6 +20,7 @@ const Header = ({ onMenuClick, className, title }: { onMenuClick: () => void; cl
     const [showSearch, setShowSearch] = useState(false);
     const [searchText, setSearchText] = useState("");
     const [searchTextLabel, setSearchTextLabel] = useState("");
+    console.log("🔍 ~  ~ src/components/layouts/Header.tsx:22 ~ searchTextLabel:", searchTextLabel);
 
     const { data: cartItemCount } = useMyCartCount({ lineUserId: session?.user?.id ?? "" });
 
@@ -49,10 +50,11 @@ const Header = ({ onMenuClick, className, title }: { onMenuClick: () => void; cl
 
     useEffect(() => {
         const searchTextParam = searchParams.get('searchtext');
+        const categoryTextParam = searchParams.get('categorytext');
 
-        if (pathname.includes("/search") && searchTextParam) {
-            setSearchTextLabel(searchTextParam)
-            setSearchText(searchTextParam)
+        if (pathname.includes("/search") && (searchTextParam || categoryTextParam)) {
+            setSearchTextLabel(searchTextParam || categoryTextParam || "")
+            setSearchText(searchTextParam || "")
         } else {
             setSearchTextLabel("")
             setSearchText("")

@@ -47,8 +47,7 @@ export function SearchCategoryModal({ animalType, name, open, onClose }: SearchC
         } else {
             // This is a leaf category - navigate to search
             // const searchtext = subcategory.detail || '';
-            // push(`/search?searchtext=${encodeURIComponent(searchtext)}`);
-            push(`/search?category=${encodeURIComponent(subcategory.id)}`);
+            push(`/search?category=${encodeURIComponent(subcategory.id)}&categorytext=${encodeURIComponent(subcategory.detail)}`);
             onClose();
         }
     };
@@ -68,8 +67,7 @@ export function SearchCategoryModal({ animalType, name, open, onClose }: SearchC
     const handleViewAllProducts = () => {
         const searchtext = currentCategory?.detail || name || '';
         const category = currentCategory?.id || categories?.productsCategoryList[0].id || '';
-        // push(`/search?searchtext=${encodeURIComponent(searchtext)}`);
-        push(`/search?category=${encodeURIComponent(category ?? '')}`);
+        push(`/search?category=${encodeURIComponent(category ?? '')}&categorytext=${encodeURIComponent(searchtext)}`);
         onClose();
     };
 

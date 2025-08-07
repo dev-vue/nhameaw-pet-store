@@ -99,7 +99,7 @@ export default function Modal({ open, header, subHeader, children, size = "md", 
 										<Dialog.Description />
 										<div
 											className={cn(
-												"px-4 md:px-6 flex items-center py-6",
+												"px-4 md:px-6 flex items-center py-4",
 												onClose != null
 													? "justify-between border-b border-gray-light"
 													: "justify-start"
