@@ -181,7 +181,7 @@ export default function MyCartPage() {
                 {/* Address Section */}
                 <div className="grid grid-cols-2 gap-x-4">
                     <div className="sm:col-span-1 col-span-2">
-                        <div className="bg-white mb-4 p-4 rounded-lg">
+                        <div className="bg-white md:mb-3 mb-2 p-4 rounded-lg">
                             {
                                 shippingAddressData && Object.keys(shippingAddressData).length > 0 ? (
                                     <div className="flex items-start">
@@ -225,7 +225,7 @@ export default function MyCartPage() {
 
                         {/* Cart Items */}
                         {myCartData?.map((item) => (
-                            <div key={item.id} className="bg-white mb-4 rounded-lg">
+                            <div key={item.id} className="bg-white mb-2 rounded-lg">
                                 <div className="p-4">
                                     <div className="flex items-start mb-2">
                                         <div className="mr-3 w-20 h-20 flex-shrink-0 border border-gray-light rounded-[14px]">
@@ -240,7 +240,7 @@ export default function MyCartPage() {
                                         <div className="flex-grow">
                                             <div className="flex justify-between items-start">
                                                 <div className="flex flex-col">
-                                                    <h3 className="font-semibold text-sm line-clamp-2 pr-4">{item.productName}</h3>
+                                                    <h3 className="text-sm line-clamp-2 pr-4">{item.productName}</h3>
                                                     <p className='text-sm text-subdube'>
                                                         {item.productItemName ? item.productItemName : item.productQuantityName} {item.productItemQuantityName}
                                                     </p>
@@ -304,7 +304,7 @@ export default function MyCartPage() {
                                 <span> </span>
                             </div>
                             <div className="border-t border-gray-light my-2 pt-2">
-                                <div className="flex justify-between font-semibold">
+                                <div className="flex justify-between">
                                     <span className='text-sm text-black'>ยอดชำระเงินทั้งหมด</span>
                                     <span className="text-black font-semibold">฿{total.toLocaleString()}</span>
                                 </div>

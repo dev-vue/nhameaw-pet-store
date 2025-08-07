@@ -141,7 +141,7 @@ export default function HomePage() {
 
 
           <h3 className="text-2xl font-semibold mb-4">รายการสินค้าทั้งหมด</h3>
-          <div className="flex space-x-2 mb-6 overflow-x-auto pb-2">
+          <div className="flex space-x-2 mb-3 overflow-x-auto pb-2">
             {filters.map((filter, index) => (
               <button
                 key={index}

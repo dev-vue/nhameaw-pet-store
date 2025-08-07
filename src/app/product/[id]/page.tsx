@@ -227,10 +227,9 @@ export default function ProductDetailPage() {
 
     return (
         <div className='pb-20'>
-
             {/* section product */}
-            <div className='bg-white '>
-                <div className='lg:container mx-auto space-y-8 lg:pt-8 lg:px-5 px-0'>
+            <div className='lg:bg-white bg-gray-light'>
+                <div className='lg:container mx-auto space-y-4 md:space-y-8 lg:pt-8 lg:px-5 px-0'>
                     <div className="grid grid-cols-1 lg:grid-cols-2 lg:gap-8">
                         {/* Product Images Section */}
                         <div className="relative order-1 lg:order-1">
@@ -307,7 +306,7 @@ export default function ProductDetailPage() {
                                 {/* Price Section - Mobile First */}
                                 <div className="mb-4 lg:mb-6 lg:order-2">
                                     <div className="flex items-center space-x-2 lg:space-x-3 mb-2 lg:mb-3">
-                                        <span className="text-2xl lg:text-3xl font-semibold text-primary">฿{productDetail?.price ?? "0"}</span>
+                                        <span className="text-2xl font-semibold text-primary">฿{productDetail?.price ?? "0"}</span>
                                         {productDetail?.originalPrice && (
                                             <span className="text-xs text-disabled line-through">฿{productDetail?.originalPrice}</span>
                                         )}
@@ -318,11 +317,11 @@ export default function ProductDetailPage() {
                                         <div className="flex flex-col">
                                             <div className="flex items-center py-2">
                                                 <Star className="w-4 h-4 lg:w-5 lg:h-5 fill-warning text-warning" />
-                                                <span className="text-sm lg:text-base text-black ml-1 lg:ml-2">{productDetail?.averageReviewScore?.toFixed(1)}</span>
-                                                <span className="text-sm lg:text-base text-gray-light mx-1 lg:mx-2">|</span>
-                                                <span className="text-xs lg:text-base text-black">ขายแล้ว {productDetail?.sold} ชิ้น</span>
+                                                <span className="text-sm text-black ml-1 lg:ml-2">{productDetail?.averageReviewScore?.toFixed(1)}</span>
+                                                <span className="text-sm text-gray-light mx-1 lg:mx-2">|</span>
+                                                <span className="text-sm text-black">ขายแล้ว {productDetail?.sold} ชิ้น</span>
                                             </div>
-                                            <span className="text-xs md:text-sm text-subdube">ยอดขายและรีวิวจากทุกช่องทางการจัดจำหน่าย</span>
+                                            <span className="text-xs  text-subdube">ยอดขายและรีวิวจากทุกช่องทางการจัดจำหน่าย</span>
                                         </div>
                                         <button type='button' className='flex items-center space-x-2' onClick={handleViewAllReviews}>
                                             <span className="text-sm md:text-base lg:text-lg text-secondary whitespace-nowrap">
@@ -339,7 +338,7 @@ export default function ProductDetailPage() {
                                 </h1>
 
                                 {/* Action Icons */}
-                                <div className="flex items-center justify-between pb-3 lg:pb-6 mb-4 lg:mb-6 border-b border-gray-light lg:order-3">
+                                <div className="flex items-center justify-between pb-3 lg:pb-6 mb-4 lg:mb-6 lg:border-b border-gray-light lg:order-3">
                                     <div className="flex items-center space-x-4 lg:space-x-6">
                                         <button
                                             onClick={handleShare}

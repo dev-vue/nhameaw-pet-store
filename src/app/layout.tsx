@@ -12,7 +12,7 @@ import 'swiper/css/pagination';
 export const metadata: Metadata = {
   title: "Nhamaew Pet Store",
   description: "สินค้าสัตว์เลี้ยงโดยทีมสัตวแพทย์",
-  viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
+  viewport: "width=device-width, initial-scale=1",
 };
 
 export default async function RootLayout({

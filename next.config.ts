@@ -10,6 +10,7 @@ const imageHostLine = String(process.env.NEXT_PUBLIC_IMAGE_HOST_LINE) ?? "";
 const nextConfig: NextConfig = {
   output: 'standalone',
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -34,6 +35,7 @@ const nextConfig: NextConfig = {
   compiler: {
     removeConsole: true,
   },
+  assetPrefix: process.env.NODE_ENV === 'production' ? '' : '',
 };
 
 export default nextConfig;

@@ -58,7 +58,7 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
                 </div>
             </div>
 
-            <div className={`bg-gray-light h-full rounded-lg  ${className}`}>
+            <div className={`bg-gray-light h-full rounded-lg ${className}`}>
                 <div className='lg:container mx-auto space-y-8 lg:pt-8 pb-5 lg:px-5 px-0'>
 
                     {/* Products Grid */}
@@ -66,8 +66,8 @@ const RelatedProducts: React.FC<RelatedProductsProps> = ({
                         {
                             productsLoading ? <Loading className='w-full col-span-4' /> :
                                 allProducts.length > 0 ? (
-                                    allProducts.map((product) => (
-                                        <ProductCard key={product.id} product={product} />
+                                    allProducts.map((product, index) => (
+                                        <ProductCard key={index} product={product} />
                                     ))
                                 ) : (
                                     <div className="col-span-full text-center py-8">

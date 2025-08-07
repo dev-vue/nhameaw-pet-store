@@ -70,10 +70,12 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
 
 
                     {/* Price */}
-                    <span className="text-2xl lg:text-3xl font-semibold text-primary">฿{productDetail?.price ?? "0"}</span>
-                    {productDetail?.originalPrice && (
-                        <span className="text-xs text-disabled line-through">฿{productDetail?.originalPrice}</span>
-                    )}
+                    <div className="flex items-center gap-x-2">
+                        <span className="text-xl font-semibold text-primary">฿{productDetail?.price ?? "0"}</span>
+                        {productDetail?.originalPrice && (
+                            <span className="text-sm text-disabled line-through">฿{productDetail?.originalPrice}</span>
+                        )}
+                    </div>
                 </div>
 
                 <hr className='w-full my-4 border-gray-light' />
@@ -106,7 +108,7 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
                                                         alt={typeSize.productItemName}
                                                         width={30}
                                                         height={30}
-                                                        className="w-auto object-contain"
+                                                        className="object-contain"
                                                     />
                                                 }
                                                 <span>{typeSize.productItemName}</span>

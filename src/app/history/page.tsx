@@ -62,17 +62,17 @@ const OrderAccordion: React.FC<{ order: Order }> = ({ order }) => {
                                 />
                             </div>
                             <div className="flex-grow">
-                                <h3 className="text-sm font-semibold text-black line-clamp-2 mb-1">
+                                <h3 className="text-base font-semibold text-black line-clamp-2 mb-1">
                                     {item.name}
                                 </h3>
-                                <p className="text-xs text-subdube">
+                                <p className="text-sm text-subdube">
                                     {item.productItemName} {item.productItemQuantityName} {item.productQuantityName}
                                 </p>
                             </div>
                         </div>
                         <div className="text-right">
-                            <p className="text-sm font-semibold text-black">
-                                ฿{item.price.toLocaleString()} <span className="text-xs text-subdube">x{item.quantity}</span>
+                            <p className="font-semibold text-black">
+                                <span className='text-base'>฿{item.price.toLocaleString()}</span> <span className="text-sm text-subdube">x{item.quantity}</span>
                             </p>
                         </div>
                     </div>
@@ -82,9 +82,9 @@ const OrderAccordion: React.FC<{ order: Order }> = ({ order }) => {
                 {order.items.length > 1 && (
                     <button
                         onClick={() => setShowAllItems(!showAllItems)}
-                        className="flex items-center justify-center w-full py-2 text-sm text-black hover:text-gray-800 transition-colors"
+                        className="flex items-center justify-center w-full py-2 text-black hover:text-gray-800 transition-colors"
                     >
-                        <span className="mr-2">
+                        <span className="mr-2 text-base">
                             {showAllItems ? 'ดูน้อยลง' : `ดูเพิ่มเติม`}
                         </span>
                         {showAllItems ? (
@@ -99,7 +99,7 @@ const OrderAccordion: React.FC<{ order: Order }> = ({ order }) => {
                 <div className="pt-2">
                     <div className="flex justify-end items-center gap-x-2">
                         <span className="text-sm text-black">
-                            สินค้าทั้งหมด {order.items.length} รายการ :
+                            สินค้ารวม {order.items.length} รายการ :
                         </span>
                         <span className="text-base text-black font-semibold">
                             ฿{order.total.toLocaleString()}
