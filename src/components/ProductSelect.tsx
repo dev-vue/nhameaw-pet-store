@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Button } from './ui/Button';
 import Image from 'next/image'
 import { Maximize2, Minus, Plus } from 'lucide-react';
@@ -17,7 +17,9 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
     const [selectedPackageQuantity, setSelectedPackageQuantity] = useState<string>(productDetail.quantityList?.[0]?.productQuantityId ?? "");
 
     const [quantity, setQuantity] = useState(1);
+    const [price, setPrice] = useState(productDetail?.price ?? "0");
     const [viewerOpen, setViewerOpen] = useState(false);
+
 
     const { data: session } = useSession();
 
@@ -38,6 +40,60 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
         }
         onClose();
     };
+
+    // Function to set price based on conditions
+    const setPriceBasedOnConditions = useCallback(() => {
+        if (productDetail.typeSizeList && productDetail.typeSizeList.length > 0) {
+            const currentTypeSize = productDetail.typeSizeList[selectedTypeIndex];
+
+            // Condition 1: typeSizeList has no quantityList - set price from typeSizeList level
+            if (!currentTypeSize.quantityList || currentTypeSize.quantityList.length === 0) {
+                if (currentTypeSize.price !== null) {
+                    setPrice(currentTypeSize.price.toString());
+                } else {
+                    // Fallback to product level price
+                    setPrice(productDetail?.price ?? "0");
+                }
+            }
+            // Condition 2: typeSizeList has quantityList - set price from quantityList level
+            else {
+                const selectedQuantityItem = currentTypeSize.quantityList.find(
+                    item => item.productQuantityId === selectedPackage
+                );
+                if (selectedQuantityItem) {
+                    setPrice(selectedQuantityItem.price.toString());
+                } else if (currentTypeSize.quantityList.length > 0) {
+                    // Default to first quantity item if none selected
+                    setPrice(currentTypeSize.quantityList[0].price.toString());
+                }
+            }
+        }
+        // Condition 3: no typeSizeList but has quantityList - set price from quantityList level
+        else if (productDetail.quantityList && productDetail.quantityList.length > 0) {
+            const selectedQuantityItem = productDetail.quantityList.find(
+                item => item.productQuantityId === selectedPackageQuantity
+            );
+            if (selectedQuantityItem) {
+                setPrice(selectedQuantityItem.price.toString());
+            } else {
+                // Default to first quantity item if none selected
+                setPrice(productDetail.quantityList[0].price.toString());
+            }
+        }
+        // Fallback to product level price
+        else {
+            setPrice(productDetail?.price ?? "0");
+        }
+    }, [productDetail, selectedTypeIndex, selectedPackage, selectedPackageQuantity]);
+
+    // Initialize price when component mounts or productDetail changes
+    useEffect(() => {
+        setPriceBasedOnConditions();
+    }, [setPriceBasedOnConditions]);
+
+    const onSelectItem = () => {
+        setPriceBasedOnConditions();
+    }
 
     return (
         <>
@@ -71,7 +127,7 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
 
                     {/* Price */}
                     <div className="flex items-center gap-x-2">
-                        <span className="text-xl font-semibold text-primary">฿{productDetail?.price ?? "0"}</span>
+                        <span className="text-xl font-semibold text-primary">฿{price}</span>
                         {productDetail?.originalPrice && (
                             <span className="text-sm text-disabled line-through">฿{productDetail?.originalPrice}</span>
                         )}
@@ -94,6 +150,11 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
                                                 () => {
                                                     setSelectedType(typeSize.productItemId)
                                                     setSelectedTypeIndex(index)
+                                                    // Reset selected package when changing type
+                                                    if (typeSize.quantityList && typeSize.quantityList.length > 0) {
+                                                        setSelectedPackage(typeSize.quantityList[0].productQuantityId)
+                                                    }
+                                                    // Price will be updated automatically via useEffect
                                                 }
                                             }
                                             className={`flex py-2 px-3 rounded-full border ${selectedType === typeSize.productItemId
@@ -131,7 +192,10 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
                                             productDetail.typeSizeList[selectedTypeIndex].quantityList?.map((quantity, index) => (
                                                 <button
                                                     key={index}
-                                                    onClick={() => setSelectedPackage(quantity.productQuantityId)}
+                                                    onClick={() => {
+                                                        setSelectedPackage(quantity.productQuantityId)
+                                                        // Price will be updated automatically via useEffect
+                                                    }}
                                                     className={`flex py-2 px-3 rounded-full border ${selectedPackage === quantity.productQuantityId
                                                         ? 'bg-primary-light border-primary text-primary'
                                                         : 'border-gray-light text-black'
@@ -155,7 +219,10 @@ const ProductSelect = ({ id, productDetail, onClose, onAddToCart }: { id: string
                                     productDetail.quantityList?.map((quantity, index) => (
                                         <button
                                             key={index}
-                                            onClick={() => setSelectedPackageQuantity(quantity.productQuantityId)}
+                                            onClick={() => {
+                                                setSelectedPackageQuantity(quantity.productQuantityId)
+                                                // Price will be updated automatically via useEffect
+                                            }}
                                             className={`flex py-2 px-3 rounded-full border ${selectedPackageQuantity === quantity.productQuantityId
                                                 ? 'bg-primary-light border-primary text-primary'
                                                 : 'border-gray-light text-black'
