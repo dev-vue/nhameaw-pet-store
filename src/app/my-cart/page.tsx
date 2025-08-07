@@ -117,17 +117,26 @@ export default function MyCartPage() {
     const handleSendToAdmin = async () => {
         // Validate required data
         if (!lineUserId) {
-            toast.error('กรุณาเข้าสู่ระบบก่อนทำการสั่งซื้อ');
+            swal.fire({
+                icon: "warning",
+                title: "กรุณาเข้าสู่ระบบก่อนทำการสั่งซื้อ",
+            });
             return;
         }
 
         if (!myCartData || myCartData.length === 0) {
-            toast.error('ไม่มีสินค้าในตะกร้า');
+            swal.fire({
+                icon: "warning",
+                title: "ไม่สามารถทำรายการ\nกรุณาลองอีกครั้ง",
+            });
             return;
         }
 
         if (!shippingAddressData || Object.keys(shippingAddressData).length === 0) {
-            toast.error('กรุณาเพิ่มที่อยู่จัดส่งก่อนทำการสั่งซื้อ');
+            swal.fire({
+                icon: "warning",
+                title: "กรุณาเพิ่มที่อยู่จัดส่งก่อนทำการสั่งซื้อ",
+            });
             return;
         }
 

@@ -33,8 +33,8 @@ const CartFooter: React.FC<CartFooterProps> = ({
                 </div>
             </div>
             <div className='bg-white'>
-                <div className="lg:container mx-auto px-4 ">
-                    <div className="grid grid-cols-2 gap-x-2 py-4 md:flex md:items-center md:justify-end">
+                <div className="lg:container mx-auto lg:px-4 px-2">
+                    <div className="grid grid-cols-2 gap-x-1 py-4 md:flex md:items-center md:justify-end">
                         <div className='flex flex-col items-end gap-x-2'>
                             <div className='flex items-center gap-x-2'>
                                 <span className="text-base text-black">
