@@ -11,10 +11,12 @@ import { useCreateOrder, useDeleteCartItem, useMyCart, useUpdateCartItemQuantity
 import { useShippingAddress, useUpdateShippingAddress } from '@/lib/react-query/address';
 import { toast, ToastContainer } from 'react-toastify';
 import { useSession } from 'next-auth/react';
+import useLiff from '@/hooks/useLiff';
 
 
 
 export default function MyCartPage() {
+    const { closeWindow } = useLiff();
 
     const { push } = useRouter();
     const { data: session } = useSession();
@@ -145,18 +147,17 @@ export default function MyCartPage() {
                 orderItemList: orderItemList
             };
 
-
             // Create the order
             createOrder(orderData, {
                 onSuccess: (result) => {
                     swal.fire({
                         icon: "success",
                         title: "สำเร็จ",
-                        text: "ส่งรายการสินค้าให้แอดมินเรียบร้อยแล้ว หน้านี้จะถูกปิดลงและพาคุณกลับไปที่ไลน์เพื่อแชทกับแอดมิน",
+                        html: "ส่งรายการสินค้าให้แอดมินเรียบร้อยแล้ว<br/>หน้านี้จะถูกปิดลงและพาคุณกลับไปที่ไลน์<br/>เพื่อแชทกับแอดมิน",
                         confirmButtonText: "ตกลง",
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            push('/history');
+                            closeWindow();
                         }
                     });
                 },
