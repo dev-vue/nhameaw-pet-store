@@ -366,7 +366,7 @@ const ReviewsModal: React.FC<ReviewsModalProps> = ({
                 header="รีวิวจากผู้ใช้จริง"
                 subHeader='จากทุกช่องทางการจัดจำหน่าย'
                 size="md"
-                canClickOutside={imageViewerOpen ? true : false}
+                canClickOutside={false}
             >
                 <div
                     className="space-y-4 pb-44 md:pb-0"
